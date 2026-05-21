@@ -34,11 +34,11 @@ Export your VM in OVA format, and use Xen Orchestra to import it. If you have an
 
 :::warning
 
-**Disk Size Limitations** 
+**Disk Size Limitations**
 
 Disks larger than 2TB - 8MB cannot be migrated automatically. You will need to create the VM in Xen Orchestra with multiple disks and use the OS capabilities to build them into a joined disk of the required size. Then, migrate the disk content using your preferred tool (e.g., Clonezilla, Robocopy, Rsync).
 
-**Warm migration prerequisites** 
+**Warm migration prerequisites**
 
 Warm migration (as explained below in the [XO V2V](#xo-v2v) section) involves migrating all content up to the last snapshot, then stopping the VM and migrating the snapshot content. This method requires that the VM has at least one snapshot and that the account used has permission to stop the VM.
 
@@ -59,7 +59,7 @@ Remove the VMware drivers before starting the migration.
 
 ### XO V2V
 
-Xen Orchestra introduces "V2V", or "VMware to Vates", a streamlined tool for migrating from VMware to the Vates Stack, which includes XCP-ng and Xen Orchestra (XO). 
+Xen Orchestra introduces "V2V", or "VMware to Vates", a streamlined tool for migrating from VMware to the Vates Stack, which includes XCP-ng and Xen Orchestra (XO).
 
 This tool is seamlessly integrated into Xen Orchestra and leverages the "warm migration" feature for efficient transitions. The process begins by exporting an initial snapshot of the VMware-based VM. Although this step can be time-consuming, it occurs without disrupting the VM's operation, ensuring transparency.
 
@@ -90,13 +90,14 @@ After the transfer, the VM on XCP-ng side is started:
 This process is fully automated, without any human intervention after it starts on step 1.
 
 #### Storage types
+
 :::warning
 
 - **Raw disks:** Raw disks are not supported.
-- **VSAN:** 
+- **VSAN:**
     - When migrating from a VSAN, make sure your remote has enough storage capacity to accommodate the largest VM you plan to import. The VM will be stopped before migration begins, and the process may be slow.
     - In this case, the network path is: VSAN → vSphere → Host running XOA → Remote → Host running XOA → Host with target storage → Target storage
-- **VMFS datastores:** 
+- **VMFS datastores:**
     - Warm migration is reported to work in most cases with VMFS5. If it doesn't work, try migrating the VM while it is stopped.
     - In this case, the network path is: VMFS storage → ESXi → Host running XOA → Host with target storage → Target storage
 - **NFS datastores:** When migrating from NFSdatastores (such as NFSDatastoreEsxi):\
@@ -119,7 +120,7 @@ On this screen, you will basically select which VM to replicate, and to which po
 
 #### From the CLI
 
-You can also use the command-line interface (CLI) to migrate your VM. 
+You can also use the command-line interface (CLI) to migrate your VM.
 
 To do this:
 
@@ -167,7 +168,7 @@ From this point onward, the process varies depending on the type of datastore yo
 
 ##### VMFS 5 (Mostly up to VMware 6.5)
 
-For VMFS 5, **you can perform a warm migration** (the VM doesn't need to be shut down before migration). 
+For VMFS 5, **you can perform a warm migration** (the VM doesn't need to be shut down before migration).
 
 Here's what you need to check:
 
@@ -205,13 +206,13 @@ Snapshots are not used, so it doesn't matter if there are any.
 3. The VM **must** be powered off.
 4. Connect directly to vSphere via its IP address.
 5. If the V2V tool successfully detects that the VM is on a vSAN store, it should prompt you to select an XOA remote (see **Settings → Remotes**) to store a temporary VMDK export.
-6. If it does not prompt you to select an XOA remote before import, it has not detected your vSAN properly. 
-\
+6. If it does not prompt you to select an XOA remote before import, it has not detected your vSAN properly.
+
 In that case, please open a support ticket with details of the issue.
 
 ##### NFS Datastore
 
-For VMs residing on an NFS datastore, **you can perform a warm migration** (the VM doesn't need to be shut down before migration). 
+For VMs residing on an NFS datastore, **you can perform a warm migration** (the VM doesn't need to be shut down before migration).
 
 Here's what you need to check:
 
@@ -254,7 +255,7 @@ The fix for this is installing some xen drivers *before* exporting the VM from V
 
 ### VMDK
 
-You can also export Virtual Machine Disks (VMDK). VMDK is a file format that describes containers for virtual hard disk drives to be used in virtual machines like VMware Workstation. 
+You can also export Virtual Machine Disks (VMDK). VMDK is a file format that describes containers for virtual hard disk drives to be used in virtual machines like VMware Workstation.
 
 There are two methods to export VMDKs:
 
@@ -283,11 +284,11 @@ Snapshot migration is slow due to the huge differences between VMDK and VHD file
 
 ### CloneZilla
 
-An alternative to using OVA. 
+An alternative to using OVA.
 
 1. Insert a CloneZilla live CD in your existing VMware VM, and boot on it. In the meantime, you also have a VM on the destination with the right metadata (same name and disks), which you'll also boot with CloneZilla.
 
-2. From the VM console, you can tell the source VM running CloneZilla to send all the blocks to the destination VM, also running CloneZilla. 
+2. From the VM console, you can tell the source VM running CloneZilla to send all the blocks to the destination VM, also running CloneZilla.
 
 3. As soon it's done, you can safely shut down the original VM and boot the copy on destination!
 
@@ -343,31 +344,31 @@ There's two options, both requiring to export your Hyper-V VM disk in VHD format
 
 ### Export the VM disk
 
-**If the server can be taken offline:** Shut down the VM and create a VHD file from the existing VHDX.  
+**If the server can be taken offline:** Shut down the VM and create a VHD file from the existing VHDX.
   This process leaves the original disk file unchanged, allowing you to restart the VM in Hyper-V if needed. Ensure sufficient disk space is available for both the original VM and the new VHD file.
 
-**If the server must remain online:** Export the VM and then convert the VHDX to a VHD file.  
+**If the server must remain online:** Export the VM and then convert the VHDX to a VHD file.
   Note that the original VM will continue running and may be updated during the migration process. Ensure enough disk space is available for the original VM, the exported VM, and the new VHD file.
 
-1. Prepare the VHD for export.  
+1. Prepare the VHD for export.
   Before exporting, remove all the Hyper-V tools from the VM to ensure compatibility.
 
-2. (Optional). Shut down the VM in Hyper-V.  
+2. (Optional). Shut down the VM in Hyper-V.
   To shut down the VM, run this command in PowerShell:
   ```powershell
   STOP-VM -Name <VM name>
   ```
 
-3. Identify the VM disk to be exported.  
+3. Identify the VM disk to be exported.
   To identify the VM disk, run this command:
   ```powershell
   Get-VMHardDiskDrive -VMName <VM name>
   ```
 
-4. Make sure the VM disk has the correct format.   
+4. Make sure the VM disk has the correct format.
   - Use a **dynamic disk** format, as the **static format is not compatible with XCP-ng**.
-  - If the disk is in the **VHDX** format, convert it to the **VHD** format. 
-  To convert the disk from VHDX to VHD, run this command:  
+  - If the disk is in the **VHDX** format, convert it to the **VHD** format.
+  To convert the disk from VHDX to VHD, run this command:
 
   ```powershell
   Convert-VHD -Path <source path> -DestinationPath <destination path> -VHDType Dynamic

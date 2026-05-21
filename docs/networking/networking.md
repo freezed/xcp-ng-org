@@ -30,7 +30,7 @@ This section uses three types of server-side software objects to represent netwo
     -  * a description
     -  * a UUID
     -  * the parameters of the NIC they represent
-    -  * the network and server they are connected to. 
+    -  * the network and server they are connected to.
 PIFs can represent:
   * A physical NIC
   * A VLAN on top of a physical NIC
@@ -208,7 +208,7 @@ After boot, the PIF will need to be removed. You can do it this way:
 ```
 xe pif-forget uuid=<PIF UUID>
 ```
-The `<PIF UUID>` can be obtained with either `xe pif-list` or with Xen Orchestra. This command only needs to be ran once on the pool. 
+The `<PIF UUID>` can be obtained with either `xe pif-list` or with Xen Orchestra. This command only needs to be ran once on the pool.
 
 ## 🛞 SDN controller
 

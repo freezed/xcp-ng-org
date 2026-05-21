@@ -91,7 +91,7 @@ Where type is one of:
 
 `source` defines the location of the installation repository or a Supplemental Pack. There may be multiple 'source' elements.
 
-`driver-source` defines the source of a Supplemental Pack containing device drivers to be loaded by  the installer and included after installation of the main repository. It can be 
+`driver-source` defines the source of a Supplemental Pack containing device drivers to be loaded by  the installer and included after installation of the main repository. It can be
 
 Repository formats:
 
@@ -214,7 +214,7 @@ Specifies the initial management interface.
 ```xml
   <admin-interface name="eth"/> | <admin-interface hwaddr="mac"/>
 ```
-    
+
 Mandatory attributes:
 * `proto`="static|dhcp|none"
 
@@ -254,11 +254,11 @@ $6$Vv6DgmVWmbZ.SdRl$AUWzbpE5luuNQIyW.CUEztWLKEJkSrBhfTKFdMaX1eJhPrtXworF4RIG.GQ9
 #### Name Server
 
 Specifies one or more DNS entries.
-    
+
 ```xml
   <name-server>ip</name-server>
 ```
-    
+
 #### Hostname
 
 Specifies the hostname. Default: `localhost.localdomain`.

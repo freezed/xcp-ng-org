@@ -10,7 +10,7 @@ To know more on high availability in general and how to set it up with XCP-ng, s
 
 ## My host rebooted. Why did it reboot?
 
-If a host configured for high availability reboots unexpectedly, it might have: 
+If a host configured for high availability reboots unexpectedly, it might have:
 
 - self-fenced, or:
 - been asked by another host to reboot

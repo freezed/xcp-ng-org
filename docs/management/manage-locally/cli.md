@@ -25,7 +25,7 @@ For example:
 ```
 [ ~]# xe help host-cpu-info
 command name            : host-cpu-info
-        reqd params     : 
+        reqd params     :
         optional params : uuid
         description     : Lists information about the host's physical CPUs.
 ```

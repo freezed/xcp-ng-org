@@ -6,7 +6,7 @@ In XCP-ng, high availability (or HA) is the ability to detect a failed host and 
 
 Implementing VM High availability (HA) is a real challenge.
 
-First, because you need to reliably detect when a server has really failed to avoid unpredictable behavior. 
+First, because you need to reliably detect when a server has really failed to avoid unpredictable behavior.
 
 But that's not the only one. If you lose the network link but not the shared storage, how to ensure you will not write simultaneously on the storage and corrupt all your data as a result?
 
@@ -17,7 +17,7 @@ You can have high availability with as few as 2 hosts, but we strongly recommend
 :::
 
 :::warning
-High availability requires **far more maintenance** and will create some traps if you are not aware. In short, it comes at a cost. 
+High availability requires **far more maintenance** and will create some traps if you are not aware. In short, it comes at a cost.
 
 Before using it, **please think about it carefully**: do you **REALLY** need it? We've seen people having less uptime using HA than when not using it, because you **must understand** what you are doing every time you reboot or update a host.
 :::
@@ -29,7 +29,7 @@ The pool concept allows hosts to exchange their data and status:
 * If you lose a host, that will be detected by the pool master.
 * If you lose the master, another host will take over the master role automatically.
 
-To be sure a host is really unreachable, HA in XCP-ng uses multiple heartbeat mechanisms. As you saw in the introduction, it's not enough to check the network: what about storage? That's why there is also a specific heartbeat for shared storage between hosts in a pool. In fact, each host regularly writes some blocks in a dedicated VDI. That's the principle of the [Dead man's switch](http://en.wikipedia.org/wiki/Dead_man%27s_switch). 
+To be sure a host is really unreachable, HA in XCP-ng uses multiple heartbeat mechanisms. As you saw in the introduction, it's not enough to check the network: what about storage? That's why there is also a specific heartbeat for shared storage between hosts in a pool. In fact, each host regularly writes some blocks in a dedicated VDI. That's the principle of the [Dead man's switch](http://en.wikipedia.org/wiki/Dead_man%27s_switch).
 
 This concept is important, and it explains why you need to **configure high availability with a shared storage** (iSCSI, Fiber Channel or NFS) to avoid simultaneous writing in a VM disk.
 
@@ -63,9 +63,9 @@ For enabling HA, we **strongly recommend** to use a bonded management interface 
 :::
 
 
-If you create VLANs and bonded interfaces via the CLI, they might not be active or properly connected, causing a VM to appear non-agile and, therefore, unprotected by HA. 
+If you create VLANs and bonded interfaces via the CLI, they might not be active or properly connected, causing a VM to appear non-agile and, therefore, unprotected by HA.
 
-Use the `pif-plug` command in the CLI to activate VLAN and bond PIFs, ensuring the VM becomes agile. 
+Use the `pif-plug` command in the CLI to activate VLAN and bond PIFs, ensuring the VM becomes agile.
 
 Additionally, the `xe diagnostic-vm-status` CLI command can help identify why a VM isn’t agile, allowing you to take corrective action as needed.
 
@@ -74,14 +74,14 @@ Additionally, the `xe diagnostic-vm-status` CLI command can help identify why a 
 
 ### Prepare the pool
 
-You can check if your pool has HA enabled or not. 
+You can check if your pool has HA enabled or not.
 
 * In Xen Orchestra, for each pool where HA has been enabled, go to the **Home → Pool** view and you'll see a small "cloud" icon with a green check.
 * In the **Pool → Advanced** tab, you'll see a **High Availability** switch that shows if HA is enabled or not:
 
 ![Pool's advanced tab showing the heartbeat SR and the High Availability option.](../assets/img/xo-ha-enabled-disabled.png)
 
-To enable HA, just toggle it on, which gives you a SR selector as Heartbeat SR. 
+To enable HA, just toggle it on, which gives you a SR selector as Heartbeat SR.
 
 You can also enable it with this xe CLI command:
 
@@ -106,7 +106,7 @@ xe pool-ha-compute-max-host-failures-to-tolerate
 1
 ```
 
-But it could be also **0**. Because, even if you lose 1 host, is there not enough RAM to boot the HA VM on the last one? If not, you can't ensure their survival. 
+But it could be also **0**. Because, even if you lose 1 host, is there not enough RAM to boot the HA VM on the last one? If not, you can't ensure their survival.
 
 If you want to set the number yourself, you can do it with this command:
 
@@ -147,7 +147,7 @@ The start order defines the sequence in which XCP-ng HA attempts to restart prot
 
 ##### How and when does it apply?
 
-While the order property can be set for any VM, HA only uses it for VMs marked as **protected**. 
+While the order property can be set for any VM, HA only uses it for VMs marked as **protected**.
 
 The order value is an integer, with the default set to **0**, indicating the **highest priority**. VMs with an order value of 0 are restarted first, and those with higher values are restarted later in the sequence.
 
@@ -163,9 +163,9 @@ xe vm-param-set uuid=<VM UUID> order=<number>
 
 ##### What's the HA timeout?
 
-The HA timeout represents the duration during which networking or storage might be inaccessible to the hosts in your pool. 
+The HA timeout represents the duration during which networking or storage might be inaccessible to the hosts in your pool.
 
-If any XCP-ng server cannot regain access to networking or storage within the specified timeout period, it may self-fence and restart. 
+If any XCP-ng server cannot regain access to networking or storage within the specified timeout period, it may self-fence and restart.
 
 ##### How do I configure it?
 

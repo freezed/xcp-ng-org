@@ -249,7 +249,7 @@ For more info, please visit [this page](https://linbit.com/drbd-user-guide/drbd-
 
 #### drbd-reactor
 
-Several services are necessary for LINSTOR to work properly on XCP-ng. The most trivial are the `linstor-controller` and the `linstor-satellite` services. 
+Several services are necessary for LINSTOR to work properly on XCP-ng. The most trivial are the `linstor-controller` and the `linstor-satellite` services.
 
 :::warning
 Never manually start a controller on a pool where an SR is already configured. There is a reason for this and it's called high availability: a controller must always be available. If a host that was running the controller is rebooted, another machine will start another controller. A daemon called `drbd-reactor` automatically handles the startup process.
@@ -310,7 +310,7 @@ RemainAfterExit=true
 - A dedicated 10G or higher network interface for DRBD. It's possible to use the same interface used for host management (XAPI) but it's recommended to use a dedicated interface.
 - At least 1 disk on any machine of the pool (case without replication). Otherwise, any number of disks can be used on a machine. However, to be consistent, we recommend using the same model and number for each machine that has disks.
 - The replication/place count must be equal to 1, 2 or 3.
-- 
+-
 :::warning
 Changing the replication factor after creating XOSTOR is not possible, as it can lead to significant issues and is therefore not supported.
 :::
@@ -904,7 +904,7 @@ linstor rd delete xcp-volume-<RES_UUID>
 
 ### How to use a specific network for satellites?
 
-Doing this is not recommended. To guarantee a certain robustness of the pool, the best choice is to use the XAPI management interface.  
+Doing this is not recommended. To guarantee a certain robustness of the pool, the best choice is to use the XAPI management interface.
 But if you are sure of what you are doing:
 
 ```
@@ -941,7 +941,7 @@ You should  have a similar configuration in the file:
     }
 ```
 
-For each entry, modify the IPs to use the XAPI management interface of each hostname.  
+For each entry, modify the IPs to use the XAPI management interface of each hostname.
 Save and repeat this modification on each host.
 
 Restart `drbd-reactor` on each machine, using this command:
@@ -961,7 +961,7 @@ If the array is empty, execute:
 systemctl stop linstor-controller
 ```
 
-The controller will restart on the current machine or another one.  
+The controller will restart on the current machine or another one.
 Check again the resource list.
 
 #### 2. Reset the active satellite connection
@@ -1021,7 +1021,7 @@ Show reports:
     linstor error-reports show 660585D7-00000-000000
 ```
 
-In this situation, the LINSTOR database should be modified manually.  
+In this situation, the LINSTOR database should be modified manually.
 Copy the database to another directory:
 ```
 mkdir /root/linstor-db/
@@ -1089,7 +1089,7 @@ INSERT INTO LINSTOR.PROPS_CONTAINERS
 VALUES ('/NODES/R620-S4', 'PrefNic', 'default');
 ```
 
-:::warning  
+:::warning
 The value of `PROPS_INSTANCE` must be in capital letters, in this example: `/NODES/R620-S4`.
 :::
 
@@ -1158,7 +1158,7 @@ If the machine has to be removed:
 linstor node lost <NODE_NAME>
 ```
 
-The next step is to remove the machine from the pool using XAPI commands.  
+The next step is to remove the machine from the pool using XAPI commands.
 Or using `xsconsole`: "Resource Pool Configuration" => "Remove This Host from the Pool".
 
 Note: iptables config must also be modified to remove LINSTOR port rules (edit `/etc/sysconfig/iptables` then `service iptables restart` to apply the changes).

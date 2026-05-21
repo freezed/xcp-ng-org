@@ -147,7 +147,7 @@ ARRAY /dev/md0  metadata=1.2 UUID=53461f34:2414371e:820f9514:008b6458
 ARRAY /dev/md127  metadata=1.0 UUID=09871a29:26fa7ce1:0c9b040a:60f5cabf
 ```
 
-Each system and array will have different UUID identifiers so the numbers we have here are specific to this example. The UUID identifiers here will not work for another system. For each system, we'll need a way to get them to include in the `mdadm.conf` file. The best way is using the `mdadm` command itself while the arrays are running like this: 
+Each system and array will have different UUID identifiers so the numbers we have here are specific to this example. The UUID identifiers here will not work for another system. For each system, we'll need a way to get them to include in the `mdadm.conf` file. The best way is using the `mdadm` command itself while the arrays are running like this:
 
 ```
 [13:06 XCP-ng ~]# mdadm --examine --scan
@@ -198,11 +198,11 @@ kernel_cmdline+=" rd.md.uuid=53461f34:2414371e:820f9514:008b6458 "
 kernel_cmdline+=" rd.md.uuid=09871a29:26fa7ce1:0c9b040a:60f5cabf "
 ```
 
-This file contains two sets of instructions for `dracut`, some that affect how the initrd file is built and what is done at boot and the rest which are passed to the Linux kernel at boot. 
+This file contains two sets of instructions for `dracut`, some that affect how the initrd file is built and what is done at boot and the rest which are passed to the Linux kernel at boot.
 
 The first set instructs `dracut` to consider the `mdadm.conf` file we created earlier and also to include a copy of it in the initrd file, add `dracut` support for mdraid, include the kernel modules for mdraid support, and specifically support the two RAID devices by name.
 
-The second set instructs the booting Linux kernel to support automatic RAID assembly, support mdraid and the mdraid configuration and also to search for and start the two RAID arrays via their UUID identifiers. These are the same UUID identifiers that we included in the `mdadm.conf` file and, like the UUID identifiers there, are specific to each array and system. 
+The second set instructs the booting Linux kernel to support automatic RAID assembly, support mdraid and the mdraid configuration and also to search for and start the two RAID arrays via their UUID identifiers. These are the same UUID identifiers that we included in the `mdadm.conf` file and, like the UUID identifiers there, are specific to each array and system.
 
 Something to note when creating the file is to allow extra space between command line parameters. That is why most of the lines have extra space before and after parameters within the quotes.
 
@@ -308,7 +308,7 @@ This list shows both of the RAID arrays in the example system and shows that bot
 
 When installing the upgrade, no differences from a normal upgrade process are needed to account for either the RAID 1 boot array or the RAID 5 storage array. We should only need to ensure that the installer recognizes the previous installation and that we select an upgrade instead of an installation when prompted.
 
-After the upgrade has finished and the host system reboots, there may be problems with recognizing one or both of the RAID arrays. It is very unlikely that there will be a problem with the `md127` RAID 1 boot array with the most likely problem being the array operating with only one drive. Problems with the RAID 5 storage array are more likely but not common with the most likely problems being drives missing from the array or the array failing to activate. 
+After the upgrade has finished and the host system reboots, there may be problems with recognizing one or both of the RAID arrays. It is very unlikely that there will be a problem with the `md127` RAID 1 boot array with the most likely problem being the array operating with only one drive. Problems with the RAID 5 storage array are more likely but not common with the most likely problems being drives missing from the array or the array failing to activate.
 
 Once the host system has rebooted, check whether the `mdadm.conf` and `dracut_mdraid.conf` files are still in the correct locations and have the correct contents. It is possible that one or both of the files have been retained; in a test upgrade from XCP-ng version 8.2 to version 8.2 itself on the example system, the `mdadm.conf` file was preserved as part of the upgrade while the `dracut_mdraid.conf` file was not.
 

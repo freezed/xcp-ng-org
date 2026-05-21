@@ -68,7 +68,7 @@ Restart toolstack on CLI with the command `xe-toolstack-restart`. This just rest
 
 ### Cause
 
-You may get this error when attempting to add a new host to an existing pool. This occurs when you mix products, for instance adding a XenServer/Citrix Hypervisor host to an XCP-ng pool, or vice versa. 
+You may get this error when attempting to add a new host to an existing pool. This occurs when you mix products, for instance adding a XenServer/Citrix Hypervisor host to an XCP-ng pool, or vice versa.
 
 ### Solution
 
@@ -298,11 +298,11 @@ To know more about certificates in XAPI, check out the [XAPI documentation](http
 
 ### Issue
 
-When installing XCP-ng, at the screen displaying **Please select the keymap you would like to use**, the installer appears to freeze or stop accepting keyboard inputs. 
+When installing XCP-ng, at the screen displaying **Please select the keymap you would like to use**, the installer appears to freeze or stop accepting keyboard inputs.
 
 ### Cause
 
-This issue is often caused by keyboard being on **Scroll Lock** mode. 
+This issue is often caused by keyboard being on **Scroll Lock** mode.
 
 ### Solution
 

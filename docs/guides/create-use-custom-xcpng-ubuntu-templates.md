@@ -2,7 +2,7 @@
 
 How to create and use custom XCP-NG templates for Ubuntu?
 
-[Xen Orchestra](https://xen-orchestra.com) offers free templates via the XOA Hub (for users of Xen Orchestra Virtual Appliance). However, if you don't find what you need and wish to create your own templates with support for [Cloud-init](https://cloud-init.io/), this post is for you. 
+[Xen Orchestra](https://xen-orchestra.com) offers free templates via the XOA Hub (for users of Xen Orchestra Virtual Appliance). However, if you don't find what you need and wish to create your own templates with support for [Cloud-init](https://cloud-init.io/), this post is for you.
 
 [Cloud-init](https://cloud-init.io/) is a tool used in cloud environments, developed to automate the configuration and initialization of virtual machines at first boot. It allows for various configurations to be applied to a virtual machine without manual intervention. Here is an overview of its main functions:
 
@@ -77,7 +77,7 @@ The creation of the virtual image from a cloud image in OVA format is complete. 
 9. Connect via the console provided by [Xen Orchestra](https://xen-orchestra.com) or via SSH and update the repositories and the system:
 
     ```
-    $ sudo apt update 
+    $ sudo apt update
     $ sudo apt dist-upgrade
     ```
 
@@ -132,9 +132,9 @@ The creation of the virtual image from a cloud image in OVA format is complete. 
     ```
 
     **If using Ubuntu 24.04 or a later version**
-    
+
     Delete the file */etc/cloud/cloud.cfg.d/90-installer-network.cfg*:
-    
+
     ```
     sudo rm -f /etc/cloud/cloud.cfg.d/90-installer-network.cfg
     ```
@@ -176,7 +176,7 @@ The creation of the virtual image from a cloud image in OVA format is complete. 
     ```
     apt-get clean
     ```
-    
+
 21. Remove SSH host keys, so they can be regenerated when first booting a of newly provisioned VM.
 
     To do this, run this command:
@@ -239,7 +239,7 @@ The template has been created and added to the list of existing templates. The c
 
 Using the previously created template will allow you to rely on an existing virtual machine on which it will be possible to add configurations supported by Cloud-init. The [documentation](https://cloudinit.readthedocs.io/en/latest/index.html) for [Cloud-init](https://cloud-init.io/) regarding configurations is not user friendly. This [GitHub repository](https://github.com/number5/cloud-init/tree/main/doc/examples) associated with the official documentation makes it easier to understand the complexity of [Cloud-init](https://cloud-init.io/).
 
-Two configurations are available: one that describes the content of *cloud-config* and one that describes the content of *network-config*. In the following, we provide examples of these configurations. I encourage readers to use these examples and the official documentation to tailor them to their needs. 
+Two configurations are available: one that describes the content of *cloud-config* and one that describes the content of *network-config*. In the following, we provide examples of these configurations. I encourage readers to use these examples and the official documentation to tailor them to their needs.
 
 The following configuration allows you to change the hostname of the virtual machine and define a single user *admin* with an SSH key. Please note the presence of the password which is useful for accessing the virtual machine from the [Xen Orchestra](https://xen-orchestra.com) console.
 

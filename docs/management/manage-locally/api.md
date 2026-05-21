@@ -50,7 +50,7 @@ Example:
 pending_task_timeout = 172800
 ```
 
-After changing the configuration, restart the toolstack with `xe-toolstack-restart`. 
+After changing the configuration, restart the toolstack with `xe-toolstack-restart`.
 
 #### Enable/Disable HSTS
 
@@ -58,7 +58,7 @@ After changing the configuration, restart the toolstack with `xe-toolstack-resta
 Do not enable HSTS if you are using the default self‑signed certificate or if the full certificate chain cannot be verified.
 :::
 
-If you want to enable HTTP Strict Transport Security: 
+If you want to enable HTTP Strict Transport Security:
 - Create a new configuration file in `/etc/xapi.conf.d/`.
 - You can name it `/etc/xapi.conf.d/hsts.conf`.
 - Define the new value for `hsts_max_age`, in seconds.
@@ -73,7 +73,7 @@ Common values are:
 - 1 year --> 31536000
 - 2 years --> 63072000
 :::
-After changing the configuration, restart the toolstack with `xe-toolstack-restart`. 
+After changing the configuration, restart the toolstack with `xe-toolstack-restart`.
 
 Example with one command to enable HSTS and restart XAPI (example sets 1 year = 31536000):
 ```bash

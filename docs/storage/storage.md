@@ -181,7 +181,7 @@ We do not provide support for issues resulting from the choice of software RAID 
 
 Shared, thin-provisioned storage. Efficient, recommended for ease of maintenance and space savings.
 
-In Xen Orchestra, go in the "New" menu entry, then Storage, and select NFS. Follow instructions from there.  
+In Xen Orchestra, go in the "New" menu entry, then Storage, and select NFS. Follow instructions from there.
 
 :::tip
 Your host will mount the top-level NFS share you provide initially (example: /share/xen), then create folder(s) inside of that, then mount those directly instead (example: /share/xen/515982ab-476e-17b7-0e61-e68fef8d7d31). This means your NFS server or appliance must be set to allow sub-directory mounts, or adding the SR will fail. In FreeNAS or TrueNAS, this checkbox is called "All dirs" in the NFS share properties.
@@ -191,7 +191,7 @@ Your host will mount the top-level NFS share you provide initially (example: /sh
 
 Local, thin-provisioned. Not recommended.
 
-The `file` storage driver allows you to use any local directory as storage. 
+The `file` storage driver allows you to use any local directory as storage.
 
 Example:
 ```
@@ -535,7 +535,7 @@ yum install ceph-common --enablerepo=centos-ceph-nautilus,Vault-base
 Create `/etc/ceph/keyring` with your access secret for Ceph.
 
 ```
-# cat /etc/ceph/keyring 
+# cat /etc/ceph/keyring
 [client.admin]
 key = YOUR-SECRET-KEY
 ```
@@ -543,7 +543,7 @@ key = YOUR-SECRET-KEY
 Create `/etc/ceph/ceph.conf` as your matching setup.
 
 ```
-# cat /etc/ceph/ceph.conf 
+# cat /etc/ceph/ceph.conf
 [global]
 mon_host = mon-ip-1:6789,mon-ip-2:6789,mon-ip-3:6789
 

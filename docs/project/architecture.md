@@ -707,7 +707,7 @@ sequenceDiagram
    Note right of xapi supporter: local msg-switch&networkd
    xapi supporter->>xapi master: network created
    xapi master->>xapi-db: store information
-   
+
 ```
 
 OVS flow:
@@ -829,4 +829,4 @@ sequenceDiagram
     datapath->>vif: send packet to the right port
     Note left of NIC: no packets
     datapath->>datapath: remove flow cache entry
-``` 
+```

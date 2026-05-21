@@ -72,7 +72,7 @@ If your existing installation is in legacy BIOS mode, boot the ISO in BIOS mode.
 
 If your existing installation is in UEFI mode, boot the ISO in UEFI mode.
 
-In your server boot menu, you might see something like this: 
+In your server boot menu, you might see something like this:
 
 ```
 Please select boot device:
