@@ -423,48 +423,46 @@ Related forum thread: [https://xcp-ng.org/forum/topic/1465/migrating-from-kvm-to
 
 _Due the fact I have only server here, I have setup a "buffer" machine on my desktop to backup and convert the VM image file._
 
-* Install the dracut packages : yum install dracut-config-generic dracut-network
+1. Install the dracut packages
+  ```bash
+  yum install dracut-config-generic dracut-network
+  dracut --add-drivers xen-blkfront -f /boot/initramfs-$(uname -r).img $(uname -r)
+  ```
+   * If your VMs are in BIOS mode
+  ```bash
+  dracut --regenerate-all -f && grub2-mkconfig -o /boot/grub2/grub.cfg
+  ```
+   * If your VMs are in UEFI mode (OVMF Tianocore)
+   ```bash
+   dracut --regenerate-all -f && grub2-mkconfig -o /boot/efi/EFI/<your distribution>/grub.cfg
+   ```
+2. Shutdown the VM
+3. Use rsync to copy VM files to the "buffer" machine using `--sparse` flag.
+4. Convert the QCOW2 to VHD using QEMU-IMG :
+  ```bash
+  qemu-img convert -O vpc myvm.qcow2 myvm.vhd
+  ```
+5. Use rsync to copy the converted files (VHD) to your XCP-ng host.
+6. After the rsync operation, the VHD are not valid for the XAPI, so repair them :
+  ```bash
+  vhd-util repair -n myvm.vhd
+  vhd-util check -n myvm.vhd` should return `myvm.vhd is valid`
+  ```
 
-  `dracut --add-drivers xen-blkfront -f /boot/initramfs-$(uname -r).img $(uname -r)`
+7. For each VM, create a VDI on Xen Orchestra with the virtual size of your VHD + 1GB (i.e the virtual size of myvm is 21GB, so I create a VDI with a size of 22GB).
+8. Get the UUID of the VDI (on Xen Orchestra or CLI) and use the CLI on the XCP-ng host to import the VHD content into the VDI :
+  ```bash
+  xe vdi-import filename=myvm.vhd format=vhd --progress uuid=<VDI UUID>
+  ```
 
-  If your VMs are in BIOS mode :
+9. Once the import is done, create a virtual machine using XO or XCP-ng Center, delete the VM disk that has been created and attach your newly created VDI to the VM. Don't forget to set the VM boot mode to UEFI if your VMs was in UEFI mode.
+10. Boot the VM and find a way to enter in the virtual UEFI of the VM.
+  * Here, I type the Escape and F9,F10,F11,F12 keys like crazy.
+  * Select Boot Manager, you should see this window :
+  ![The virtual UEFI boot manager showing the QEMU HARDDISK selected.](../../assets/img/migrate-to-xcp-ng_bootloader.png)
 
-  `dracut --regenerate-all -f && grub2-mkconfig -o /boot/grub2/grub.cfg`
-
-  If your VMs are in UEFI mode (OVMF Tianocore) :
-
-  `dracut --regenerate-all -f && grub2-mkconfig -o /boot/efi/EFI/<your distribution>/grub.cfg`
-
-* Shutdown the VM
-
-* Use rsync to copy VM files to the "buffer" machine using `--sparse` flag.
-
-* Convert the QCOW2 to VHD using QEMU-IMG :
-
-  `qemu-img convert -O vpc myvm.qcow2 myvm.vhd`
-
-* Use rsync to copy the converted files (VHD) to your XCP-ng host.
-
-* After the rsync operation, the VHD are not valid for the XAPI, so repair them :
-
-   `vhd-util repair -n myvm.vhd`
-
-    `vhd-util check -n myvm.vhd` should return `myvm.vhd is valid`
-
-* For each VM, create a VDI on Xen Orchestra with the virtual size of your VHD + 1GB (i.e the virtual size of myvm is 21GB, so I create a VDI with a size of 22GB).
-
-* Get the UUID of the VDI (on Xen Orchestra or CLI) and use the CLI on the XCP-ng host to import the VHD content into the VDI :
-
-  `xe vdi-import filename=myvm.vhd format=vhd --progress uuid=<VDI UUID>`
-
-* Once the import is done, create a virtual machine using XO or XCP-ng Center, delete the VM disk that has been created and attach your newly created VDI to the VM. Don't forget to set the VM boot mode to UEFI if your VMs was in UEFI mode.
-
-* Boot the VM and find a way to enter in the virtual UEFI of the VM. Here, I type the Escape and F9,F10,F11,F12 keys like crazy. Select Boot Manager, you should see this window :
-
-![The virtual UEFI boot manager showing the QEMU HARDDISK selected.](../../assets/img/migrate-to-xcp-ng_bootloader.png)
-
-* Select `UEFI QEMU HARDDISK`, the screen should be black for seconds and you should see the GRUB. Let the machine worked for minutes and you should see the prompt finally 👍
-
-* Install Guest Tools and reboot. The reboot shouldn't take long, you don't have to redo step 13, the OS seems to have repair the boot sequence by itself.
+11. Select `UEFI QEMU HARDDISK`, the screen should be black for seconds and you should see the GRUB. Let the machine worked for minutes and you should see the prompt finally 👍
+12. Install Guest Tools and reboot.
+  * The reboot shouldn't take long, you don't have to redo step 13, the OS seems to have repair the boot sequence by itself.
 
 Done !
