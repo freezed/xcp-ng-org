@@ -26,4 +26,4 @@ All terms and acronyms.
 * XCP-ng: [XCP New Generation](https://xcp-ng.org/)
 * XCP: [Xen Cloud Platform](https://wiki.xenproject.org/wiki/XCP_Overview) (legacy Citrix project)
 * XOA: [Xen Orchestra Appliance](/management/manage-at-scale/xo-web-ui/)
-* XOSTOR: [Hyper-convergence solution based on DRBD](/xostor/)
+* XOSTOR: [Hyper-convergence solution based on LINSTOR](/xostor/)
