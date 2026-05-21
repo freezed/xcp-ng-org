@@ -285,15 +285,15 @@ Regarding the structure of this SR heartbeat volume:
 
 ### XOSTOR
 
-For DRBD/LINSTOR experts, and with the general architecture explanation, you can understand what happens when we replace the NFS hearbeat volume by a DRBD device.
+For DRBD/LINSTOR experts, and with the general architecture explanation, you can understand what happens when we replace the NFS hearbeat volume by a <abbr title="Distributed Replicated Block Device">DRBD</abbr> device.
 
-We must change our architecture because — basically — a DRBD volume can only be opened in one place at a time. We cannot easily write in each volume at the same time, because we would have to open or close the heartbeat volume several times per second. Or, we would have to set up a mechanism in the xha daemon so that each one writes in turn. Since this is complex to set up, we chose another approach.
+We must change our architecture because — basically — a <abbr title="Distributed Replicated Block Device">DRBD</abbr> volume can only be opened in one place at a time. We cannot easily write in each volume at the same time, because we would have to open or close the heartbeat volume several times per second. Or, we would have to set up a mechanism in the xha daemon so that each one writes in turn. Since this is complex to set up, we chose another approach.
 
 ![In XOSTOR case, each hosts have an HTTP DISK server, only one is active. It checks the ha-statefile, talk to each hosts NBD HTTP server which talks to their host XHA daemon.](../../assets/img/xha-xostor-sr.png)
 
-To support the fact that only one DRBD volume can be PRIMARY, and to avoid making significant changes to the xha/XHAPI modules, we had to be a bit creative. Instead of writing to or reading directly from the heartbeat volume on all hosts, we use an `NBD HTTP server` daemon. It's a process that listens through an NBD device, which is seen as the heartbeat volume by the XHA daemon.
+To support the fact that only one <abbr title="Distributed Replicated Block Device">DRBD</abbr> volume can be PRIMARY, and to avoid making significant changes to the xha/XHAPI modules, we had to be a bit creative. Instead of writing to or reading directly from the heartbeat volume on all hosts, we use an `NBD HTTP server` daemon. It's a process that listens through an NBD device, which is seen as the heartbeat volume by the XHA daemon.
 
-As a result, each read and write request from the XHA daemon goes through an NBD device. It is then transmitted via the HTTP protocol to another daemon called `HTTP disk server`, which is responsible for writing to the DRBD heartbeat volume.
+As a result, each read and write request from the XHA daemon goes through an NBD device. It is then transmitted via the HTTP protocol to another daemon called `HTTP disk server`, which is responsible for writing to the <abbr title="Distributed Replicated Block Device">DRBD</abbr> heartbeat volume.
 This whole new path acts as a proxy, hiding direct access to the actual heartbeat volume of the SR.
 
 Now, what happens if the host running the active `HTTP disk server` daemon crashes?
