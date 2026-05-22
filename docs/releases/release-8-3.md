@@ -4,7 +4,6 @@ sidebar_position: 1
 
 # XCP-ng 8.3 LTS
 
-
 XCP-ng 8.3 is an [LTS Release](../#-lts-releases). [Download the installation ISO](https://mirrors.xcp-ng.org/isos/8.3/xcp-ng-8.3.0-20250606.2.iso?https=1).
 
 SHA256 checksums, GPG signatures, and the net-install ISO are available [here](https://xcp-ng.org/#easy-to-install).
@@ -25,11 +24,13 @@ LTS means **Long Term Support**: more information in [this section](../#-lts-rel
 ## Release information
 
 For this release, the product lifecycle has changed:
+
 * A longer preview phase, enabling broad user feedback, now ended.
 * After the General Availability release, XCP-ng 8.3 continued to receive updates, allowing us to introduce new features while maintaining platform stability through improved testing processes.
 * On 2025-06-16, XCP-ng 8.3 transitioned to a Long-Term Support (LTS) release model, with a more conservative approach to updates.
 
 Key details:
+
 * Released on 2024-10-07.
 * Partly based on XenServer 8 (which succeeded Citrix Hypervisor 8.2 CU1) + updates.
 * Base version of CentOS in the control domain (dom0): 7 + security fixes backported by XCP-ng's Security Team.
@@ -45,15 +46,17 @@ See [Installation](../../../installation/install-xcp-ng).
 ## Upgrade from previous releases
 
 Upgrading to XCP-ng 8.3 is possible from:
-- An up-to-date XCP-ng 8.2.1 (recommended)
-- XCP-ng 8.0 or 8.1
-- A prerelease of XCP-ng 8.3
+* An up-to-date XCP-ng 8.2.1 (recommended)
+* XCP-ng 8.0 or 8.1
+* A prerelease of XCP-ng 8.3
 
 To upgrade from earlier releases, it is necessary to first upgrade the pool to XCP-ng 8.2.1 before proceeding with the upgrade to XCP-ng 8.3.
 
 :::warning
+
 * Only upgrades using the installation ISO image are supported. An in-place upgrade using `yum` is not possible nor supported.
 * Please carefully read these release notes, especially the [Deprecations and Removals](#deprecations-and-removals), [Attention Points](#attention-points), and [Known Issues](#known-issues) sections before performing the upgrade.
+
 :::
 
 Refer to the [Upgrade How-to](../../../installation/upgrade) for the exact upgrade process.
@@ -69,6 +72,7 @@ XCP-ng 8.3 is the result of years of development on XCP-ng, XenServer, and commo
 In order to give credit where it's due, changes primarily carried out by the developers at XenServer are marked with `[XS]`.
 
 Interested readers can also review all blog announcements related to XCP-ng 8.3 published over the last two years. These contain more detailed information than these release notes on specific topics, as well as development stories:
+
 * [XCP-ng 8.3 Alpha](https://xcp-ng.org/blog/2022/11/18/xcp-ng-8-3-alpha/)
 * [News about 8.3 Alpha](https://xcp-ng.org/blog/2023/02/27/news-about-8-3-alpha/)
 * [XCP-ng 8.3 Beta 1](https://xcp-ng.org/blog/2023/06/22/xcp-ng-8-3-beta-1/)
@@ -147,10 +151,10 @@ We ensured all mirrors hosting updates for XCP-ng support both IPv4 and IPv6. A 
 ### Increased limits [XS]
 
 VM limits:
-- Virtual CPUs per VM: raised to 64, when the guest OS supports it. At the time of writing, RHEL 8 and derivatives do not support more than 32.
+* Virtual CPUs per VM: raised to 64, when the guest OS supports it. At the time of writing, RHEL 8 and derivatives do not support more than 32.
 
 XCP-ng host limits:
-- Logical processors per host: raised to 960, depending on CPU support.
+* Logical processors per host: raised to 960, depending on CPU support.
 
 ### Hardware support
 
@@ -184,16 +188,16 @@ As a result, Guest UEFI Secure Boot is handled slightly differently in XCP-ng 8.
 
 Here’s how it works now. Although it may seem a bit convoluted, it balances various constraints while ensuring usability:
 
-- For Secure Boot to be available to UEFI VMs in a pool, UEFI certificates need to be installed once.
-- VMs get their copy of the certificates from the pool the first time they boot and are not updated by XCP-ng afterward.
-- An unfortunate consequence is that some VMs booted before the certificates were installed on the pool, or imported from another pool where certificates were missing, will not be ready for Secure Boot.
+* For Secure Boot to be available to UEFI VMs in a pool, UEFI certificates need to be installed once.
+* VMs get their copy of the certificates from the pool the first time they boot and are not updated by XCP-ng afterward.
+* An unfortunate consequence is that some VMs booted before the certificates were installed on the pool, or imported from another pool where certificates were missing, will not be ready for Secure Boot.
 
 However, we expanded XAPI's features and collaborated with Xen Orchestra developers to offer the following helpers:
 
-- A warning when attempting to enable Secure Boot on a pool that is not ready for it.
-- Auto-detection of a VM's Secure Boot readiness when users want to enable it.
-- A big button to propagate the pool's certificates to a VM's UEFI variable store if the certificates are missing for that VM, and thus make it Secure Boot ready.
-- Plus, links to our extensive [Guest UEFI Secure Boot guide](../guides/guest-UEFI-Secure-Boot.md) are provided in the user interface where needed.
+* A warning when attempting to enable Secure Boot on a pool that is not ready for it.
+* Auto-detection of a VM's Secure Boot readiness when users want to enable it.
+* A big button to propagate the pool's certificates to a VM's UEFI variable store if the certificates are missing for that VM, and thus make it Secure Boot ready.
+* Plus, links to our extensive [Guest UEFI Secure Boot guide](../guides/guest-UEFI-Secure-Boot.md) are provided in the user interface where needed.
 
 We also fixed an issue — reported by one of our testers — that caused all UEFI VMs to fail on some specific hardware, and we sent the patch to XenServer developers.
 
@@ -218,15 +222,16 @@ More about this feature can be found [in XenServer's documentation](https://docs
 Accepted ciphers, keys and algorithms used to be defined in `/etc/sshd_config` and `/etc/ssh_config`. Whenever we wanted to update them, we had to choose between potentially overwriting user modifications to these files, and not updating them (actually we had a middle ground where we attempted to patch just the relevant lines, but success was not guaranteed).
 
 Now it's simpler:
-- We define the accepted ciphers, keys, and algorithms directly at OpenSSH build time.
-- As long as users do not define settings that take precedence, we use our built-in defaults. To update them, we just publish a new build.
-- Users who choose to modify their SSH configuration will need to maintain these settings themselves, as any updates provided by our Security Team through new builds will be overridden by user-defined settings.
+* We define the accepted ciphers, keys, and algorithms directly at OpenSSH build time.
+* As long as users do not define settings that take precedence, we use our built-in defaults. To update them, we just publish a new build.
+* Users who choose to modify their SSH configuration will need to maintain these settings themselves, as any updates provided by our Security Team through new builds will be overridden by user-defined settings.
 
 ### Restricted use of port 80 [XS]
 
 To enhance security, it is now possible to close TCP port 80 on the management interface. By default, port 80 remains open for specific clients that may still require it, but all internal connections now utilize HTTPS. Previously, VM migration occurred over port 80, but this has been updated.
 
 To close port 80, run the following command:
+
 ```
 xe pool-param-set uuid=<pool-uuid> https-only=true
 ```
@@ -238,21 +243,21 @@ Two years ago, development around XenServer's (and XCP-ng's) installer [was open
 However, despite good intentions on both sides, not every change we submitted was accepted, and the XS image-creation process is still not open, leading to some remaining divergences. Unfortunately, some improvements we developed couldn’t be included in XCP-ng 8.3 as they would have caused significant differences with the upstream base (keeping large patches up to date as the base code evolves is not sustainable).
 
 Key improvements made to the installer include:
-- `memtest86+` has been updated to version 6 with EFI support.
-- The `xen-pciback.hide` boot parameter (useful for PCI passthrough) will now persist when upgrading XCP-ng (merged upstream).
-- The default SR type now defaults to `ext`, and users are presented with radio buttons instead of a checkbox for the choice (not contributed upstream as it’s irrelevant for XenServer).
-- The "Do you want to install any supplemental packs?" dialog was removed at the end of installation (submitted upstream to make it optional, so we can disable it while maintaining upstream consistency). Exception: it still appears if a driver disk was loaded during installation.
-- The primary disk selection screen always appears, even if only one disk is available. Previously, if only one disk met the prerequisites, the screen was skipped, leading users to mistake the Local SR creation screen for the primary disk selection (merged upstream).
-- Better error message granularity when installations fail due to incorrect system dates, signature issues, etc. (merged upstream).
-- Improved robustness when installing on used disks that contain ZFS metadata.
-- Earlier warnings if attempting to upgrade a system with a different BIOS type (Legacy BIOS vs. UEFI), preventing issues later in the process.
-- The installer now blocks upgrades if the host's certificate key length is less than 2048 bits. See [Host certificate key too small prevents upgrade](#host-certificate-key-too-small-prevents-upgrade).
-- IPv6 support was added. Although not accepted upstream yet, it was important enough to retain in XCP-ng's installer version, with hopes that XenServer developers will review it in the future.
-- Various bugfixes.
+* `memtest86+` has been updated to version 6 with EFI support.
+* The `xen-pciback.hide` boot parameter (useful for PCI passthrough) will now persist when upgrading XCP-ng (merged upstream).
+* The default SR type now defaults to `ext`, and users are presented with radio buttons instead of a checkbox for the choice (not contributed upstream as it’s irrelevant for XenServer).
+* The "Do you want to install any supplemental packs?" dialog was removed at the end of installation (submitted upstream to make it optional, so we can disable it while maintaining upstream consistency). Exception: it still appears if a driver disk was loaded during installation.
+* The primary disk selection screen always appears, even if only one disk is available. Previously, if only one disk met the prerequisites, the screen was skipped, leading users to mistake the Local SR creation screen for the primary disk selection (merged upstream).
+* Better error message granularity when installations fail due to incorrect system dates, signature issues, etc. (merged upstream).
+* Improved robustness when installing on used disks that contain ZFS metadata.
+* Earlier warnings if attempting to upgrade a system with a different BIOS type (Legacy BIOS vs. UEFI), preventing issues later in the process.
+* The installer now blocks upgrades if the host's certificate key length is less than 2048 bits. See [Host certificate key too small prevents upgrade](#host-certificate-key-too-small-prevents-upgrade).
+* IPv6 support was added. Although not accepted upstream yet, it was important enough to retain in XCP-ng's installer version, with hopes that XenServer developers will review it in the future.
+* Various bugfixes.
 
 Our contribution was not (yet?) accepted for:
-- LACP bond creation from the installer.
-- Improved handling of existing software RAIDs.
+* LACP bond creation from the installer.
+* Improved handling of existing software RAIDs.
 
 We redesigned the image-creation process to [use a brand new set of scripts](https://github.com/xcp-ng/create-install-image/) - here again, this effort which started for 8.3 was already put to good use last year with XCP-ng 8.2.1's latest refreshed installation ISOs. Users willing to customize the installation images also have a more light-weight option, with our [iso-remaster script](https://github.com/xcp-ng/xcp/tree/master/scripts/iso-remaster). And those facing a missing hardware driver at installation time will also have the option of [producing a Driver Disk](https://github.com/xcp-ng/driver-disks) to complement a pristine installation image.
 
@@ -279,10 +284,10 @@ The correct method for adding custom multipath configurations is by creating a f
 To address these issues, we contributed changes to Citrix Hypervisor/XenServer developers, which were accepted.
 
 Here's what changes:
-- A warning is now added at the top of `/etc/multipath.conf`, instructing users not to edit it and directing them to use `/etc/multipath/conf.d/` instead.
-- The `/etc/multipath/conf.d/` directory is created by default.
-- A ready-to-modify `/etc/multipath/conf.d/custom.conf` file is included. As noted inside the file, it will even be preserved during upgrades to future XCP-ng versions.
-- Any changes made to the default `/etc/multipath.conf` will be overwritten by future updates to the file.
+* A warning is now added at the top of `/etc/multipath.conf`, instructing users not to edit it and directing them to use `/etc/multipath/conf.d/` instead.
+* The `/etc/multipath/conf.d/` directory is created by default.
+* A ready-to-modify `/etc/multipath/conf.d/custom.conf` file is included. As noted inside the file, it will even be preserved during upgrades to future XCP-ng versions.
+* Any changes made to the default `/etc/multipath.conf` will be overwritten by future updates to the file.
 
 ### Network selection for the Host Evacuate feature
 
@@ -318,7 +323,7 @@ However, if your storage or host is already under heavy load, this can impact th
 
 To address this, we enhanced the XAPI method with an optional "batch size" parameter:
 
-https://github.com/xapi-project/xen-api/pull/5203
+<https://github.com/xapi-project/xen-api/pull/5203>
 
 Thanks to the responsiveness of the XAPI team, this modification was merged quickly. But it doesn't stop there! Now that the method has this optional parameter, Xen Orchestra also uses it, with a default concurrency of 3. This strikes a balance between migration speed and reducing VM pause time during live migrations, and it doesn't require changing any default configuration on your hosts.
 
@@ -332,13 +337,13 @@ However, this feature has known flaws, so we recommend against using it unless a
 
 ### Other changes
 
-- Almost all Python components have been ported to Python 3.
-- VLAN display support has been added to `xsconsole` (contributed upstream to the XAPI project).
-- `smartmontools` was updated to version 7, adding JSON export. We also added a XAPI plugin used by Xen Orchestra to display disk status.
-- Updated guest templates, including two new generic Linux templates (BIOS and UEFI).
-- The web server provided by XAPI now reports the correct MIME type for SVG (and other) files, a requirement for XO Lite.
-- IPv6 support for VM network booting [XS].
-- Numerous under-the-hood changes and fixes.
+* Almost all Python components have been ported to Python 3.
+* VLAN display support has been added to `xsconsole` (contributed upstream to the XAPI project).
+* `smartmontools` was updated to version 7, adding JSON export. We also added a XAPI plugin used by Xen Orchestra to display disk status.
+* Updated guest templates, including two new generic Linux templates (BIOS and UEFI).
+* The web server provided by XAPI now reports the correct MIME type for SVG (and other) files, a requirement for XO Lite.
+* IPv6 support for VM network booting [XS].
+* Numerous under-the-hood changes and fixes.
 
 We've also invested heavily in test automation to improve coverage. Nevertheless, feedback from our user community remains invaluable (and really was during all the development of XCP-ng 8.3!).
 
@@ -346,11 +351,11 @@ We've also invested heavily in test automation to improve coverage. Nevertheless
 
 [Additional packages](../../management/additional-packages) are packages made available by the XCP-ng team directly in our RPM repositories, for easy installation and update on XCP-ng hosts.
 
-- [Alternate kernel](../../installation/hardware#-alternate-kernel) updated to version 4.19.316 (as of XCP-ng 8.3 release).
-- New [alternate driver packages](../../installation/hardware#-alternate-drivers): `intel-i40e-alt`, `intel-ice-alt`, `tg3-module-alt`, and `mlx4-modules-alt`. Various other alternate driver packages were also updated. See [XCP-ng Drivers](https://github.com/xcp-ng/xcp/wiki/Drivers).
-- `zfs` updated to version 2.1.15. ⚠️ Existing ZFS pools may need to be upgraded using `zpool upgrade`. Check ZFS documentation.
-- `netdata` updated to version 1.44.3.
-- `lsscsi` added to the XCP-ng repositories.
+* [Alternate kernel](../../installation/hardware#-alternate-kernel) updated to version 4.19.316 (as of XCP-ng 8.3 release).
+* New [alternate driver packages](../../installation/hardware#-alternate-drivers): `intel-i40e-alt`, `intel-ice-alt`, `tg3-module-alt`, and `mlx4-modules-alt`. Various other alternate driver packages were also updated. See [XCP-ng Drivers](https://github.com/xcp-ng/xcp/wiki/Drivers).
+* `zfs` updated to version 2.1.15. ⚠️ Existing ZFS pools may need to be upgraded using `zpool upgrade`. Check ZFS documentation.
+* `netdata` updated to version 1.44.3.
+* `lsscsi` added to the XCP-ng repositories.
 
 ## Status of XOSTOR in XCP-ng 8.3
 
@@ -446,6 +451,7 @@ Important changes or adjustments that may affect how you use the product. Be sur
 Hosts initially installed with a version of XenServer or XCP-ng less than 8.0, by default, have a host TLS certificate whose key length is only 1024. In XCP-ng 8.3, the `stunnel` services, which handle TLS protocols, require a key length of at least 2048 bit. A key that's too small causes communication failures, making it impossible for the host to communicate with other hosts in the pool or external clients such as Xen Orchestra or XO Lite.
 
 To prevent this situation after an upgrade:
+
 1. We added this warning.
 2. The installer will refuse to upgrade if the detected key length is too small.
 3. Xen Orchestra developers have added a visible warning to make users aware of the issue before attempting any upgrade to XCP-ng 8.3. If applicable, the warning is displayed next to the host name in the Hosts view.
@@ -494,13 +500,13 @@ See [Active Directory in XCP-ng](#active-directory-in-xcp-ng).
 
 With all the IPv4-only assumptions embedded in the code of various components, adding IPv6 support was a challenging task, but we managed to make it work. However, there are still some rough edges. We already have internal fixes for several of these issues, and they'll be released shortly.
 
-- Using IPv4 and IPv6 simultaneously ("dual stack") remains experimental and will be further stabilized through future updates.
-- When both IPv6 and a VLAN are configured for the management interface, the IP configuration may be lost after a reboot. A fix will be released shortly after the initial release.
-- Disabling port 80 doesn't work with IPv6 configurations on the management interface, as it currently only blocks IPv4 traffic. A fix will follow soon after the release.
-- Performing an emergency network restart reverts the configuration to IPv4 + DHCP instead of retaining IPv6 settings. This will also be fixed shortly after the release.
-- Ejecting a host from a pool causes it to fall back to IPv4 + DHCP, instead of maintaining its IPv6 configuration. A fix is coming soon.
-- DHCPv6 support is still incomplete.
-- Manually configured DNS settings can be overwritten by autoconf.
+* Using IPv4 and IPv6 simultaneously ("dual stack") remains experimental and will be further stabilized through future updates.
+* When both IPv6 and a VLAN are configured for the management interface, the IP configuration may be lost after a reboot. A fix will be released shortly after the initial release.
+* Disabling port 80 doesn't work with IPv6 configurations on the management interface, as it currently only blocks IPv4 traffic. A fix will follow soon after the release.
+* Performing an emergency network restart reverts the configuration to IPv4 + DHCP instead of retaining IPv6 settings. This will also be fixed shortly after the release.
+* Ejecting a host from a pool causes it to fall back to IPv4 + DHCP, instead of maintaining its IPv6 configuration. A fix is coming soon.
+* DHCPv6 support is still incomplete.
+* Manually configured DNS settings can be overwritten by autoconf.
 
 ### Pool metadata backup temporarily unavailable from console
 
@@ -515,6 +521,7 @@ Though not all issues from XenServer 8 apply to XCP-ng 8.3, some of the informat
 ### Cross-pool live migration from XenServer < 7.1
 
 Live migrating a VM from an older XenServer version can sometimes result in errors, leading to the following consequences:
+
 * The VM may reboot.
 * The VM may get duplicated, meaning the same VM UUID (and usually its VDIs too) will appear both on the sender and receiver host. In such a case, you'll need to remove the duplicate from the receiver host.
 

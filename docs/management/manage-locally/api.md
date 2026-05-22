@@ -45,6 +45,7 @@ For example, you can name it `/etc/xapi.conf.d/increase-task-timeout.conf`.
 Define the new value for `pending_task_timeout`, in seconds.
 
 Example:
+
 ```ini
 # set XAPI task timeout to 48h
 pending_task_timeout = 172800
@@ -59,23 +60,29 @@ Do not enable HSTS if you are using the default self‑signed certificate or if 
 :::
 
 If you want to enable HTTP Strict Transport Security:
+
 - Create a new configuration file in `/etc/xapi.conf.d/`.
 - You can name it `/etc/xapi.conf.d/hsts.conf`.
 - Define the new value for `hsts_max_age`, in seconds.
 
 Example:
+
 ```ini
 # Set HSTS retained for 1y
 hsts_max_age = 31536000
 ```
+
 :::tip
 Common values are:
+
 - 1 year --> 31536000
 - 2 years --> 63072000
+
 :::
 After changing the configuration, restart the toolstack with `xe-toolstack-restart`.
 
 Example with one command to enable HSTS and restart XAPI (example sets 1 year = 31536000):
+
 ```bash
 echo "hsts_max_age = 31536000" > /etc/xapi.conf.d/hsts.conf' && sudo xe-toolstack-restart
 ```
@@ -86,9 +93,10 @@ You can then type `xapi-wait-init-complete 30` to ensure that XAPI has fully sta
 
 ### Verify HSTS header and max-age
 
-This checks whether the response from https://localhost/ contains a Strict-Transport-Security header with a positive max-age and prints "HSTS: OK" or "HSTS: KO".
+This checks whether the response from <https://localhost/> contains a Strict-Transport-Security header with a positive max-age and prints "HSTS: OK" or "HSTS: KO".
 
 Recommended one-liner (Won't work with self-signed certs):
+
 ```bash
 curl -sI https://localhost/ \
     | grep -iE '^Strict-Transport-Security:.*max-age=[1-9][0-9]*' \
@@ -96,8 +104,10 @@ curl -sI https://localhost/ \
 ```
 
 :::note
+
 - The regex was tightened to match any positive integer (not just a single digit).
 - max-age=0 means HSTS is disabled.
+
 :::
 
 To undo the change, remove the previously added configuration file (e.g. `/etc/xapi.conf.d/hsts.conf`) and restart the toolstack.

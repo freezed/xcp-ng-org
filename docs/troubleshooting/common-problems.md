@@ -134,14 +134,14 @@ Example: `# tcpdump -i eth0 -v -nn |grep incorrect`
 
 **NOTE**: These changes does not guarantee improved network performance, please use iperf3 to check before and after the change.
 
-- If you see transmit TCP offload checksum errors like this:
+* If you see transmit TCP offload checksum errors like this:
 
      `<XCP-ng host IP>.443 > x.x.x.x.19723: Flags [.], cksum 0x848a (incorrect -> 0x1b17), ack 3537, win 1392, length 0`
 
      then try running
      `# xe pif-param-set uuid=$PIFUUID other-config:ethtool-tx="off"` where $PIFUUID is the UUID of the physical interface.
 
-- If you see receive TCP offload checksum errors like this:
+* If you see receive TCP offload checksum errors like this:
 
      `x.x.x.x.445 > <XCP-ng host IP>.58710: Flags [.], cksum 0xa189 (incorrect -> 0xc352), seq 469937:477177, ack 53892, win 256, options [nop,nop,TS val 170183446 ecr 146516], length 7240WARNING: Packet is continued in later TCP segments`
 
@@ -166,9 +166,9 @@ In some cases, at least observed on XCP-ng 8.2.1 with Intel I219-V NICs, having 
 
 **NOTE**: This change does not guarantee improved network performance, please use iperf3 to check before and after the change.
 
-- Identify your PIF UUID using `# xe pif-list`
-- Disable TSO: `# xe pif-param-set uuid=$PIFUUID other-config:ethtool-tso="off"`
-- Either unplug/plug the PIF for the change to be taken into account, or reboot your host
+* Identify your PIF UUID using `# xe pif-list`
+* Disable TSO: `# xe pif-param-set uuid=$PIFUUID other-config:ethtool-tso="off"`
+* Either unplug/plug the PIF for the change to be taken into account, or reboot your host
 
 :::warning
 If running the unplug/plug commands through ssh, make sure you're not doing so over the network that will be unplugged. Ideally it is recommended to do such changes through your machine IPMI interface or on via physical access
@@ -223,7 +223,7 @@ Some versions of Ubuntu 18.04 might fail to boot, due to a Xorg bug affecting GD
 
 ### Solution
 
-The solution is to use `vga=normal fb=false` on Grub boot kernel to overcome this. You can add those into ` /etc/default/grub`, for the `GRUB_CMDLINE_LINUX_DEFAULT` variable. Then, a simple `sudo update-grub` will provide the fix forever.
+The solution is to use `vga=normal fb=false` on Grub boot kernel to overcome this. You can add those into `/etc/default/grub`, for the `GRUB_CMDLINE_LINUX_DEFAULT` variable. Then, a simple `sudo update-grub` will provide the fix forever.
 
 You can also remove the `hwe` kernel and use the `generic` one: this way, the problem won't occur at all.
 
@@ -242,6 +242,7 @@ In specific conditions, the global template generation can fail. If you attempt 
 ### Solution
 
 Simply go to the console of your XCP-NG host and enter the following command:
+
 ```
 /usr/bin/create-guest-templates
 ```
@@ -262,7 +263,6 @@ cat /var/lib/xcp-ng-xapi-plugins/updater.py.lock
 
 It should be empty, but if you have the bug, you got `check_update`.
 
-
 ### Solution
 
 Remove `/var/lib/xcp-ng-xapi-plugins/updater.py.lock` and that should fix it.
@@ -277,6 +277,7 @@ Upgrading from 8.2 to 8.3 can cause an issue where `/etc/stunnel/xapi-pool-ca-bu
 You can check this with `ls -l /etc/stunnel/xapi-pool-ca-bundle.pem` on the host.
 It will cause issues when live-migrating VDIs between SRs (even if the VM remains on the same host).
 The migration fails with:
+
 ```
 Xenops_interface.Xenopsd_error([S(Internal_error);S(Sys_error(\"Connection reset by peer\"))])
 ```
@@ -284,9 +285,11 @@ Xenops_interface.Xenopsd_error([S(Internal_error);S(Sys_error(\"Connection reset
 ### Solution
 
 To fix this, create the file with the following command:
+
 ```
 xe host-refresh-server-certificate host=<host name>
 ```
+
 This will create the correct file on the host.
 You will need to run the command on all hosts of the pool.
 

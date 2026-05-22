@@ -3,10 +3,12 @@
 ## Foreword
 
 :::warning
+
 - This guide is specifically for environments using LACP-only networks, without LACP fallback. It assumes you do not want to reconfigure your switches.
 - The recommended approach is to enable "LACP fallback" (or an equivalent feature) on your switch. This way you can simply use a single interface during installation or upgrade.
 - If you’re performing a new installation on an LACP-only network, be aware that your host will lose network connectivity after booting. You’ll need physical access or IPMI access to configure the network properly afterward. Xen Orchestra won’t be able to assist with bond creation at this stage.
 - For upgrades, your existing configuration will remain intact after the upgrade is done.
+
 :::
 
 Our installer does not support LACP. This guide explains how to bypass this limitation, but please read all the instructions carefully before proceeding, as there are important caveats.
@@ -40,10 +42,10 @@ Do not attempt to configure the bond yet. Doing so would mislead the installer i
 
 ![Installer's keymap selection.](../assets/img/installer-keymap-screen.png)
 
-2. Select your keymap, and proceed to the next screen: **Welcome to XCP-ng Setup**
-3. You can now switch to the second terminal. To do this, use `alt+F2` or `alt+right`.
-4. Use `ip link` to make sure that the interfaces are named `ethX`. If that's the case, you can move on to the next steps.
-5. Now we can configure a bond using standard linux tools.
+1. Select your keymap, and proceed to the next screen: **Welcome to XCP-ng Setup**
+2. You can now switch to the second terminal. To do this, use `alt+F2` or `alt+right`.
+3. Use `ip link` to make sure that the interfaces are named `ethX`. If that's the case, you can move on to the next steps.
+4. Now we can configure a bond using standard linux tools.
 
 ```bash
 modprobe bonding mode=802.3ad miimon=100 # automatically creates bond0 in 8.3 installer
@@ -53,7 +55,7 @@ ip link set eth0 master bond0
 ip link set eth1 master bond0
 ```
 
-6. Configure an IP address. There are two ways to do this:
+1. Configure an IP address. There are two ways to do this:
 
 - Via DHCP:
 
@@ -80,7 +82,7 @@ For example:\
 
 ![Networking configuration screen with a new option: Use existing configuration.](../assets/img/installer-use-existing-configuration.png)
 
-2. Reboot your host.
+1. Reboot your host.
 
 You're all done! Your host will automatically restore its previous bond configuration after the reboot.
 
@@ -95,12 +97,12 @@ During a network installation, you’ll encounter 2 steps related to network con
 
 ![Networking configuration with "Use existing configuratio" option that will allow the installer to reach the repository for netinstall.](../assets/img/netinstall-repo-network.png)
 
-2. During the second step, the **Use existing configuration** option won’t be available. Instead, you’ll need to select one of the interfaces provided by the installer. While you can still configure the hostname and other basic network settings, you won’t be able to set up your bond at this stage.
+1. During the second step, the **Use existing configuration** option won’t be available. Instead, you’ll need to select one of the interfaces provided by the installer. While you can still configure the hostname and other basic network settings, you won’t be able to set up your bond at this stage.
 
 ![Networking configuration not offering the "Use existing configuration" option.](../assets/img/netinstall-management-network.png)
 
-3. Proceed with the installation.
-4. Reboot your host.
+1. Proceed with the installation.
+2. Reboot your host.
 
 :::tip
 The first boot can take a while. Give the host enough time for everything to start up before proceeding to the next steps.
@@ -121,13 +123,13 @@ At this point, you’ll need to create your bond and set it as the management in
 xe network-create name-label="bond0"
 ```
 
-2. Create the bond using the `network-uuid` that command just returned:
+1. Create the bond using the `network-uuid` that command just returned:
 
 ```bash
 xe bond-create mode=lacp network-uuid=<network_uuid> pif-uuids=<pif_uuid#1>,<pif-uuid#2>
 ```
 
-3. Set the previously created bond as your management interface:
+1. Set the previously created bond as your management interface:
 
 ```bash
 # for example, to set a static IP:

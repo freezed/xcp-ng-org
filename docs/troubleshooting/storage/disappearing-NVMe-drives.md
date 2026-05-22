@@ -25,9 +25,9 @@ APST can be disabled by adding `nvme_core.default_ps_max_latency_us=0` to your k
 
 ```
 menuentry 'XCP-ng' {
-	search --label --set root root-jnugiq
-	multiboot2 /boot/xen.gz dom0_mem=7584M,max:7584M watchdog ucode=scan dom0_max_vcpus=1-16 crashkernel=256M,below=4G console=vga vga=mode-0x0311
-	module2 /boot/vmlinuz-4.19-xen root=LABEL=root-jnugiq ro nolvm hpet=disable console=hvc0 console=tty0 quiet vga=785 splash plymouth.ignore-serial-consoles nvme_core.default_ps_max_latency_us=0
-	module2 /boot/initrd-4.19-xen.img
+ search --label --set root root-jnugiq
+ multiboot2 /boot/xen.gz dom0_mem=7584M,max:7584M watchdog ucode=scan dom0_max_vcpus=1-16 crashkernel=256M,below=4G console=vga vga=mode-0x0311
+ module2 /boot/vmlinuz-4.19-xen root=LABEL=root-jnugiq ro nolvm hpet=disable console=hvc0 console=tty0 quiet vga=785 splash plymouth.ignore-serial-consoles nvme_core.default_ps_max_latency_us=0
+ module2 /boot/initrd-4.19-xen.img
 }
 ```

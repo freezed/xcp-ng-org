@@ -27,7 +27,6 @@ In addition to this, storage can be either local or shared between hosts of a po
 
 There are storage types that are officially supported, and others that are provided as-is, in the hope that they are useful to you. Actually, we do maintain them too, but they receive less testing than the officially supported ones.
 
-
 <table>
   <tr>
     <th>Type of Storage Repository</th>
@@ -146,7 +145,8 @@ The concept is simple: tell XCP-ng which disk or partition you want to use, and 
 As XCP-ng will handle everything for you, be aware that the device or partition will be formatted.
 
 * Don't create a SR over a device or partition that contains important data.
-* If you want to attach an existing SR to your pool, don't create a new local SR over it, else your virtual disks will be deleted. Instead, use the `xe sr-introduce` command. Further explanation can be found in the official XenServer documentation: https://support.citrix.com/external/article?articleUrl=CTX121896-how-to-introduce-a-local-storage-repository-in-xenserver
+* If you want to attach an existing SR to your pool, don't create a new local SR over it, else your virtual disks will be deleted. Instead, use the `xe sr-introduce` command. Further explanation can be found in the official XenServer documentation: <https://support.citrix.com/external/article?articleUrl=CTX121896-how-to-introduce-a-local-storage-repository-in-xenserver>
+
 :::
 
 In [Xen Orchestra](../management#%EF%B8%8F-manage-at-scale):
@@ -194,6 +194,7 @@ Local, thin-provisioned. Not recommended.
 The `file` storage driver allows you to use any local directory as storage.
 
 Example:
+
 ```
 xe sr-create host-uuid=<host UUID> type=file content-type=user name-label="Local File SR" device-config:location=/path/to/storage
 ```
@@ -207,7 +208,6 @@ Shared, thin-provisioned storage.
 XOSTOR is an hyperconvergence solution. In short, your local storage are combined into a big shared storage.
 
 The detailed documentation is available on [this dedicated page](../xostor/xostor.md).
-
 
 ### ZFS
 
@@ -335,11 +335,13 @@ xe sr-create content-type=user type=glusterfs name-label=GlusterSharedStorage sh
 Shared, thin-provisioned storage. Available since XCP-ng 8.2.
 
 :::warning
-- **CephFS storage integration is offered as-is** and does not come with official support.
-- This way of using Ceph requires installing `ceph-common` inside dom0 from outside the official XCP-ng repositories. It is reported to be working by some users, but isn't recommended officially (see [Additional packages](../management/additional-packages)). You will also need to be careful about system updates and upgrades.
+* **CephFS storage integration is offered as-is** and does not come with official support.
+* This way of using Ceph requires installing `ceph-common` inside dom0 from outside the official XCP-ng repositories. It is reported to be working by some users, but isn't recommended officially (see [Additional packages](../management/additional-packages)). You will also need to be careful about system updates and upgrades.
+
 :::
 
 You can use this driver to connect to an existing Ceph storage filesystem, and configure it as a shared SR for all your hosts in the pool. This driver uses `mount.ceph` from `ceph-common` package of `centos-release-ceph-nautilus` repo. So user needs to install it before creating the SR. Without it, the SR creation would fail with an error like below
+
 ```
 Error code: SR_BACKEND_FAILURE_47
 Error parameters: , The SR is not available [opterr=ceph is not installed],
@@ -372,6 +374,7 @@ enabled=0
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-$releasever
 ```
+
 After that follow installation steps
 
 ```
@@ -386,20 +389,24 @@ yum install ceph-common --enablerepo=centos-ceph-nautilus,Vault-base
 ```
 
 Create `/etc/ceph/admin.secret` with your access secret for CephFS.
+
 ```
 # cat /etc/ceph/admin.secret
 AQBX21dfVMJtBhAA2qthmLyp7Wxz+T5YgoxzeQ==
 ```
 
 Now you can create the SR where `server` is your mon ip.
+
 ```
 # xe sr-create type=cephfs name-label=ceph device-config:server=172.16.10.10 device-config:serverpath=/xcpsr device-config:options=name=admin,secretfile=/etc/ceph/admin.secret
 ```
 
 :::tip
+
 * For `serverpath` it would be good idea to use an empty folder from the CephFS instead of `/`.
 * You may specify `serverport` option if you are using any other port than 6789.
-* Do not use admin keyring for production, but make a separate key with only necessary privileges https://docs.ceph.com/en/latest/rados/operations/user-management/
+* Do not use admin keyring for production, but make a separate key with only necessary privileges <https://docs.ceph.com/en/latest/rados/operations/user-management/>
+
 :::
 
 ### MooseFS
@@ -410,32 +417,37 @@ MooseFS is a fault-tolerant, highly available, highly performing, scaling-out, n
 SR driver was contributed directly by MooseFS Development Team.
 
 :::warning
-- **MooseFS storage integration is provided as-is** and does not come with official support.
-- The MooseFS client is not included with XCP-ng, so it must be installed on dom0 from the official MooseFS repository.
-- By default, the MooseFS repository will be set as enabled. This means that any system update will also update the MooseFS client. Please, consider disabling the repository after installation.
+* **MooseFS storage integration is provided as-is** and does not come with official support.
+* The MooseFS client is not included with XCP-ng, so it must be installed on dom0 from the official MooseFS repository.
+* By default, the MooseFS repository will be set as enabled. This means that any system update will also update the MooseFS client. Please, consider disabling the repository after installation.
+
 :::
 
 Installation steps
+
 ```
 curl "https://ppa.moosefs.com/RPM-GPG-KEY-MooseFS" > /etc/pki/rpm-gpg/RPM-GPG-KEY-MooseFS
 curl "http://ppa.moosefs.com/MooseFS-3-el7.repo" > /etc/yum.repos.d/MooseFS.repo
 yum install moosefs-client
 ```
+
 :::tip
-- By default, the `moosefs` storage driver is not enabled and must be whitelisted in XAPI's configuration.
-- The list of accepted storage drivers is defined in `/etc/xapi.conf` but we must *never* modify this file directly. Instead, copy the `sm-plugins` definition from it, add `moosefs` to the line, and write the resulting line to a new `/etc/xapi.conf.d/99-enable-moosefs.conf` file.
-- ⚠️ XAPI only takes the last definition of `sm-plugins` it reads into account. Files are read in alphabetical order. If there's already a configuration file in `/etc/xapi.conf.d` (to enable another additional storage driver), take it into consideration when you write your new definition of `sm-plugins`.
+* By default, the `moosefs` storage driver is not enabled and must be whitelisted in XAPI's configuration.
+* The list of accepted storage drivers is defined in `/etc/xapi.conf` but we must *never* modify this file directly. Instead, copy the `sm-plugins` definition from it, add `moosefs` to the line, and write the resulting line to a new `/etc/xapi.conf.d/99-enable-moosefs.conf` file.
+* ⚠️ XAPI only takes the last definition of `sm-plugins` it reads into account. Files are read in alphabetical order. If there's already a configuration file in `/etc/xapi.conf.d` (to enable another additional storage driver), take it into consideration when you write your new definition of `sm-plugins`.
+
 :::
 
 Now when the MooseFS client is installed you can connect to an existing [MooseFS cluster](https://moosefs.com/support/#documentation) and create a shared SR for all hosts in the pool.
+
 ```
 
 # xe sr-create type=moosefs name-label=MooseFS-SR content-type=user shared=True device-config:masterhost=mfsmaster.host.name device-config:masterport=9421 device-config:rootpath=/xcp-ng
 ```
 
 Basically, to connect the driver to our cluster we have to know two parameters:
-- masterhost - MooseFS master host name or IP, default mfsmaster
-- masterport - MooseFS master port, default 9421
+* masterhost - MooseFS master host name or IP, default mfsmaster
+* masterport - MooseFS master port, default 9421
 
 We also suggest to use a folder on the MooseFS cluster as a root path rather than using the direct path of the cluster.
 
@@ -484,8 +496,9 @@ IMPORTANT: User had many weird glitches with iSCSI connection via ceph gateway i
 ### Ceph RBD
 
 :::warning
-- **Ceph RBD storage integration is provided as-is** and does not come with official support.
-- This way of using Ceph requires installing `ceph-common` inside dom0 from outside the official XCP-ng repositories. It is reported to be working by some users, but isn't recommended officially (see [Additional packages](../management/additional-packages)). You will also need to be careful about system updates and upgrades.
+* **Ceph RBD storage integration is provided as-is** and does not come with official support.
+* This way of using Ceph requires installing `ceph-common` inside dom0 from outside the official XCP-ng repositories. It is reported to be working by some users, but isn't recommended officially (see [Additional packages](../management/additional-packages)). You will also need to be careful about system updates and upgrades.
+
 :::
 
 You can use this to connect to an existing Ceph storage over RBD, and configure it as a shared SR for all your hosts in the pool. This driver uses LVM (lvm) as generic driver and expects that the Ceph RBD volume is already connected to one or more hosts.
@@ -519,6 +532,7 @@ enabled=0
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-$releasever
 ```
+
 After that follow installation steps
 
 ```
@@ -564,11 +578,11 @@ Mount the RBD image on your host.
 rbd map pool/xen1
 ```
 
-To automatically mount the RBD image, you can configure the `/etc/rbdmap` ( see [RBDMap documentation ](https://docs.ceph.com/en/reef/man/8/rbdmap/) ) as follows:
+To automatically mount the RBD image, you can configure the `/etc/rbdmap` ( see [RBDMap documentation](https://docs.ceph.com/en/reef/man/8/rbdmap/) ) as follows:
 
 ```
 cat /etc/ceph/rbdmap
-# RbdDevice		Parameters
+# RbdDevice  Parameters
 pool/xen1
 ```
 
@@ -581,14 +595,14 @@ systemctl enable --now rbdmap
 The CEPH RBD SR is built on top of an LVM Block device (your RBD image). You need to adapt the LVM configuration in order to be able to detect the newly created LVM VG created by XCP-NG.
 
 You need to place this `devices` configuration for both:
-- /etc/lvm/lvmlocal.conf
-- /etc/lvm/master/lvmlocal.conf
+* /etc/lvm/lvmlocal.conf
+* /etc/lvm/master/lvmlocal.conf
 
 ```
 ...
 devices {
-	types = [ "scini", 16, "rbd", 1024 ]
-	scan = [ "/dev/disk/by-id", "/dev/rbd" ]
+ types = [ "scini", 16, "rbd", 1024 ]
+ scan = [ "/dev/disk/by-id", "/dev/rbd" ]
 }
 ...
 ```
@@ -600,6 +614,7 @@ This configuration must be re-applied after each [XCP-NG Upgrade]("https://docs.
 :::
 
 Create the CephRBD SR.
+
 ```
 # create a shared LVM
 xe sr-create name-label='CEPH' shared=true device-config:device=/dev/rbd/rbd/xen1 type=lvm content-type=user
@@ -610,7 +625,9 @@ You will probably want to configure ceph further so that the block device is map
 For the full discussion about Ceph in XCP-ng, see this forum thread: [https://xcp-ng.org/forum/topic/4/ceph-on-xcp-ng](https://xcp-ng.org/forum/topic/4/ceph-on-xcp-ng)
 
 :::tip
+
 * Do not use admin keyring for production, but make a separate key with only necessary privileges [https://docs.ceph.com/en/latest/rados/operations/user-management/](https://docs.ceph.com/en/latest/rados/operations/user-management/)
+
 :::
 
 ### LargeBlock SR
@@ -631,8 +648,8 @@ It's needed to work around an issue with VHD alignment that creates an error on 
 ## 💿 ISO SR
 
 You might be wondering how to upload an ISO. Unlike other solutions, you need to create a dedicated "space" for these, a specific ISO SR. To create an ISO SR, you have 2 possibilities:
-- Shared: A shared ISO SR is on a VM or on a dedicated storage server. It's accessible with an IP address, like 192.168.1.100 via SMB or NFS.
-- Local (not recommended for production): A local ISO SR is a directory created directly on the dom0 host. It's only accessible on the host where the directory was created.
+* Shared: A shared ISO SR is on a VM or on a dedicated storage server. It's accessible with an IP address, like 192.168.1.100 via SMB or NFS.
+* Local (not recommended for production): A local ISO SR is a directory created directly on the dom0 host. It's only accessible on the host where the directory was created.
 
 ### Create a Shared ISO SR
 
@@ -664,6 +681,7 @@ a6732eb5-9129-27a7-5e4a-8784ac45df27 # this is the output
 
 xe sr-scan uuid=a6732eb5-9129-27a7-5e4a-8784ac45df27
 ```
+
 If your host is in a pool of several hosts, you need to add the `host-uuid` parameter to the `xe sr-create` command above. You can retrieve the host UUID with `xe host-list`.
 
 You can then upload your ISO in /opt/var/iso_repository/

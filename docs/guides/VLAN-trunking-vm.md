@@ -12,6 +12,7 @@ or the [original version](https://github.com/xcp-ng/xcp-ng-org/blob/e829aab3dad9
 :::
 
 The guide will document how to:
+
 - install [OPNsense](https://opnsense.org/) router on a VM
 - attach the VLAN trunk port directly to it
 - handle the VLANs in OPNsense directly
@@ -22,6 +23,7 @@ This is because the VLAN trunk needs its interface MTU to 1504,
 and XCP-ng requires MTU 1500 on the management network for Xen to operate properly.
 
 For this scenario, we are assuming a configuration of 3 physical interfaces:
+
 - `eth0`: management network - ethernet
 - `eth1`: WAN side - ethernet
 - `eth2`: LAN side - VLAN trunk
@@ -38,14 +40,15 @@ To change this setting, consult the documentation of your switch.
 You can achieve the same result using Xen-Orchestra, or directly on the XCP-ng host (via `xe` utility).
 
 With Xen-Orchestra:
+
 - Select the right *Pool*
 - Go to *Network* panel
 - Modify the MTU of the **Pool-wide network associated with eth2**:
-    - Associated PIF is `eth2`, which is the LAN side used for VLAN trunking in your example.
-    - The VLAN property is `None`: if it is `0` or another number,
+  - Associated PIF is `eth2`, which is the LAN side used for VLAN trunking in your example.
+  - The VLAN property is `None`: if it is `0` or another number,
       it isn't the right network and this network couldn't be used for VLAN trunking
       (802.1Q tagged packets would be dropped).
-    - Finally, you can click on the MTU to modify it to `1504` (it will disconnect and reconnect the PIF on the host).
+  - Finally, you can click on the MTU to modify it to `1504` (it will disconnect and reconnect the PIF on the host).
 - On the *Host* configuration, check that the *eth2* network is properly reconnected,
   or do it if it isn't the case
   (it could happens if some host on the pool aren't fully up).
@@ -113,6 +116,7 @@ or more simply, just reboot the host.
 ## VM interfaces
 
 Once the MTU is properly configured, create a new VM for OPNsense with several VIFs:
+
 - `VIF #0` - the management interface (MTU 1500)
 - `VIF #1` - the WAN interface (MTU 1500)
 - `VIF #2` - the LAN interface (MTU 1504): `Pool-wide network associated with eth2`

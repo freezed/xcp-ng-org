@@ -77,32 +77,32 @@ The creation of the virtual image from a cloud image in OVA format is complete. 
 9. Connect via the console provided by [Xen Orchestra](https://xen-orchestra.com) or via SSH and update the repositories and the system:
 
     ```
-    $ sudo apt update
-    $ sudo apt dist-upgrade
+    sudo apt update
+    sudo apt dist-upgrade
     ```
 
 10. Install the package *xe-guest-utilities-latest* to improve communication between the XCP-NG hypervisor and the virtual machine ([Guest tools](https://docs.xcp-ng.org/vms/#%EF%B8%8F-guest-tools)):
 
     ```
-    $ sudo apt install xe-guest-utilities
+    sudo apt install xe-guest-utilities
     ```
 
 11. Update the *cloud-init* package:
 
     ```
-    $ sudo apt install cloud-init
+    sudo apt install cloud-init
     ```
 
 12. Install the package *cloud-initramfs-growroot* to automatically resize the root partition of the disk upon virtual machine startup:
 
     ```
-    $ sudo apt install cloud-initramfs-growroot
+    sudo apt install cloud-initramfs-growroot
     ```
 
 13. Configure the [Cloud-init](https://cloud-init.io/) data sources by selecting *NoCloud*, *ConfigDrive*, and *OpenStack*:
 
     ```
-    $ sudo dpkg-reconfigure cloud-init
+    sudo dpkg-reconfigure cloud-init
     ```
 
 14. Prevent Cloud-init from removing */etc/cloud/ds-identify.cfg*.
@@ -142,19 +142,19 @@ The creation of the virtual image from a cloud image in OVA format is complete. 
 16. **If using an Ubuntu version older than 24.04**, delete the file */etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg* to allow modification of network settings:
 
     ```
-    $ sudo rm -f /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
+    sudo rm -f /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
     ```
 
 17. Clean runtime cloud-init leftovers and logs:
 
     ```
-    $ cloud-init clean --logs --seed
+    cloud-init clean --logs --seed
     ```
 
 18. Delete the file */etc/netplan/00-installer-config.yaml* which is the current network configuration so that the new configuration can be applied after reboot:
 
     ```
-    $ sudo rm -f /etc/netplan/00-installer-config.yaml
+    sudo rm -f /etc/netplan/00-installer-config.yaml
     ```
 
 19. To ensure the template correctly generates a new machine ID, applies the static IP address when deploying a VM, and clears existing cloud-init logs to facilitate  troubleshooting in case something goes wrong, run the following commands:
@@ -168,8 +168,8 @@ The creation of the virtual image from a cloud image in OVA format is complete. 
     ```
 
 20. Clean up the APT cache. It's useful for two reasons:
-- Saving some storage space
-- Prevent future problems in installing packages, due to the cache growing stale
+* Saving some storage space
+* Prevent future problems in installing packages, due to the cache growing stale
 
     To clean up the APT cache, run the following command:
 
@@ -177,7 +177,7 @@ The creation of the virtual image from a cloud image in OVA format is complete. 
     apt-get clean
     ```
 
-21. Remove SSH host keys, so they can be regenerated when first booting a of newly provisioned VM.
+1. Remove SSH host keys, so they can be regenerated when first booting a of newly provisioned VM.
 
     To do this, run this command:
 
@@ -191,10 +191,10 @@ The creation of the virtual image from a cloud image in OVA format is complete. 
 
     :::
 
-22. Before shutting down the virtual machine, you can install any additional repositories you want. Once this step is completed, you can shut down the virtual machine:
+2. Before shutting down the virtual machine, you can install any additional repositories you want. Once this step is completed, you can shut down the virtual machine:
 
     ```
-    $ sudo shutdown now
+    sudo shutdown now
     ```
 
 The creation of the virtual image *custom-ubuntu22.04* from an ISO file is complete, and a template can now be created.
@@ -203,7 +203,7 @@ The creation of the virtual image *custom-ubuntu22.04* from an ISO file is compl
 
 * For Ubuntu 24.04, you will need to delete the */etc/cloud/cloud-init.disabled* file, which disables Cloud-Init by default, and the */etc/netplan/50-cloud-init.yaml* file for network configuration.
 * For your network configuration YAML:
-    * Use the following format:
+  * Use the following format:
 
     ```yaml
     #cloud-config
@@ -220,9 +220,11 @@ The creation of the virtual image *custom-ubuntu22.04* from an ISO file is compl
                         - 10.0.2.1
                         - 1.1.1.1
     ```
-    * Make sure your IP address uses the [Classless Inter-Domain Routing (CIDR)](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) notation.\
+
+  * Make sure your IP address uses the [Classless Inter-Domain Routing (CIDR)](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) notation.\
       CIDR notation specifies an IP address, a slash ('/') character, and a decimal number (for instance: `198.51.100.14/24`).
 * If a problem occurs when creating or using your template, go to `/var/log` and look for `cloud-init.log` to troubleshoot the issue.
+
 :::
 
 ## Template creation
@@ -312,18 +314,18 @@ The solution using XO-CLI can address this issue, as command-line automation is 
 
 XO-CLI (Xen Orchestra CLI) is a command-line solution that allows for the administration of virtual machines. The tool can query either a REST API or a JSON-RPC API over WebSocket. The REST API is limited and only allows for simple operations, whereas the latter can handle all operations. It is noteworthy that communication via the JSON-RPC API over WebSocket is used between the graphical layer and the [Xen Orchestra](https://xen-orchestra.com) server.
 
-* Execute the following command to authorize the connection of XO-CLI to [Xen Orchestra](https://xen-orchestra.com). Replace user@email.fr with an email recognized by [Xen Orchestra](https://xen-orchestra.com).
+* Execute the following command to authorize the connection of XO-CLI to [Xen Orchestra](https://xen-orchestra.com). Replace <user@email.fr> with an email recognized by [Xen Orchestra](https://xen-orchestra.com).
 
 ```
-$ xo-cli --register http://URL_XEN_ORCHESTRA user@email.fr
+xo-cli --register http://URL_XEN_ORCHESTRA user@email.fr
 ```
 
 In the following example, we will detail the creation of a virtual machine based on the template named *custom-ubuntu22.04*, the storage disk called *VS5 - LVM storage (RAID 0)*, and the network named *eth0 - Public VLAN*. We will need to use a function called `xo.getAllObjects` to retrieve the identifiers for the template, storage disk, and network.
 
 ```
-$ TEMPLATE_ID=$(xo-cli xo.getAllObjects --json filter=json:'{"type":"VM-template", "name_label":"custom-ubuntu22.04"}' | jq -r '.[].id')
-$ STORAGE_ID=$(xo-cli xo.getAllObjects --json filter=json:'{"type":"SR", "name_label":"VS5 - LVM storage (RAID 0)"}' | jq '.[].id')
-$ NETWORK_ID=$(xo-cli xo.getAllObjects --json filter=json:'{"type":"network", "name_label":"eth0 - Public VLAN"}' | jq '.[].id')
+TEMPLATE_ID=$(xo-cli xo.getAllObjects --json filter=json:'{"type":"VM-template", "name_label":"custom-ubuntu22.04"}' | jq -r '.[].id')
+STORAGE_ID=$(xo-cli xo.getAllObjects --json filter=json:'{"type":"SR", "name_label":"VS5 - LVM storage (RAID 0)"}' | jq '.[].id')
+NETWORK_ID=$(xo-cli xo.getAllObjects --json filter=json:'{"type":"network", "name_label":"eth0 - Public VLAN"}' | jq '.[].id')
 ```
 
 The `vm.create` function allows for the creation of a virtual machine.

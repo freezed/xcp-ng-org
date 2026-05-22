@@ -17,12 +17,12 @@ You can now read more details about the [origin of the project on Wikipedia!](ht
 Most of the community is on [XCP-ng Forum](https://xcp-ng.org/forum). Feel free go there and ask anything! We also have a [Discord server](https://discord.gg/Hr98F6wRvx) for live chat, or even on [Reddit](https://www.reddit.com/r/xcpng/) (however, the forum is the most active place).
 
 You can also find us on many social networks:
+
 * [X/Twitter](https://twitter.com/xcpng)
 * [Mastodon](https://social.vates.tech/@xcpng)
 * [LinkedIn](https://www.linkedin.com/company/vates-sas)
 * [Facebook](https://www.facebook.com/XCPng)
 * IRC on OFTC at #xcp-ng
-
 
 ## 📜 History of XCP-ng
 

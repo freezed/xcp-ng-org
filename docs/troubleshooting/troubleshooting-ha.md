@@ -17,7 +17,7 @@ If a host configured for high availability reboots unexpectedly, it might have:
 
 Check the host's logs to verify if any of these events happened, in particular `/var/log/xha.log`.
 
-## I can't reach my host!
+## I can't reach my host
 
 ### Disabling HA
 

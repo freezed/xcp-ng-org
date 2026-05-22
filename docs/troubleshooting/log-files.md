@@ -42,7 +42,6 @@ xen-bugtool --yestoall
 
 Then upload the resulting archive somewhere. It may contain sensitive information about your setup, so it may be better to upload it to a private area and give the link only to those you trust to analyze it.
 
-
 ## XCP-ng Center
 
 You can display the log files via menu `Help` -> `View XCP-ng Center Log Files`.
@@ -52,8 +51,8 @@ The log files are located in `C:\Users\<user>\AppData\Roaming\XCP-ng\XCP-ng Cent
 ## Windows VM
 
 ### (PV-)Driver install log
-`C:\Windows\INF\setupapi.dev.log`
 
+`C:\Windows\INF\setupapi.dev.log`
 
 ## Useful data for debugging
 

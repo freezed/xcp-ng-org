@@ -21,6 +21,7 @@ Xen Orchestra is the most advanced backup solution and 100% integrated with XCP-
 </div>
 
 And they come with different features:
+
 * NFS, SMB, S3 compatible backup repositories
 * Encryption
 * Compression
@@ -28,8 +29,6 @@ And they come with different features:
 * NBD-enabled for extra backup speed
 * Rate limiting
 * XO Proxy (backup remote sites without any VPN requirement)
-
-
 
 All options are explained in the [official documentation](https://xen-orchestra.com/docs/). Xen Orchestra is [available as a turnkey virtual appliance](https://xen-orchestra.com), called XOA which [you can deploy in a minute](https://vates.tech/deploy).
 

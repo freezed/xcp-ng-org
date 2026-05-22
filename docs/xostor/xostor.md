@@ -10,6 +10,7 @@
 ### How does it work?
 
 LINSTOR is made of two main components:
+
 - A controller, declared on a machine of the XCP-ng pool. There is only one per pool and it can run on a master or a slave. The controller is a daemon that receives commands across the pool's network to manipulate the volumes, network, configuration...
 - Satellites which are the other machines of the pool. They send commands to the controller and the controller's state to the host.
 
@@ -29,6 +30,7 @@ DRBD is a solution to share a resource across multiple machines, using a replica
 DRBD has a `device minor number`, but also a `resource name` which helps to understand what the resource corresponds to.
 
 The path to a DRBD resource follows this pattern:
+
 ```
 > realpath /dev/drbd/by-res/<RESOURCE_NAME>/<VOLUME_ID>
 /dev/drbd<DRBD_MINOR>
@@ -40,11 +42,13 @@ A DRBD is a set of volumes that form a group. Within the same DRBD resource, eac
 #### Roles/Locks
 
 The ability of a machine to access a DRBD path `/dev/drbdXXX` depends on the role of the DRBD resource. A resource can be `Primary` or `Secondary`:
+
 - A `Primary` resource is accessible on a host for READ and WRITE operations.
 - A `Secondary` resource only receives requests from the `Primary`. It's used to replicate the data and improve reading performance simultaneously. Only the DRBD kernel module can access this volume's data and it can't be written or read by any other process.
 
 A DRBD Primary can be seen as a lock on a resource. This lock is global to a machine, not specific to a process.
 At first, all instances of a DRBD are in the Secondary role. There are two main ways for a DRBD to become Primary:
+
 - By taking the Primary role if the resource is indeed Secondary on all machines with the command `drbdadm primary <RESOURCE_NAME>`. Change the parameter and run the command `drbdadm secondary <RESOURCE_NAME>` when you no longer want to read or write on this resource.
 - By using the default configuration of a DRBD resource: a call to a C function like `fopen("/dev/drbd1001", "r+")` gives `Primary` access to a resource. If the resource is opened on another machine, an `EROFS` errno code is returned. If the resource contains a partition, a call to the `mount` command also allows to obtain a lock.
 
@@ -72,11 +76,13 @@ We saw that DRBD is a set of resources and volumes. These notions also exist in 
 #### Node
 
 A node is an object that contains important information about a host such as:
-  - Its name, which must be identical to the hostname.
-  - Its type: controller, satellite, combined, auxiliary. In our implementation, we always use combined nodes which can be controller and/or satellite because if the current controller of a pool has a problem, we want to be able to start one elsewhere. Without this, we would no longer be able to launch LINSTOR commands.
-  - The IP address and port that are used by the satellites/controller. By default, the XAPI management IP is used.
+
+- Its name, which must be identical to the hostname.
+- Its type: controller, satellite, combined, auxiliary. In our implementation, we always use combined nodes which can be controller and/or satellite because if the current controller of a pool has a problem, we want to be able to start one elsewhere. Without this, we would no longer be able to launch LINSTOR commands.
+- The IP address and port that are used by the satellites/controller. By default, the XAPI management IP is used.
 
 CLI example:
+
 ```
 > linstor node list
 ╭──────────────────────────────────────────────────────────╮
@@ -93,6 +99,7 @@ CLI example:
 A storage pool is a LINSTOR object that represents the physical storage layer of a pool node. In practice, it is an LVM layer below DRBD.
 
 CLI example:
+
 ```
 > linstor storage-pool list
 ╭────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
@@ -118,6 +125,7 @@ A resource group is another LINSTOR object and it can be seen as a container of 
 A change in a property has a direct impact on the existing resources. For example, increasing a place count will create new duplications on other hosts.
 
 CLI example:
+
 ```
 > linstor rg list
 ╭────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
@@ -136,6 +144,7 @@ CLI example:
 ```
 
 In an XCP-ng context, we use a single storage pool (xcp-sr-linstor_group_thin_device) containing two resource groups:
+
 - xcp-ha-linstor_group_thin_device
 - xcp-sr-linstor_group_thin_device
 
@@ -147,6 +156,7 @@ In an XCP-ng context, we use a single storage pool (xcp-sr-linstor_group_thin_de
 In comparison to DRBD, the info about the resource and volume also has a `definition` in LINSTOR. A resource cannot exist without a definition and it describes the most common attributes of each copy of the resource, regardless of the number of replications.
 
 Examples of resource and volume definitions:
+
 ```
 > linstor rd list
 ╭───────────────────────────────────────────────────────────────────────────────────────────────────╮
@@ -175,6 +185,7 @@ Examples of resource and volume definitions:
 In XCP-ng, we always use only one volume for one resource, so the `VolumeNr` column only contains 0s.
 It is possible to retrieve DRBD paths with this info.
 For example for the HA statefile volume, we have:
+
 ```
 /dev/drbd/by-res/xcp-persistent-ha-statefile/0 # where 0 is the VolumeNr
 /dev/drbd1001 # where 1001 is the VolumeMinor
@@ -183,6 +194,7 @@ For example for the HA statefile volume, we have:
 A resource is an instance of a definition. There are usually at least three resources per definition and each has its properties: the node where it is located, its usage, state and creation date.
 
 Examples of resources and volumes:
+
 ```
 > linstor r list
 ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
@@ -239,6 +251,7 @@ Examples of resources and volumes:
 ### DRBD/LINSTOR Resource State
 
 A DRBD/LINSTOR resource can be in several states, the main ones are:
+
 - UpToDate: No issue with the resource!
 - DUnknown: Communication issue getting the resource's state. An incorrect IP address, a problem with the network or with a satellite can cause this.
 - Inconsistent: This can happen on replications when a new resource is created or during a new synchronization.
@@ -258,6 +271,7 @@ Never manually start a controller on a pool where an SR is already configured. T
 The `drbd-reactor` is a daemon implemented to react to DRBD events and respond using scripts.
 
 It has a modified configuration on XCP-ng so that it can always be restarted in the event of a problem:
+
 ```
 /etc/systemd/system/drbd-reactor.service.d/override.conf
 ```
@@ -265,6 +279,7 @@ It has a modified configuration on XCP-ng so that it can always be restarted in 
 It is configured using:
 
 - A modification of the satellite configuration:
+
 ```
 > cat /etc/systemd/system/linstor-satellite.service.d/override.conf
 [Service]
@@ -277,6 +292,7 @@ After=drbd.service
 As noted in the shared database section, the controller uses a DRBD volume containing the LINSTOR database instead of a simple local folder on a host. This database must be accessible after a reboot, meaning that `/dev/drbd/by-res/xcp-persistent-database/0` must be accessible on at least one machine (normally 3, since this volume is always replicated 3 times). A path like that is generated using a DRBD resource config file. These configurations are automatically created by LINSTOR itself and they are not persistent: they are recreated each time the controller is started after a pool reboot. The only way to keep a DRBD config file at boot is to use the `LS_KEEP_RES` environment variable to indicate it to LINSTOR.
 
 - A `drbd-reactor` configuration that uses the linbit promoter plugin:
+
 ```
 > cat /etc/drbd-reactor.d/sm-linstor.toml
 [[promoter]]
@@ -284,11 +300,13 @@ As noted in the shared database section, the controller uses a DRBD volume conta
 [promoter.resources.xcp-persistent-database]
 start = [ "var-lib-linstor.service", "linstor-controller.service" ]
 ```
+
 This plugin allows the running of resources when a resource has a quorum and is not primary. In our case, we start `var-lib-linstor.service` which mounts the database `/dev/drbd1000` on `/var/lib/linstor`. If successful, we can start the controller. Only one host can mount the database since only one primary is on the resource. Quick reminder: when a resource is mounted on a host, it takes the primary lock.
 
 For more info regarding the promoter plugin, you can visit [this page](https://github.com/LINBIT/drbd-reactor/blob/0620ff875370ad26a61c149fa6f02a19d66f45cd/doc/promoter.md).
 
 - The `/etc/systemd/system/var-lib-linstor.service` config file that contains:
+
 ```
 [Unit]
 Description=Mount filesystem for the LINSTOR controller
@@ -311,12 +329,15 @@ RemainAfterExit=true
 - At least 1 disk on any machine of the pool (case without replication). Otherwise, any number of disks can be used on a machine. However, to be consistent, we recommend using the same model and number for each machine that has disks.
 - The replication/place count must be equal to 1, 2 or 3.
 -
+
 :::warning
 Changing the replication factor after creating XOSTOR is not possible, as it can lead to significant issues and is therefore not supported.
 :::
 
 :::warning
+
 - LINSTOR services like satellites and controller can use a lot of memory resources. It is therefore more than necessary to have sufficient RAM allocated to the Dom-0, 16 GiB can be enough for average pools with around a hundred volumes. But it may be essential to increase the dedicated memory for more intensive use. So make sure to monitor the memory usage of your pool to prevent the OOM Killer from being triggered.
+
 :::
 
 :::important
@@ -337,6 +358,7 @@ For updates that don't change the version number of XCP-ng (bugfixes, security f
 - All hosts must be up to date on the version of XCP-ng you are currently using. For this refer to [the update section](#update).
 - HA must be disabled on your pool.
 - Ensure all nodes are reachable and resources are in "OK" state via XO's XOSTOR view. Alternatively, you can use the CLI:
+
 ```
 linstor n l
 linstor r l
@@ -351,6 +373,7 @@ Also don't try to upgrade using CLI or network ISO installer.
 The dedicated upgrade ISO can be downloaded from [https://repo.vates.tech/xcp-ng/isos/](https://repo.vates.tech/xcp-ng/isos/).
 
 LINSTOR has several prerequisites to work correctly and if you don't use the right upgrade image:
+
 - LINSTOR's controller and satellite packages would be removed.
 - Specific LINSTOR services would be removed through the use of a generic XCP-ng ISO.
 - DRBDs/LINSTOR ports would not be open on the resulting upgraded host.
@@ -361,6 +384,7 @@ From this point we can proceed to upgrade your XOSTOR-enabled pool.
 
 An upgrade can take quite a long time so we recommend disabling the auto-evict mechanism during this procedure to avoid bad behavior.
 On the host where the controller is running:
+
 ```
 linstor controller set-property DrbdOptions/AutoEvictAllowEviction False
 ```
@@ -373,19 +397,23 @@ Otherwise, it could pull more recent versions of the LINSTOR packages on the new
 
 :::warning
 If you have this error during upgrade, you must download the right ISO version as documented in [this section](#2-xcp-ng-iso-with-linstor-support):
+
 ```
 Cannot upgrade host with LINSTOR using a package source that does not have LINSTOR.  Please use as package source the repository on the dedicated ISO.
 ```
+
 :::
 
 If you want to make sure that everything is going well so as not to impact your production, we recommend these manual checks after each host reboot:
 
 - Ensure the host node is connected with the command below. Otherwise wait a few seconds.
+
 ```
 linstor n list
 ```
 
 - Check if there is an issue with the resources:
+
 ```
 linstor r list
 linstor advise r # Give possible fix commands in case of problems.
@@ -400,6 +428,7 @@ Very important: if you don't want to break the quorum or your production environ
 ### 4. After pool upgrade
 
 - If you have deactivated auto eviction as recommended, it's necessary to reactivate it. On the host where the controller resides, execute this command:
+
 ```
 linstor controller set-property DrbdOptions/AutoEvictAllowEviction True
 ```
@@ -407,11 +436,13 @@ linstor controller set-property DrbdOptions/AutoEvictAllowEviction True
 If a node was evicted because the recommendation was not followed, read this [topic](#what-to-do-when-a-node-is-in-an-evicted-state).
 
 - Check the resource states with:
+
 ```
 linstor r list
 ```
 
 In case of bad sync between volumes, execute on each machine:
+
 ```
 systemctl stop linstor-controller
 systemctl restart linstor-satellite
@@ -424,22 +455,26 @@ systemctl restart linstor-satellite
 ### The linstor command does not work!?
 
 If you get the following output, this is not necessarily abnormal:
+
 ```
 > linstor r list
 Error: Unable to connect to linstor://localhost:3370: [Errno 99] Cannot assign requested address
 ```
 
 There can only be one controller running on a pool at a time. If you get this error, there are two possibilities:
+
 - Either there is a problem and the `linstor-controller` service is not started anywhere.
 - Or you should rerun the command on another machine.
 
 :::tip
 It's possible to provide the command with a comma separated list of IPs, eliminating the need to manually try each host.
+
 ```
 linstor --controllers=<IP_LIST> r list
 ```
 
 Example on a pool with 3 machines:
+
 ```
 linstor --controllers=172.16.210.84,172.16.210.85,172.16.210.86 r list
 ```
@@ -451,11 +486,13 @@ Important: the `--controllers` parameter should always be just after the command
 ### How to list LINSTOR resources and interpret this output?
 
 Command:
+
 ```
 linstor r list
 ```
 
 Output example:
+
 ```
 ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 ┊ ResourceName                                    ┊ Node    ┊ Port ┊ Usage  ┊ Conns ┊      State ┊ CreatedOn           ┊
@@ -486,6 +523,7 @@ Output example:
 ```
 
 Remarks regarding special volumes:
+
 - `xcp-persistent-database` is an important resource that contains the LINSTOR database, i.e. the list of volumes, nodes, etc. It's this DRBD resource that is mounted on `/var/lib/linstor` before the controller starts.
 - `xcp-persistent-ha-statefile` & `xcp-persistent-redo-log` are special volumes used by the HA.
 - All other resources start with `xcp-volume-<UUID>` where the UUID is an internal identifier different from the XAPI VDI UUIDs.
@@ -493,18 +531,21 @@ Remarks regarding special volumes:
 ### How to get a quick view of the resource status of a pool?
 
 You can use the following commands to find out the status of a pool:
+
 ```
 linstor n list
 linstor r list
 ```
 
 They return the state of the nodes and resources. If nothing is written in RED, it probably means that there is no damage to the data. However, this does not mean that there are no problems elsewhere. To prevent issues from happening, you can run this command:
+
 ```
 linstor advise r
 ```
 
 It returns recommendations about resources that might have problems later.
 For example, you can have an output like this:
+
 ```
 ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 ┊ Resource                                        ┊ Issue                                                                  ┊ Possible fix                                                                                  ┊
@@ -521,6 +562,7 @@ For example, you can have an output like this:
 ### Map LINSTOR resource names to XAPI VDI UUIDs
 
 Resource UUIDs are different from VDI UUIDs. The output of `linstor r list` gives the resource name but it doesn't give an understanding about relationships between LINSTOR volumes and XAPI VDI UUIDs:
+
 ```
 ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 ┊ ResourceName                                    ┊ Node    ┊ Port ┊ Usage  ┊ Conns ┊      State ┊ CreatedOn           ┊
@@ -551,6 +593,7 @@ Resource UUIDs are different from VDI UUIDs. The output of `linstor r list` give
 To better understand the mapping of UUIDs, we developed a tool called `linstor-kv-tool`.
 
 Usage:
+
 ```
 linstor-kv-tool --dump-volumes -u <HOSTNAME> -g <SP_NAME> | grep '/volume-name":'
 ```
@@ -559,11 +602,13 @@ linstor-kv-tool --dump-volumes -u <HOSTNAME> -g <SP_NAME> | grep '/volume-name":
 - `<SP_NAME>` is the LINSTOR storage pool used by the pool.
 
 To know which group to specify, you can use the command:
+
 ```
 linstor resource-group list
 ```
 
 Output example:
+
 ```
 ╭────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 ┊ ResourceGroup                    ┊ SelectFilter                                     ┊ VlmNrs ┊ Description ┊
@@ -579,9 +624,11 @@ Output example:
 ┊                                  ┊ DisklessOnRemaining: True                        ┊        ┊             ┊
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
+
 The group name is the value of `StoragePool(s)`.
 
 Output example of the `linstor-kv-tool` command:
+
 ```
 > linstor-kv-tool --dump-volumes -u localhost -g xcp-sr-linstor_group_thin_device | grep '/volume-name":'
   "xcp/volume/0e7a20d9-04ce-4306-8229-02a76a407ae6/volume-name": "xcp-volume-289c3fb5-67ec-49b1-b5a8-71ebe379ee2a",
@@ -593,6 +640,7 @@ Output example of the `linstor-kv-tool` command:
 ```
 
 Output format:
+
 ```
   "xcp/volume/<VDI_UUID>/volume-name": "<LINSTOR_VOLUME_NAME>"
 ```
@@ -600,18 +648,21 @@ Output format:
 ### How a LINSTOR SR capacity is calculated?
 
 If you cannot create a VDI due to an error of it being too large, even though it's smaller than the size of the SR in XO's view, there is an explanation:
+
 - The maximum size of a VDI that can be created is not necessarily equal to the SR capacity.
 - The SR capacity in the XOSTOR context is the maximum size that can be used to store _all_ VDI data.
 
 Exception: if the replication count is equal to the number of hosts, the SR capacity is equal to the max VDI size, i.e. the capacity of the smallest disk in the pool.
 
 This formula can be used to compute the SR capacity:
+
 ```
 sr_capacity = smallest_host_disk_capacity * host_count / replication_count
 ```
 
 For a pool of 3 hosts for example, with a replication count of 2 and a disk of 200 GiB on each host, the formula gives an SR capacity equal to 300 GiB.
 Consider the following:
+
 - It's not possible to create a VDI greater than 200 GiB because the replication is not block-based but volume-based.
 - If you create a volume of 200 GiB it means that 400 of the 600 GiB are physically used. However, the remaining disk of 200 GiB cannot be used because it cannot be replicated on two different disks.
 - If you create 3 volumes of 100 GiB: the SR is filled. In this case, you have 300 GiB of unique data and a replication of 300 GiB.
@@ -620,12 +671,14 @@ Consider the following:
 
 :::warning
 If you want to configure a new host, make sure the pool is up-to-date (see [the update section](#update)) and make sure you have the required packages on the new host by running these commands on it:
+
 ```
 yum install -y xcp-ng-release-linstor
 yum install -y xcp-ng-linstor
 ```
 
 And then restart the toolstack to detect the LINSTOR driver:
+
 ```
 xe-toolstack-restart
 ```
@@ -634,11 +687,13 @@ If you are in a situation where you can't safely update your pool, contact [Vate
 :::
 
 First ensure you have the same configuration on each PBD of your XOSTOR SR using this command. Replace `<UUID>` with the SR UUID that you use:
+
 ```
 xe pbd-list sr-uuid=<UUID>
 ```
 
 Example output where the group-name is `linstor_group/thin_device`:
+
 ```
 uuid ( RO)                  : 06d10e9e-c7ad-2ed6-a901-53ac1c2c7486
              host-uuid ( RO): 4bac16be-b25b-4d0b-a159-8f5bda930640
@@ -662,9 +717,11 @@ uuid ( RO)                  : 1d872d5b-fb60-dbd7-58fc-555a211f18fa
 ```
 
 Then if you want to fix an incorrect group name value or even add a new host, use this command with the correct `<GROUP_NAME>` and `<HOST_UUID>`:
+
 ```
 xe host-call-plugin host-uuid=<HOST_UUID> plugin=linstor-manager fn=addHost args:groupName=<GROUP_NAME>
 ```
+
 For a short description, this command (re)creates a PBD, opens DRBD/LINSTOR ports, starts specific services and adds the node to the LINSTOR database.
 
 If you have storage devices to use on the host, a LINSTOR storage layer is not directly added to the corresponding node.
@@ -673,10 +730,12 @@ You can follow the [section](#how-to-add-storage-on-a-new-host) below to add sto
 ### How to add storage on a new host?
 
 There are two simple steps:
+
 1. Create a VG (and LV for thin) with all the host disks
 2. Create a SP for the host pointing to this new VG
 
 You can verify the storage state like this:
+
 ```
 linstor sp list
 ```
@@ -684,6 +743,7 @@ linstor sp list
 Small example:
 
 A `LVM_THIN` entry is missing for `hpmc17` in this context, meaning it has no local storage:
+
 ```
 ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 ┊ StoragePool                      ┊ Node   ┊ Driver   ┊ PoolName                  ┊ FreeCapacity ┊ TotalCapacity ┊ CanSnapshots ┊ State ┊ SharedName                              ┊
@@ -700,29 +760,34 @@ A `LVM_THIN` entry is missing for `hpmc17` in this context, meaning it has no lo
 
 To add disks to the linstor SR, you will need to create a LVM volume group.
 Connect to the machine to modify and use `vgcreate` with the wanted disks to create a VG group on the host:
+
 ```
 vgcreate <GROUP_NAME> <DEVICES>
 ```
 
 In our example where we want to use `/dev/nvme0n1` with the group `linstor_group`:
+
 ```
 vgcreate linstor_group /dev/nvme0n1
 ```
 
 For `thin` additional commands are required:
+
 ```
 lvcreate -l 100%FREE -T <GROUP_NAME>/<LV_THIN_VOLUME>
 lvchange -ay <GROUP_NAME>/<LV_THIN_VOLUME>
 ```
 
 Most of the time and in our example, we will have:
+
 - `<GROUP_NAME>`: `linstor_group`.
 - `<LV_THIN_VOLUME>`: `thin_device`.
 - `<SP_NAME>`: `xcp-sr-linstor_group_thin_device`.
 
-2. Create a new storage pool attached to the node
+1. Create a new storage pool attached to the node
 
 Run the corresponding command on the host where the controller is running to add the volume group in the LINSTOR database:
+
 ```
 # For thin:
 linstor storage-pool create lvmthin <NODE_NAME> <SP_NAME> <VG_NAME>/<LV_THIN_VOLUME>
@@ -732,6 +797,7 @@ linstor storage-pool create lvm <NODE_NAME> <SP_NAME> <VG_NAME>
 ```
 
 In our example:
+
 ```
 linstor storage-pool create lvm hpmc17 xcp-sr-linstor_group_thin_device linstor_group/thin_device
 ```
@@ -739,6 +805,7 @@ linstor storage-pool create lvm hpmc17 xcp-sr-linstor_group_thin_device linstor_
 ### How to use a specific network for DRBD requests?
 
 To use a specific network to handle the DRBD traffic, a new interface must be created on each host:
+
 ```
 linstor node interface create <NODE_NAME> <INTERFACE_NAME> <IP>
 ```
@@ -746,6 +813,7 @@ linstor node interface create <NODE_NAME> <INTERFACE_NAME> <IP>
 `<INTERFACE_NAME>` is arbitrary; you can choose any name. Then, specify an existing IP on the host you have assigned to a network / NIC in XCP-ng.
 
 To set this new interface as active, use the following:
+
 ```
 linstor node set-property <NODE_NAME> PrefNic <INTERFACE_NAME>
 ```
@@ -778,32 +846,38 @@ sed -i -e "s/$MODIFIED_NAME/$ORIGINAL_NAME/g" /var/lib/linstor.d/*.res
 systemctl restart linstor-satellite.service
 systemctl restart linstor-monitor.service
 ```
+
 :::
 
 There is no easy way to do this, the trick is to create a new node and remove the old one. Here are the steps to follow:
 
 1. Create a new node:
+
 ```
 linstor node create --node-type Combined <NODE_NAME> <IP>
 ```
 
-2. Evacuate the old node to preserve the replication count:
+1. Evacuate the old node to preserve the replication count:
+
 ```
 linstor node evacuate <OLD_NAME>
 ```
 
-3. Change the hostname:
+1. Change the hostname:
+
 ```
 xe host-set-hostname-live host-uuid=<HOST_UUID> host-name=<HOST_NAME>
 ```
 
-4. Restart the services on each host:
+1. Restart the services on each host:
+
 ```
 systemctl stop linstor-controller
 systemctl restart linstor-satellite
 ```
 
-5. Make sure that the resources of the deleted node have been replicated on the remaining host and verify with `linstor r list` that all resources are up to date. Then, delete the node and create a storage pool for the new node:
+1. Make sure that the resources of the deleted node have been replicated on the remaining host and verify with `linstor r list` that all resources are up to date. Then, delete the node and create a storage pool for the new node:
+
 ```
 linstor node delete <OLD_NAME>
 ```
@@ -821,12 +895,14 @@ linstor storage-pool create lvm <NODE_NAME> <SP_NAME> <VG_NAME>
 
 :::tip
 To verify the Storage Pool, you can use:
+
 ```
 linstor sp list
 ```
+
 :::
 
-6. Recreate the diskless/diskful resources (if necessary).
+1. Recreate the diskless/diskful resources (if necessary).
 
  Use `linstor advise r` to see the commands to execute.
 
@@ -834,17 +910,21 @@ linstor sp list
 
 In certain situations, a volume may no longer be usable.
 For example, a LINSTOR resource containing a VHD whose header/footer has been overwritten and is unreadable. Here, we're talking about a situation where a VHD isn't just simply corrupted and where `vhd-util repair -n <PATH>` is useless like this output in `SMlog`:
+
 ```
 Jun 22 10:50:13 r620-s3 SM: [23871] ['/usr/bin/vhd-util', 'query', '--debug', '-vsfpu', '-n', '/dev/drbd/by-res/xcp-volume-83da35c4-dd18-47fb-9d2b-68bd5b92fcaa/0']
 Jun 22 10:50:13 r620-s3 SM: [23871] FAILED in util.pread: (rc 22) stdout: 'error opening /dev/drbd/by-res/xcp-volume-83da35c4-dd18-47fb-9d2b-68bd5b92fcaa/0: -22
 ```
 
 The problem with this error is that it's generic and can occur in other situations. If you're not sure what you're doing, contact us on [support](https://vates.tech) or the [forum](https://xcp-ng.org/forum). Alternatively you can confirm that a resource is indeed unusable, execute this command by connecting to a host where the volume is marked `InUse`:
+
 ```
 vhd-util check -n <DRBD_PATH>
 ```
+
 In this example, `<DRBD_PATH>` is `/dev/drbd/by-res/xcp-volume-83da35c4-dd18-47fb-9d2b-68bd5b92fcaa/0`
 Two cases here:
+
 - If the volume is marked as `InUse` in the LINSTOR database, run this command on the host that is using it.
 - Otherwise, you can run this same command on the master that has the resource path on its filesystem (so a DRBD diskless or diskful).
 
@@ -857,11 +937,13 @@ Additionally, we assume that if you destroy a resource, you have a recent backup
 :::
 
 1. Retrieve the SR's storage pool name using this command:
+
 ```
 linstor sp list
 ```
 
 Example output where the storage pool name is `xcp-sr-linstor_group_thin_device` in the `StoragePool` column:
+
 ```
 ╭────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 ┊ StoragePool                      ┊ Node    ┊ Driver   ┊ PoolName                  ┊ FreeCapacity ┊ TotalCapacity ┊ CanSnapshots ┊ State ┊ SharedName                               ┊
@@ -875,10 +957,12 @@ Example output where the storage pool name is `xcp-sr-linstor_group_thin_device`
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
-2. If you don't know what the corresponding VDI UUID for the DRBD resource is, you can deduce it via this command:
+1. If you don't know what the corresponding VDI UUID for the DRBD resource is, you can deduce it via this command:
+
 ```
 linstor-kv-tool --dump-volumes -g <SP_NAME> | grep volume-name | grep <RES_UUID>
 ```
+
 As a reminder, `<RES_UUID>` is the UUID used in the naming of DRBD resources after the prefix `xcp-volume-`. For example: `xcp-volume-83da35c4-dd18-47fb-9d2b-68bd5b92fcaa`. And `<SP_NAME>` is the value obtained in the previous point.
 
 :::tip
@@ -886,18 +970,22 @@ For more explanation between `RES_UUID` and `VDI_UUID` link, check out [this sec
 :::
 
 Example result by replacing `<RES_UUID>` with `83da35c4-dd18-47fb-9d2b-68bd5b92fcaa`:
+
 ```
 linstor-kv-tool --dump-volumes -g xcp-sr-linstor_group_thin_device | grep volume-name | grep 83da35c4-dd18-47fb-9d2b-68bd5b92fcaa
   "xcp/volume/6b9046a2-8ef9-47ef-baa9-a4c533ca848a/volume-name": "83da35c4-dd18-47fb-9d2b-68bd5b92fcaa",
 ```
+
 Here, the XAPI UUID of the VDI to delete is `6b9046a2-8ef9-47ef-baa9-a4c533ca848a`.
 
-3. You can remove the VDI reference from the `kv-store` via the following command, replace `<VDI_UUID>` with the one obtained previously:
+1. You can remove the VDI reference from the `kv-store` via the following command, replace `<VDI_UUID>` with the one obtained previously:
+
 ```
 linstor-kv-tool -g xcp-sr-linstor_group_thin_device --remove-volume <VDI_UUID>
 ```
 
 The previous command does not delete the LINSTOR volume itself, only the kv-store reference that is used by the driver. It's necessary to manually delete the resource definition that still exists under the name `xcp-volume-<RES_UUID>`. Replace `<RES_UUID>` with the one used during the previous step:
+
 ```
 linstor rd delete xcp-volume-<RES_UUID>
 ```
@@ -922,11 +1010,13 @@ Feel free to follow steps 1 to 5 described below:
 Check the node list using `linstor node list` on the node where the controller is running.
 If there is no controller, use `drbdsetup status xcp-persistent-database` to see the state of the database on each host. In the case of split-brain, use the corresponding documentation.
 Otherwise, to change the IPs manually, open this file on a machine of the pool:
+
 ```
 nano /var/lib/linstor.d/xcp-persistent-database.res
 ```
 
 You should  have a similar configuration in the file:
+
 ```
     connection
     {
@@ -945,6 +1035,7 @@ For each entry, modify the IPs to use the XAPI management interface of each host
 Save and repeat this modification on each host.
 
 Restart `drbd-reactor` on each machine, using this command:
+
 ```
 systemctl restart drbd-reactor
 ```
@@ -952,11 +1043,13 @@ systemctl restart drbd-reactor
 Reboot the hosts if the controller doesn't restart.
 
 After this point, the controller should be running. Find it and list the resources:
+
 ```
 linstor r list
 ```
 
 If the array is empty, execute:
+
 ```
 systemctl stop linstor-controller
 ```
@@ -967,11 +1060,13 @@ Check again the resource list.
 #### 2. Reset the active satellite connection
 
 Verify the node list:
+
 ```
 linstor n list
 ```
 
 If you have a similar result, there is still something wrong:
+
 ```
 ╭───────────────────────────────────────────────────────────╮
 ┊ Node    ┊ NodeType ┊ Addresses                  ┊ State   ┊
@@ -983,11 +1078,13 @@ If you have a similar result, there is still something wrong:
 ```
 
 Verify the interfaces using:
+
 ```
 linstor node interface list r620-s1
 ```
 
 If you don't have "StltCon" in the first column for the default interface (or if this interface is missing), the active connection should be reset:
+
 ```
 ╭────────────────────────────────────────────────────────────────╮
 ┊ r620-s1 ┊ NetInterface ┊ IP            ┊ Port ┊ EncryptionType ┊
@@ -997,6 +1094,7 @@ If you don't have "StltCon" in the first column for the default interface (or if
 ```
 
 Try using this command for each host interface (replace `r620-s1` using the right hostname):
+
 ```
 linstor node interface modify r620-s1 default --active
 ```
@@ -1006,11 +1104,13 @@ Verify every interface of each node again.
 #### 3. H2 modification to reset active connection and use default interface
 
 If you cannot modify the connections using:
+
 ```
 linstor node interface modify <HOSTNAME> default --active
 ```
 
 You probably have a similar error:
+
 ```
 ERROR:
 Description:
@@ -1023,6 +1123,7 @@ Show reports:
 
 In this situation, the LINSTOR database should be modified manually.
 Copy the database to another directory:
+
 ```
 mkdir /root/linstor-db/
 cp /var/lib/linstor/linstordb.mv.db /root/linstor-db/linstordb.mv.db.backup
@@ -1030,6 +1131,7 @@ cp /root/linstor-db/linstordb.mv.db.backup /root/linstor-db/linstordb.mv.db
 ```
 
 Connect to the DB backup using:
+
 ```
 java -cp /usr/share/linstor-server/lib/h2*.jar org.h2.tools.Shell -url jdbc:h2:/root/db/linstordb -user linstor -password linstor
 # Note: you can also use a web interface with:
@@ -1040,11 +1142,13 @@ java -cp /usr/share/linstor-server/lib/h2*.jar org.h2.tools.Shell -url jdbc:h2:/
 ##### 4. Modify node properties
 
 Now we can execute a few commands to verify the database state. Check the node properties first:
+
 ```
 SELECT * FROM LINSTOR.PROPS_CONTAINERS WHERE PROPS_INSTANCE LIKE '/NODE%';
 ```
 
 A valid configuration should return something similar to this:
+
 ```
 PROPS_INSTANCE | PROP_KEY        | PROP_VALUE
 /NODES/R620-S1 | CurStltConnName | default
@@ -1060,12 +1164,14 @@ PROPS_INSTANCE | PROP_KEY        | PROP_VALUE
 ```
 
 In this context:
+
 - `CurStltConnName` is the satellite connection used by a node.
 - `PrefNic` is the preferred network used by a DRBD resource on this node.
 
 The goal is to reset the satellite and DRBD connections to use the `default` interface.
 
 If the `CurStltConnName` is not equal to `default` for each node, use:
+
 ```
 UPDATE LINSTOR.PROPS_CONTAINERS
 SET PROP_VALUE = 'default'
@@ -1073,6 +1179,7 @@ WHERE PROPS_INSTANCE LIKE '/NODE%' AND PROP_KEY = 'CurStltConnName';
 ```
 
 Same for the preferred NIC:
+
 ```
 UPDATE LINSTOR.PROPS_CONTAINERS
 SET PROP_VALUE = 'default'
@@ -1080,6 +1187,7 @@ WHERE PROPS_INSTANCE LIKE '/NODE%' AND PROP_KEY = 'PrefNic';
 ```
 
 You can add the missing info if a node entry is absent (for `NodeUname`, `CurStltConnName` or `PrefNic`). For example to configure a `r620-s4` node:
+
 ```
 INSERT INTO LINSTOR.PROPS_CONTAINERS
 VALUES ('/NODES/R620-S4', 'NodeUname', 'r620-s4');
@@ -1094,6 +1202,7 @@ The value of `PROPS_INSTANCE` must be in capital letters, in this example: `/NOD
 :::
 
 To remove a bad node, for example `r620-s4`:
+
 ```
 DELETE FROM LINSTOR.PROPS_CONTAINERS
 WHERE PROPS_INSTANCE = '/NODES/R620-S4';
@@ -1105,11 +1214,13 @@ The default config should now be set for each node.
 The last thing to do is to verify the IP addresses of the default interfaces.
 
 To list them:
+
 ```
 SELECT * FROM LINSTOR.NODE_NET_INTERFACES;
 ```
 
 Output example:
+
 ```
 UUID                                 | NODE_NAME | NODE_NET_NAME | NODE_NET_DSP_NAME | INET_ADDRESS  | STLT_CONN_PORT | STLT_CONN_ENCR_TYPE
 25bf886f-2325-42df-a888-c7c88f48d722 | R620-S1   | DEFAULT       | default           | 192.16.210.14 | 3366           | PLAIN
@@ -1121,6 +1232,7 @@ b2d8e90c-7ce2-46aa-bd50-c5dd3bdae85b | R620-S3   | STORAGE       | storage      
 ```
 
 If an IP is incorrect for the default interface, you can modify it. Example for the `R620-S1` node:
+
 ```
 UPDATE LINSTOR.NODE_NET_INTERFACES
 SET INET_ADDRESS = '172.16.210.14'
@@ -1128,11 +1240,13 @@ WHERE UUID = '25bf886f-2325-42df-a888-c7c88f48d722';
 ```
 
 After all these changes, you can exit. If SQL transactions have been used, do not forget to commit:
+
 ```
 COMMIT;
 ```
 
 Then, you can override the LINSTOR database:
+
 ```
 cp /root/linstor-db/linstordb.mv.db /var/lib/linstor/linstordb.mv.db
 ```
@@ -1141,6 +1255,7 @@ Finally, you can stop the controller on the host currently running.
 `drbd-reactor` will restart it and you should have a valid database again.
 
 Check using:
+
 ```
 linstor n list
 linstor r list
@@ -1149,11 +1264,13 @@ linstor r list
 ### What to do when a node is in an EVICTED state?
 
 A controller can mark a node as EVICTED if the LINSTOR default configuration is used and a satellite offline for 60 minutes. The DRBD resources are then replicated on the remaining nodes as a protection against data loss. The following command is usually enough to re-import the evicted machine:
+
 ```
 linstor node restore <NODE_NAME>
 ```
 
 If the machine has to be removed:
+
 ```
 linstor node lost <NODE_NAME>
 ```
@@ -1164,8 +1281,9 @@ Or using `xsconsole`: "Resource Pool Configuration" => "Remove This Host from th
 Note: iptables config must also be modified to remove LINSTOR port rules (edit `/etc/sysconfig/iptables` then `service iptables restart` to apply the changes).
 
 For more info:
-- https://linbit.com/blog/linstors-auto-evict/
-- https://linbit.com/drbd-user-guide/linstor-guide-1_0-en/#s-linstor-auto-evict
+
+- <https://linbit.com/blog/linstors-auto-evict/>
+- <https://linbit.com/drbd-user-guide/linstor-guide-1_0-en/#s-linstor-auto-evict>
 
 ### How to enable dm-cache (Device mapper cache)?
 
@@ -1176,11 +1294,13 @@ This feature is currently experimental and not covered by [Vates Pro Support](ht
 :::
 
 On each host, create a new PV and VG using your cache devices:
+
 ```
 vgcreate linstor_group_cache <CACHE_DEVICES>
 ```
 
 Using `linstor`, create new storage pools for all nodes:
+
 ```
 linstor storage-pool create lvm <NODE_NAME> linstor_group_cache linstor_group_cache
 ```
@@ -1188,11 +1308,13 @@ linstor storage-pool create lvm <NODE_NAME> linstor_group_cache linstor_group_ca
 Then you can enable the cache with a few commands using the linstor controller.
 
 Verify the group to modify, it must start with "xcp-sr-" (generally `linstor_group_thin_device` for thin):
+
 ```
 linstor storage-pool list
 ```
 
 Make sure the primary resource group is configured with cache support and enable the cache on the volume group:
+
 ```
 linstor rg modify xcp-sr-linstor_group_thin_device --layer-list drbd,cache,storage
 linstor vg set-property xcp-sr-linstor_group_thin_device 0 Cache/CachePool linstor_group_cache
@@ -1209,12 +1331,14 @@ You can list caches on a host using `dmsetup ls`. Also one important thing, a ca
 ### How to disable dm-cache (Device mapper cache)?
 
 Execute these commands:
+
 ```
 linstor vg set-property xcp-sr-linstor_group_thin_device 0 Cache/CachePool
 linstor rg modify xcp-sr-linstor_group_thin_device --layer-list ""
 ```
 
 And for each node:
+
 ```
 linstor sp delete <NODE_NAME> linstor_group_cache
 ```
@@ -1222,11 +1346,13 @@ linstor sp delete <NODE_NAME> linstor_group_cache
 #### How to configure the cache size?
 
 By default, a VDI uses a cache size of 1% of its volume size. But it can be changed globally for all VDIs:
+
 ```
 linstor vg set-property xcp-sr-linstor_group_thin_device 0 Cache/Cachesize <PERCENTAGE>
 ```
 
 You can change this value globally or on a particular resource definition with:
+
 ```
 linstor rd set-property <VOLUME_NAME> Cache/Cachesize <PERCENTAGE>
 ```
@@ -1240,6 +1366,7 @@ Due to too-long VHD chains, snapshots can consume more memory than necessary. It
 #### How to switch between read and read-write modes?
 
 Simply use:
+
 ```
 linstor vg set-property xcp-sr-linstor_group_thin_device 0 Cache/OpMode <MODE>
 ```
@@ -1260,6 +1387,7 @@ If you are in a situation where you don't know what you're doing, contact [Vates
 :::
 
 After a total network outage or a critical crash of an entire XOSTOR pool, in very rare situations a transaction to the LINSTOR H2 database may not proceed as expected. This can lead to LINSTOR logs similar to this one:
+
 ```
 Caused by:
 ==========
@@ -1281,50 +1409,58 @@ To repair the driver, follow these steps:
 1. Disconnect the SR from each host in the pool via XOA. If this fails, proceed to the next step.
 
 2. Stop the satellites on each host:
+
 ```
 systemctl stop linstor-satellite
 ```
 
-3. Log in to the host where the controller is running. The `/var/lib/linstor` folder should be mounted. You can verify this using the `mountpoint` command:
+1. Log in to the host where the controller is running. The `/var/lib/linstor` folder should be mounted. You can verify this using the `mountpoint` command:
+
 ```
 mountpoint /var/lib/linstor
 /var/lib/linstor is a mountpoint
 ```
 
 Copy these files from the database folder: `linstordb.mv.db` and `linstordb.trace.db` ​​into another folder:
+
 ```
 mkdir linstor.bak
 cp /var/lib/linstor/*.db linstor.bak/
 ```
 
-4. Download the `H2` tool from [the official website](https://www.h2database.com/html/download-archive.html). The version to download corresponds to the one used by the installed version of LINSTOR. This information can be found on the LINSTOR server [git repository](https://github.com/LINBIT/linstor-server/blob/master/build.gradle).
+1. Download the `H2` tool from [the official website](https://www.h2database.com/html/download-archive.html). The version to download corresponds to the one used by the installed version of LINSTOR. This information can be found on the LINSTOR server [git repository](https://github.com/LINBIT/linstor-server/blob/master/build.gradle).
 
-5. Extract the H2 archive, replace the `<H2_FOLDER>` and `<H2_VERSION>` and run the recovery tool in the copied database folder:
+2. Extract the H2 archive, replace the `<H2_FOLDER>` and `<H2_VERSION>` and run the recovery tool in the copied database folder:
+
 ```
 java -cp <H2_FOLDER>/bin/h2-<H2_VERSION>.jar org.h2.tools.Recover -dir linstor.bak
 ```
 
 The recovery tool generates a SQL file. The contents of `linstor.bak` should look like this:
+
 ```
 ls linstor.bak/
 linstordb.h2.sql  linstordb.mv.db  linstordb.mv.txt  linstordb.trace.db
 ```
 
-6. Generate a new database in a temporary folder:
+1. Generate a new database in a temporary folder:
+
 ```
 java -cp <H2_FOLDER>/bin/h2-<H2_VERSION>.jar org.h2.tools.RunScript -url jdbc:h2:/tmp/linstordb -user linstor -password linstor -script linstor.bak/linstordb.h2.sql
 ```
 
-7. Replace the corrupted database with the temporary one:
+1. Replace the corrupted database with the temporary one:
+
 ```
 mv /tmp/linstordb.mv.db /var/lib/linstor/linstordb.mv.db
 ```
 
-8. Stop the controller:
+1. Stop the controller:
+
 ```
 systemctl stop linstor-controller
 ```
 
-9. Reconnect the SR to each host via XOA.
+1. Reconnect the SR to each host via XOA.
 
 The database should work fine now, but — as mentioned in the introduction — there might still be a few issues to fix (like corrupted or blocked resources).

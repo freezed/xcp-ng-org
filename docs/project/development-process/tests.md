@@ -35,11 +35,11 @@ Give priority to tests on actual hardware, but if you don't have any hardware av
 
 ## Installer
 
-* installation, upgrade
-* net-install with GPG check on
-* installation with answer file
-* compatibility with driver disks from Citrix?
-* backup restore
+- installation, upgrade
+- net-install with GPG check on
+- installation with answer file
+- compatibility with driver disks from Citrix?
+- backup restore
 
 ## Live migration tests
 
@@ -48,38 +48,38 @@ Live migration needs to be tested, with or without storage motion (ie. moving th
 **TODO: create (and link to) a page dedicated to live migration and known issues, gotchas or incompatibilities, especially across different releases and/or during pool upgrade.**
 
 Mixed combinations of:
-* (PV-)HVM Linux
-* PV Linux
-* (PV-)HVM Windows
-* ...
+- (PV-)HVM Linux
+- PV Linux
+- (PV-)HVM Windows
+- ...
 
 and
 
-* VMs created in older releases and carried over several upgrades
-* recent VMs
-* VMs imported from other hypervisors
+- VMs created in older releases and carried over several upgrades
+- recent VMs
+- VMs imported from other hypervisors
 
 and
 
-* very small VMs
-* large VMs
+- very small VMs
+- large VMs
 
 and
 
-* VMs with high CPU / memory / I/O usage (can be done on Linux using various options of the `stress` command). Example to be adapted and modified: `stress --io 4 --hdd 2 --vm 6 --vm-keep --vm-bytes 1000M`
+- VMs with high CPU / memory / I/O usage (can be done on Linux using various options of the `stress` command). Example to be adapted and modified: `stress --io 4 --hdd 2 --vm 6 --vm-keep --vm-bytes 1000M`
 
 and
 
-* live migration using a shared repository (no storage migration)
-* live migration with storage migration using local storage repositories
-* live migration with storage migration using network repositories (or network to local / local to network)
+- live migration using a shared repository (no storage migration)
+- live migration with storage migration using local storage repositories
+- live migration with storage migration using network repositories (or network to local / local to network)
 
 and
 
-* migration within a pool
-* cross-pool migration, same versions
-* migration from earlier releases, during pool upgrade (see below)
-* migration from earlier releases, cross-pool (see below)
+- migration within a pool
+- cross-pool migration, same versions
+- migration from earlier releases, during pool upgrade (see below)
+- migration from earlier releases, cross-pool (see below)
 
 ### From earlier releases, during pool upgrade
 
@@ -106,33 +106,33 @@ We try to overcome these whenever possible, but bugs that require patching the o
 Live migration is important, but let's not forget to test "cold" migration (migration of shutdown VMs).
 
 Mixed combinations of:
-* (PV-)HVM Linux
-* PV Linux
-* (PV-)HVM Windows
-* ...
+- (PV-)HVM Linux
+- PV Linux
+- (PV-)HVM Windows
+- ...
 
 and
 
-* VMs created in older releases and carried over several upgrades
-* recent VMs
-* VMs imported from other hypervisors
+- VMs created in older releases and carried over several upgrades
+- recent VMs
+- VMs imported from other hypervisors
 
 and
 
-* very small VMs
-* large VMs
+- very small VMs
+- large VMs
 
 and
 
-* local storage to local storage
-* local storage to network storage and conversely
-* network storage to network storage
+- local storage to local storage
+- local storage to network storage and conversely
+- network storage to network storage
 
 and
 
-* migration within a pool
-* cross-pool migration, same versions
-* migration from earlier releases, cross-pool
+- migration within a pool
+- cross-pool migration, same versions
+- migration from earlier releases, cross-pool
 
 ## Test the Xen hypervisor itself
 
@@ -149,6 +149,7 @@ Please report any issue or unexpected result on [the forum](https://xcp-ng.org/f
 The first test suite is **XTF** (stands for Xen Test Framework)
 
 Enable HVM FEP on the host. This is not mandatory but if you don't, several tests that require it will be skipped:
+
 ```
 /opt/xensource/libexec/xen-cmdline --set-xen hvm_fep
 reboot
@@ -157,6 +158,7 @@ reboot
 Note: this debug setting is not recommended for production.
 
 Build XTF
+
 ```
 yum install gcc git -y
 git clone git://xenbits.xen.org/xtf.git
@@ -165,11 +167,13 @@ make -j8
 ```
 
 (Optional, protects your host from a crash if its hardware is vulnerable to [XSA-304](https://xenbits.xen.org/xsa/advisory-304.html)) Switch EPT superpages to secure mode:
+
 ```
 xl set-parameters ept=no-exec-sp
 ```
 
 Run the tests
+
 ```
 # self test
 ./xtf-runner selftest -q --host
@@ -181,6 +185,7 @@ echo $?
 ```
 
 Switch back EPT superpages to fast mode, if needed
+
 ```
 xl set-parameters ept=exec-sp
 ```
@@ -188,10 +193,10 @@ xl set-parameters ept=exec-sp
 There will be a few SKIPPED tests, but there shouldn't be many.
 
 Known skipped tests:
-* `test-hvm32-umip`, `test-hvm64-umip`: skipped if the CPU is not recent enough to support UMIP.
-* `test-pv64-xsa-167`: tests PV superpages, support for which was removed long ago from Xen. Always skips.
-* `test-pv64-xsa-182`: skipped in default configuration.
-* `test-pv64-xsa-444`: will skip if DBEXT (an AMD feature) support is not present. So skips on all Intel systems.
+- `test-hvm32-umip`, `test-hvm64-umip`: skipped if the CPU is not recent enough to support UMIP.
+- `test-pv64-xsa-167`: tests PV superpages, support for which was removed long ago from Xen. Always skips.
+- `test-pv64-xsa-182`: skipped in default configuration.
+- `test-pv64-xsa-444`: will skip if DBEXT (an AMD feature) support is not present. So skips on all Intel systems.
 
 You can ignore skipped tests which belong to this list.
 
@@ -200,6 +205,7 @@ You can ignore skipped tests which belong to this list.
 The `xen-dom0-tests` RPM provides several test programs from the Xen Project.
 
 Install:
+
 ```
 yum install xen-dom0-tests
 ```

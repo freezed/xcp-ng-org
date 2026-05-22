@@ -13,15 +13,14 @@ You can use various 3rd party tools to manage your XCP-ng/XO stack "as code".
 
 Packer is a free and open source tool for creating golden images for multiple platforms from a single source configuration. Combined with XCP-ng, you can create and regenerate templates for your own requirements or for your customers.
 
-Here is a tutorial to start with Packer and XCP-ng: https://xcp-ng.org/blog/2024/02/22/using-packer-with-xcp-ng/
-
+Here is a tutorial to start with Packer and XCP-ng: <https://xcp-ng.org/blog/2024/02/22/using-packer-with-xcp-ng/>
 
 ## 🌍 Terraform / OpenTofu
 
 Terraform is an infrastructure as code software tool that enables you to safely and predictably create, change, and improve infrastructure. There's a series of blog posts to explain it in more details:
 
-* https://xen-orchestra.com/blog/virtops1-xen-orchestra-terraform-provider/
-* https://xen-orchestra.com/blog/managing-existing-infrastructure-with-terraform-2/
+* <https://xen-orchestra.com/blog/virtops1-xen-orchestra-terraform-provider/>
+* <https://xen-orchestra.com/blog/managing-existing-infrastructure-with-terraform-2/>
 
 While Terraform used to be free and open-source, Hashicorp decided to relicense it. There is a free and open source fork called [OpenTofu](https://opentofu.org/) which can use Terraform's providers, though!
 
@@ -29,7 +28,7 @@ While Terraform used to be free and open-source, Hashicorp decided to relicense 
 
 Ansible is a suite of software tools that enables infrastructure as code. It is open-source and the suite includes software provisioning, configuration management, and application deployment functionality
 
-https://xen-orchestra.com/blog/virtops3-ansible-with-xen-orchestra/
+<https://xen-orchestra.com/blog/virtops3-ansible-with-xen-orchestra/>
 
 ## 🗃️ Netbox
 
@@ -37,4 +36,4 @@ https://xen-orchestra.com/blog/virtops3-ansible-with-xen-orchestra/
 
 You can even integrate a synchronization between Netbox and XCP-ng/XO:
 
-https://xen-orchestra.com/blog/virtops-4-track-any-change-in-your-virtualized-infrastructure/
+<https://xen-orchestra.com/blog/virtops-4-track-any-change-in-your-virtualized-infrastructure/>

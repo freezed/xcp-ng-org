@@ -9,6 +9,7 @@ The way we use tags and branches.
 We need a few conventions to work together. The following describes the naming conventions for branches and tags in our code repositories, that is repositories located at [https://github.com/xcp-ng](https://github.com/xcp-ng). Repositories used for RPM packaging, at [https://github.com/xcp-ng-rpms/](https://github.com/xcp-ng-rpms/), use different conventions not discussed here.
 
 The objectives of the branch and tag naming conventions are:
+
 * always being able to know how to name tags and maintenance branches, depending on the situation
 * easily identify maintenance branches for a given release of XCP-ng, based on their name
 * know what branch to develop the next version on
@@ -23,6 +24,7 @@ We decide when to release a new version, and we decide the versioning.
 Examples: `xcp-emu-manager`, `uefistored`…
 
 Common case:
+
 * Tags: `vMAJOR.MINOR.PATCH` (`v1.1.2`, `v1.2.0`…)
 * Maintenance branch if needed: `VERSION-XCPNGVERSION`.
   * We don't need to create the maintenance branch in advance. Not all software gets hotfixes.
@@ -34,10 +36,12 @@ Common case:
 * Next release developed on: `master`
 
 If for any reason we decide to release a newer version of the software as a maintenance update, then:
+
 * We stop updating the existing maintenance branch
 * Further hotfixes would come from a new maintenance branch created from the appropriate tag.
 
 Special case: if VERSION and XCPNGVERSION are always the same (example: `xcp-ng-release`), then:
+
 * Tags: `vXCPNGVERSIONFULL` (`v8.2.0`)
 * Maintenance branch if needed: `XCPNGVERSION` (`8.2`)
 
@@ -48,6 +52,7 @@ We do not decide how and when new versions and released, and how they are number
 Examples: `sm`…
 
 Common case:
+
 * Tags:
   * We tag when we release a new version of XCP-ng: `vUPSTREAMVERSION-XCPNGVERSIONFULL` (`v1.29.0-8.2.0`)
   * Then we use the maintenance branch but don't tag anymore (each build pushed to koji already acts as a sort of tag). If we *really* wanted to tag for patch updates from the maintenance branch, we could increment neither `UPSTREAMVERSION` nor `XCPNGVERSIONFULL` so we'd have to add yet another suffix, e.g. `v1.29.0-8.2.0-3.1` where `3.1` would be the `Release` tag from the hotfix RPM.
@@ -61,8 +66,9 @@ Common case:
 If for any reason we decide to release a newer version of the software as a maintenance update, then we'd create new tag and a new maintenance branch that match `UPSTREAMVERSION` (that changes) and `XCPNGVERSIONFULL` (that doesn't change)
 
 Special case: if the upstream version and the XCP-ng version are always the same, then:
-  * Tags: `vXCPNGVERSIONFULL` (`v8.2.0`)
-  * Maintenance branch: `XCPNGVERSION` (`8.2`)
+
+* Tags: `vXCPNGVERSIONFULL` (`v8.2.0`)
+* Maintenance branch: `XCPNGVERSION` (`8.2`)
 
 ### About upstream branches
 
@@ -73,21 +79,21 @@ Special case: if the upstream version and the XCP-ng version are always the same
 
 #### How to create a new branch after a XCP-ng release?
 
-- Find the tag of the new sm release in the upstream repo and check it out.
-- Create a new `UPSTREAMVERSION-XCPNGVERSION` (example: `2.46.11-8.3`) branch.
-- Rebase or cherry-pick our own commits from our current maintenance branch for the previous release (example: `2.30.4-8.2`) and resolve conflicts carefully. Reorganize commits if needed for the most consistent history possible. Of course, drop patches that were already merged upstream.
+* Find the tag of the new sm release in the upstream repo and check it out.
+* Create a new `UPSTREAMVERSION-XCPNGVERSION` (example: `2.46.11-8.3`) branch.
+* Rebase or cherry-pick our own commits from our current maintenance branch for the previous release (example: `2.30.4-8.2`) and resolve conflicts carefully. Reorganize commits if needed for the most consistent history possible. Of course, drop patches that were already merged upstream.
 
 #### How to synchronize a maintenance branch with the upstream?
 
 The upstream repository doesn't contain the maintenance branches that are the basis for Citrix Hypervisor hotfixes. So the process is a bit more complicated for us, as we first need to create a branch whose contents match the contents of the tar.gz in the hotfix SRPM, and tag this as a reference for generating our patches for the RPM.
 
-- Create a new maintenance branch, following the `UPSTREAMVERSION-XCPNGVERSION` naming convention, from the tag that matches the current (before the hotfix) version of `sm` in our RPM.
-  - If it's the first `sm` hotfix for this release of XCP-ng, then start from the upstream tag
-  - Else start from the tag that we had to create for the previous hotfix because upstream didn't provide one. Follow the `vUPSTREAMVERSION-xcpng` naming convention. Example: `v2.30.4-xcpng`.
-- Cherry-pick upstream commits into this branch using the SRPM changelog of the upstream hotfix.
-- Check if we have the same source code between the SRPM and our branch using `diff -urq <sources> <upstream sources>`.
-- When our branch exactly matches the contents of the hotfix's tarball, tag it as `vUPSTREAMVERSION-xcpng`. This tag will be used to checkout for the next maintenance update, and as the base reference to generate patches for our RPM.
-- At last, we can apply our specific commits on top: rebase or cherry-pick them from the previous maintenance branch for this release (example: `2.30.3-8.2`) and resolve conflicts carefully. Of course, drop patches that were already merged upstream.
+* Create a new maintenance branch, following the `UPSTREAMVERSION-XCPNGVERSION` naming convention, from the tag that matches the current (before the hotfix) version of `sm` in our RPM.
+  * If it's the first `sm` hotfix for this release of XCP-ng, then start from the upstream tag
+  * Else start from the tag that we had to create for the previous hotfix because upstream didn't provide one. Follow the `vUPSTREAMVERSION-xcpng` naming convention. Example: `v2.30.4-xcpng`.
+* Cherry-pick upstream commits into this branch using the SRPM changelog of the upstream hotfix.
+* Check if we have the same source code between the SRPM and our branch using `diff -urq <sources> <upstream sources>`.
+* When our branch exactly matches the contents of the hotfix's tarball, tag it as `vUPSTREAMVERSION-xcpng`. This tag will be used to checkout for the next maintenance update, and as the base reference to generate patches for our RPM.
+* At last, we can apply our specific commits on top: rebase or cherry-pick them from the previous maintenance branch for this release (example: `2.30.3-8.2`) and resolve conflicts carefully. Of course, drop patches that were already merged upstream.
 
 ### Special case: `xapi`
 
@@ -97,27 +103,29 @@ but it's crucial that these patches ultimately be awaiting upstream acceptance.
 
 #### How to manage patches?
 
-- Create a new `UPSTREAMVERSION-XCPNGVERSION` branch (example: `v24.39.1-8.3`).
-- To update either the upstream version or the xcpng version, rebase or cherry-pick your commits
+* Create a new `UPSTREAMVERSION-XCPNGVERSION` branch (example: `v24.39.1-8.3`).
+* To update either the upstream version or the xcpng version, rebase or cherry-pick your commits
 from the current maintenance branch for the previous release (e.g, `v24.19.2-8.3`), and
 resolve conflicts carefully. Reorganize commits as needed to maintain a consistent history.
 Of course, drop any patches that have already been merged upstream.
-- For example, if the upstream version changes:
-  - create a new branch using the naming convention.
-  - rebase or cherry-pick the patches from the older version. Rebasing is often a better
+* For example, if the upstream version changes:
+  * create a new branch using the naming convention.
+  * rebase or cherry-pick the patches from the older version. Rebasing is often a better
   approach but if you need to keep a subset of patches cherry-picking can be an option.
   You need to create the new branch according to your needs.
-- If the XCP-ng version changes, follow the same process: create a new branch and rebase or
+* If the XCP-ng version changes, follow the same process: create a new branch and rebase or
 cherry-pick the patches.
-- To generate the list of patches to be used for the RPM, use `git format-patch --no-numbered --no-signature UPSTREAMVERSION`
+* To generate the list of patches to be used for the RPM, use `git format-patch --no-numbered --no-signature UPSTREAMVERSION`
 
 ### Special case: `qemu-dp`
 
 `qemu-dp` both *has* an upstream git repository and at the same time it *hasn't*:
+
 * The SRPM's source tarball comes from upstream `qemu`.
 * Additional patches by XenServer team come from a private git repository, so all we have is patches in the SRPM.
 
 We chose to base our `qemu-dp` repository on a fork of the upstream `qemu` [repository mirror on github](https://github.com/qemu/qemu), with additional branches:
+
 * To track XS patches, for each XS release:
   * Branch `UPSTREAMVERSION-XS-XSVERSION` (`2.12.0-XS-8.2`), created from the `v2.12.0` upstream tag, and patches from the SRPM applied as commits on top.
   * Tag `vUPSTREAMVERSION-XS-XSVERSIONFULL` (`v2.12.0-XS-8.2.0`) created from the commit of the above branch that corresponds to the initial release of XSVERSIONFULL.
@@ -154,6 +162,7 @@ To switch to a new upstream version `vUPSTREAMVERSION` (`v10.10.5`), we want a n
 A way to achieve that is through `git rebase -i -r` (aka `--interactive --rebase-merges`): the branch is first created as a clone of the previous one (i.e. on the same revision), and rebased while preserving the merge structure so the topics are kept isolated.
 
 Care should be taken to:
+
 * getting each topic branch merged only once (in the case where new commits were piled on a topic during the previous version's lifetime), and get the relevant piled commits squashed when applicable
 * review the `rebase` instruction sheet to avoid unwanted rebasing of each topic branch -- whether we want to change a given topic branch's base depends on the status of the matching pull-request
 * pushing those topic branches we did want to rebase, so the uptream PR gets our new version
@@ -161,4 +170,3 @@ Care should be taken to:
 #### Tagging
 
 Versions are tagged when we want to release a new version to official repos. Tags are named `vUPSTREAMVERSION.xcpng.REVISION` (`v10.10.5.xcpng.1`), and gpg-signed.
-

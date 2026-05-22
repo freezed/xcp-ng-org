@@ -97,11 +97,11 @@ Repository formats:
 
 * nfs - `server:/path/`
 * url - one of:
-    * `http://[user[:passwd]]@host[:port]/path/`
-    * `https://[user[:passwd]]@host[:port]/path/`
-    * `ftp://[user[:passwd]]@host[:port]/path/`
-    * `file:///path/`
-    * `nfs://server:/path/`
+  * `http://[user[:passwd]]@host[:port]/path/`
+  * `https://[user[:passwd]]@host[:port]/path/`
+  * `ftp://[user[:passwd]]@host[:port]/path/`
+  * `file:///path/`
+  * `nfs://server:/path/`
 
 #### Bootloader
 
@@ -150,7 +150,6 @@ Args passed to the script:
 * `filesystem-populated`: mnt (mount point of root filesystem)
 * `installation-complete`: 0 | 1 (success or failure)
 
-
 #### FCoE
 
 Specifies interfaces to run Fibre Channel over Ethernet VLAN Discovery on.
@@ -181,6 +180,7 @@ Specifies the target disks and md device for creating a software RAID 1 array. T
     <disk>dev2</disk>
   </raid>
 ```
+
 #### Primary disk
 
 Specifies the target disk for installation.
@@ -190,6 +190,7 @@ Specifies the target disk for installation.
 ```
 
 Optional attribute:
+
 * `guest-storage`=bool. Include the remaining space of the primary disk in the local SR. `True` by default.
 * `sr-at-end`=bool. Location of SR partition on the physical disk. Used by XenRT to simulate a host that has been migrated from an OEM release. Default: `True`.
 * `preserve-first-partition`=`true|yes|false|no|if-utility`. Defines the action to perform on detecting a non-XS partition at the start of the disk. Default : if-utility. Values:
@@ -216,9 +217,11 @@ Specifies the initial management interface.
 ```
 
 Mandatory attributes:
+
 * `proto`="static|dhcp|none"
 
 If the interface is static then the following elements must be present:
+
 ```xml
       <ipaddr>ip</ipaddr>
 
@@ -228,10 +231,12 @@ If the interface is static then the following elements must be present:
 ```
 
 If proto is specified as "none" then protov6 must be specified and must not be none. Default: `none`. Optional attributes:
+
 * `vlan`="vlan". Specifies tagged VLAN id for management interface. If not present, untagged VLAN is used as default. VLAN is supported from 1 to 4094.
 * `protov6`="static|dhcp|autoconf|none". Default: `none`.
 
 If `protov6` is static then the following elements must be present:
+
 ```xml
       <ipv6>ipv6/prefix_length</ipv6>
       <gatewayv6>gw</gatewayv6>
@@ -246,6 +251,7 @@ Specifies the root password. The value `!!` and a type of "hash" defers setting 
 ```
 
 How to create a hash.
+
 ```
 mkpasswd -m SHA-512 'Password1'
 $6$Vv6DgmVWmbZ.SdRl$AUWzbpE5luuNQIyW.CUEztWLKEJkSrBhfTKFdMaX1eJhPrtXworF4RIG.GQ9cBtxE0yNBI4weakgnHdGjljFg/

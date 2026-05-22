@@ -25,7 +25,6 @@ This tool is pretty standard and used everywhere. A lot of existing cloud templa
 
 So it means very easily customizing your VM when you create it from a compatible template. It brings you closer to the "instance" principle, like in Amazon cloud or OpenStack.
 
-
 ### ACLs
 
 ACLs can be used to allow some XO users to only see some resources. See more about ACLs [on the official documentation](https://xen-orchestra.com/docs/acls.html).

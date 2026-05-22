@@ -9,6 +9,7 @@ Dom0 is another word to talk about the *privileged domain*, also known as the *C
 Issues can arise when the control domain is lacking memory, that's why we advise to be generous with it whenever possible. Default values from the installer may be too low for your setup. In general it depends on the amount of VM's and their workload. If constraints do not allow you to follow the advice below, you can try to set lower values.
 
 In any case:
+
 * monitor RAM usage in the control domain
 * if issues arise (failed live migration for example), [look at the logs](../../troubleshooting/log-files) for messages related to lack of memory
 

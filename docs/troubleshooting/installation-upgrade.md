@@ -15,6 +15,7 @@ Upgrade here designates an upgrade using the installation ISO
 
 * On UEFI mode, you can edit the grub entries with `e`. Xen parameters are on lines starting with `multiboot2 /boot/xen.gz` and kernel parameters on lines starting with `module2 /boot/vmlinuz`.
 * On BIOS mode, you can enter a menu by typing `menu` and then modify the boot entries with the TAB key. Xen parameters are between `/boot/xen.gz` and the next `---`. Kernel parameters are between `/boot/vmlinuz` and the next `---`.
+
 :::
 
 If any of the above allows to work around your issue, please let us know ([github issues](https://github.com/xcp-ng/xcp/issues)). We can't fix issues we aren't aware of.
@@ -35,8 +36,8 @@ While the console access method described above may be sufficient for simple iss
 
 To enable SSH/SCP access during installation, you can use the Linux kernel command line to:
 
-- Activate the network
-- Enable the sshd service with a root password of your choice
+* Activate the network
+* Enable the sshd service with a root password of your choice
 
 For the most common case (setting up the network via DHCP), add the following parameters to the Linux boot section:
 
@@ -89,8 +90,8 @@ Virtual CDROM Device         <<<<<< This one is the same device, in legacy BIOS 
 
 On the host, run `efibootmgr`.
 
-- If you see `EFI variables are not supported on this system.` you're running on legacy BIOS.
-- If you see some EFI boot entries, you’re running on UEFI.
+* If you see `EFI variables are not supported on this system.` you're running on legacy BIOS.
+* If you see some EFI boot entries, you’re running on UEFI.
 
 ### First-boot services won't complete
 

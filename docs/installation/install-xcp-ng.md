@@ -63,7 +63,6 @@ NEVER switch from UEFI to BIOS (or vice-versa) **after** you installed XCP-ng. S
 
 ![EULA screen, providing information about licenses and allowing to accept EULA or go back.](https://xcp-ng.org/assets/img/screenshots/install4.png)
 
-
 #### 5. Disk selection
 
 <a name="_5-disk-selection"></a>
@@ -84,7 +83,6 @@ If only one disk is found suitable for the installation, this step is skipped. T
 This is the place where your VM disks will be stored. It's called a **Storage Repository** (SR). It can use the same disk you installed the system on. It will automatically use the free space after system partitions.
 
 ![Local storage screen, select the disk and type of storage: EXT for thin provisioning, or LVM for thick provisioning.](https://xcp-ng.org/assets/img/screenshots/install7.png)
-
 
 :::tip
 EXT instead of LVM? We advise to use EXT to benefit from thin provisioning!
@@ -216,6 +214,7 @@ label xcp-ng
 ```
 
 How TFTP folder looks like when configured
+
 ```
 tree -L 1 /srv/tftp/
 srv/tftp
@@ -236,6 +235,7 @@ If you want to make an installation in UEFI mode, you need to have a slightly di
 1. In your TFTP root folder, create a directory called `EFI/xcp-ng`
 2. Configure your DHCP server to provide `/EFI/xcp-ng/grubx64.efi` as the boot file
 3. Create a `grub.cfg` as follow:
+
 ```
  menuentry "XCP-ng Install (serial)" {
     multiboot2 /EFI/xcp-ng/xen.gz dom0_mem=2048M,max:2048M watchdog \
@@ -244,10 +244,11 @@ If you want to make an installation in UEFI mode, you need to have a slightly di
     module2 /EFI/xcp-ng/install.img
  }
 ```
-4. Copy this `grub.cfg` file to `EFI/xenserver` folder on the TFTP server
-5. Get the following files from XCP-ng ISO: `grubx64.efi`, `install.img` (from the root directory), `vmlinuz`, and `xen.gz` (from the /boot directory) to the new `EFI/xcp-ng` directory on the TFTP server.
+1. Copy this `grub.cfg` file to `EFI/xenserver` folder on the TFTP server
+2. Get the following files from XCP-ng ISO: `grubx64.efi`, `install.img` (from the root directory), `vmlinuz`, and `xen.gz` (from the /boot directory) to the new `EFI/xcp-ng` directory on the TFTP server.
 
 How TFTP folder looks like when configured
+
 ```
 tree -L 1 /srv/tftp/
 srv/tftp
@@ -304,8 +305,8 @@ tree -L 1 /path/to/http-directory/
 └── install.img
 ```
 
-2. Boot the target machine.
-3. Press Ctrl-B to catch the iPXE menu.  Use the chainload command to load grub.
+1. Boot the target machine.
+2. Press Ctrl-B to catch the iPXE menu.  Use the chainload command to load grub.
 
 ```
 chain http://SERVER_IP/EFI/xenserver/grubx64.efi
@@ -315,7 +316,7 @@ chain http://SERVER_IP/EFI/xenserver/grubx64.efi
 Sometimes grub takes a very long time to load after displaying "Welcome to Grub".  This can be fixed by compiling a new version of Grub with `grub-mkstandalone`.
 :::
 
-4. Once the grub prompt loads, set the root to http and load the config file.
+1. Once the grub prompt loads, set the root to http and load the config file.
 
 ```
 # Replace with your server's ip
@@ -323,8 +324,8 @@ set root=(http,SERVER_IP)
 configfile /EFI/xenserver/grub.cfg
 ```
 
-5. Select the "install" menu entry.
-6. Wait for grub to load the necessary binaries.  This may take a minute.  If you look at your http server log you should see something like:
+1. Select the "install" menu entry.
+2. Wait for grub to load the necessary binaries.  This may take a minute.  If you look at your http server log you should see something like:
 
 ```
 # (from python3 -m http.server path-to-directory 80)
@@ -333,10 +334,10 @@ configfile /EFI/xenserver/grub.cfg
 192.168.0.10 - - [11/Mar/2021 03:25:58] "GET /boot/vmlinuz HTTP/1.1" 200 -
 192.168.0.10 - - [11/Mar/2021 03:26:03] "GET /install.img HTTP/1.1" 200 -
 ```
-7. Continue with installation as normal.
-
+1. Continue with installation as normal.
 
 ## 🤖 Automated install
+
 <a name="-automatedinstall"></a>
 XCP-ng's installation can be automated by using network boot (PXE) or a custom installation image.
 
@@ -378,6 +379,7 @@ Follow the [previous section on Network boot (PXE)](#-pxe-boot-install) and add 
 Add `answerfile=http://your_server/path/to/answerfile.xml install` to the parameters passed to `vmlinuz` (the linux kernel of the installer).
 
 Example:
+
 ```
 default xcp-ng-auto
 label xcp-ng-auto
@@ -394,6 +396,7 @@ Any SYSLINUX configuration style file will be valid. [Find more on the syslinux 
 Add `answerfile=http://your_server/path/to/answerfile.xml install` to the parameters passed to `vmlinuz` (the linux kernel of the installer).
 
 Example:
+
 ```
 menuentry "XCP-ng Install (serial)" {
     multiboot2 /EFI/xcp-ng/xen.gz dom0_mem=2048M,max:2048M watchdog dom0_max_vcpus=4 com1=115200,8n1 console=com1,vga
@@ -413,21 +416,27 @@ If you can't or don't want to setup PXE but can still serve a file (the answerfi
 1. [Prepare an answerfile](../../appendix/answerfile) and make it available from a local HTTP server
 2. [Extract the XCP-NG ISO file](../../project/development-process/ISO-modification#extract-an-existing-iso-image)
 3. Modify the boot configuration to use the remote answerfile
-  * For BIOS boot, edit `/boot/isolinux/isolinux.cfg`.
-    * Locate the `install` boot entry, which should look like this:
+
+* For BIOS boot, edit `/boot/isolinux/isolinux.cfg`.
+  * Locate the `install` boot entry, which should look like this:
+
     ```
     LABEL install
         KERNEL mboot.c32
         APPEND /boot/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga --- /boot/vmlinuz console=hvc0 console=tty0 --- /install.img
     ```
-    * Append `answerfile=http://your_server/path/to/answerfile.xml install` to the parameters passed to vmlinuz, before the last `---`:
+
+  * Append `answerfile=http://your_server/path/to/answerfile.xml install` to the parameters passed to vmlinuz, before the last `---`:
+
     ```
     LABEL install
         KERNEL mboot.c32
         APPEND /boot/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga --- /boot/vmlinuz console=hvc0 console=tty0 answerfile=http://your_server/path/to/answerfile.xml install --- /install.img
     ```
-  * For UEFI boot edit `/EFI/xenserver/grub.cfg` (and `/EFI/xenserver/grub-usb.cfg` for USB installation).
-    * Locate the `install` menuentry, which should look like this:
+
+* For UEFI boot edit `/EFI/xenserver/grub.cfg` (and `/EFI/xenserver/grub-usb.cfg` for USB installation).
+  * Locate the `install` menuentry, which should look like this:
+
     ```
     menuentry "install" {
         multiboot2 /boot/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga
@@ -435,7 +444,9 @@ If you can't or don't want to setup PXE but can still serve a file (the answerfi
         module2 /install.img
     }
     ```
-    * Append `answerfile=http://your_server/path/to/answerfile.xml install` to the parameters passed to vmlinuz, in the line that starts with `module2 /boot/vmlinuz`:
+
+  * Append `answerfile=http://your_server/path/to/answerfile.xml install` to the parameters passed to vmlinuz, in the line that starts with `module2 /boot/vmlinuz`:
+
     ```
     menuentry "install" {
         multiboot2 /boot/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga
@@ -443,7 +454,7 @@ If you can't or don't want to setup PXE but can still serve a file (the answerfi
         module2 /install.img
     }
     ```
-4. [Build a new ISO with your changes](../../project/development-process/ISO-modification)
+1. [Build a new ISO with your changes](../../project/development-process/ISO-modification)
 
 Your ISO is ready for installation.
 
@@ -454,21 +465,27 @@ If can't either setup PXE or serve a file (the answerfile) from a server that wi
 1. [Prepare an answerfile](../../appendix/answerfile)
 2. [Extract the XCP-NG ISO file](../../project/development-process/ISO-modification#extract-an-existing-iso-image)
 3. Modify the boot configuration to use a local (= embedded in the ISO) answerfile
-  * For BIOS boot, edit `/boot/isolinux/isolinux.cfg`.
-    * Locate the `install` boot entry, which should look like this:
+
+* For BIOS boot, edit `/boot/isolinux/isolinux.cfg`.
+  * Locate the `install` boot entry, which should look like this:
+
     ```
     LABEL install
         KERNEL mboot.c32
         APPEND /boot/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga --- /boot/vmlinuz console=hvc0 console=tty0 --- /install.img
     ```
-    * Append `answerfile=file:///answerfile.xml install` to the parameters passed to vmlinuz, before the last `---`:
+
+  * Append `answerfile=file:///answerfile.xml install` to the parameters passed to vmlinuz, before the last `---`:
+
     ```
     LABEL install
         KERNEL mboot.c32
         APPEND /boot/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga --- /boot/vmlinuz console=hvc0 console=tty0 answerfile=file:///answerfile.xml install --- /install.img
     ```
-  * For UEFI boot edit `/EFI/xenserver/grub.cfg` (and `/EFI/xenserver/grub-usb.cfg` for USB installation).
-    * Locate the `install` menuentry, which should look like this:
+
+* For UEFI boot edit `/EFI/xenserver/grub.cfg` (and `/EFI/xenserver/grub-usb.cfg` for USB installation).
+  * Locate the `install` menuentry, which should look like this:
+
     ```
     menuentry "install" {
         multiboot2 /boot/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga
@@ -476,7 +493,9 @@ If can't either setup PXE or serve a file (the answerfile) from a server that wi
         module2 /install.img
     }
     ```
-    * Append `answerfile=file:///answerfile.xml install` to the parameters passed to vmlinuz, in the line that starts with `module2 /boot/vmlinuz`:
+
+  * Append `answerfile=file:///answerfile.xml install` to the parameters passed to vmlinuz, in the line that starts with `module2 /boot/vmlinuz`:
+
     ```
     menuentry "install" {
         multiboot2 /boot/xen.gz dom0_max_vcpus=1-16 dom0_mem=max:8192M com1=115200,8n1 console=com1,vga
@@ -484,17 +503,17 @@ If can't either setup PXE or serve a file (the answerfile) from a server that wi
         module2 /install.img
     }
     ```
-4. [Extract install.img](../../project/development-process/ISO-modification#extract-an-existing-iso-image)
-5. Add your answerfile
+1. [Extract install.img](../../project/development-process/ISO-modification#extract-an-existing-iso-image)
+2. Add your answerfile
+
     ```
     cp answerfile.xml "$WORK_DIR/install/answerfile.xml"
     ```
 
-6. [Build a new install.img with your changes](../../project/development-process/ISO-modification#build-a-new-installimg-with-your-changes)
-7. [Build a new ISO with your changes](../../project/development-process/ISO-modification#build-a-new-iso-image-with-your-changes)
+3. [Build a new install.img with your changes](../../project/development-process/ISO-modification#build-a-new-installimg-with-your-changes)
+4. [Build a new ISO with your changes](../../project/development-process/ISO-modification#build-a-new-iso-image-with-your-changes)
 
 Your ISO is ready for installation.
-
 
 ### Software RAID in answerfile
 
@@ -542,8 +561,10 @@ See [the Troubleshooting page](../../troubleshooting/after-upgrade).
 
 :::danger
 We **strongly discourage** the installation of XCP-ng on USB drives. The frequent writing actions required by XCP-ng can rapidly degrade a USB drive due to:
+
 * XAPI: This is the XenServer API database, which undergoes constant changes. This results in significant write operations, which are detrimental to the longevity of USB drives. Note: The XAPI database maintains the state of all XCP-ng operations and is replicated across each host (from the slave).
 * Logs: XCP-ng generates a substantial amount of debug logs. A possible solution is to utilize a remote syslog.
+
 :::
 
 ### Installation on SD cards

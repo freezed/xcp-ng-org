@@ -22,6 +22,7 @@ umount tmpmountdir/ # as root
 Now you have the contents of the ISO image in the `iso/` directory. Note that everything in the directory is read-only at this stage, so you will need to change the file permissions or be root to modify the files.
 
 For example:
+
 ```
 chmod a+w iso/ -R
 ```
@@ -44,6 +45,7 @@ We'll only list the files that are used during an installation or upgrade. The o
 ## Modify the installer itself
 
 The steps to modify the installer are:
+
 * (extract the ISO image, see above)
 * extract install.img
 * modify the files it contains (a whole Linux filesystem)
@@ -63,18 +65,23 @@ cd ..
 ### Navigate in the installer's filesystem
 
 If you want to use commands in the installer's filesystem context, as root:
+
 ```
 chroot install/
 ```
+
 To use `yum` or `rpm`, you'll also need to mount `urandom` in your chrooted dir.
 From outside the chroot run:
+
 ```
 touch install/dev/urandom
 mount -B /dev/urandom install/dev/urandom # As root!
 ```
+
 Then useful commands will be available to you in the context of that filesystem, such as `rpm`, `yum`, etc.
 
 For example, you can list all RPMs present in that "system":
+
 ```
 rpm -qa | sort
 ```
@@ -91,15 +98,18 @@ To modify the installed RPMs on a host see [change the list of installed RPMs](#
 :::
 
 Example use cases:
+
 * Update drivers: replace an existing driver module (*.ko) with yours, or, if you have built a RPM with that driver, install it. For example, you could rebuild a patched `qlogic-qla2xxx` RPM package and install it instead of the one that is included by default. Note that this will *not* install the newer driver on the final installed XCP-ng. We're only in the context of the system that runs during the installation phase, here.
 * Modify the installer itself to fix a bug or add new features (see below)
 
 ### Modify the installer code itself
 
 The installer is a `python` program that comes from the `host-installer`. In chroot, you can easily locate its files with:
+
 ```
 rpm -ql host-installer
 ```
+
 Most of them are in `/opt/xensource/installer/`
 
 Our git repository for the installer is: [https://github.com/xcp-ng/host-installer](https://github.com/xcp-ng/host-installer). Feel free to create pull requests for your enhancements or bug fixes.
@@ -107,6 +117,7 @@ Our git repository for the installer is: [https://github.com/xcp-ng/host-install
 ### Build a new `install.img` with your changes
 
 From the `iso/` directory
+
 ```
 cd install/
 find . | cpio -o -H newc | bzip2 > ../install.img # as root!
@@ -122,9 +133,11 @@ You may want the installer to install more packages, or updated packages.
 Read [the usual warnings about the installation of third party RPMs on XCP-ng.](../../management/updates.md#be-cautious-with-third-party-repositories-and-packages)
 
 To achieve this:
+
 * Change the RPMs in the `Packages/` directory. If you add new packages, be careful about dependencies, else they'll fail to install and the whole installation process will fail.
 * If you need to add new RPMs not just replace existing ones, they need to be pulled by another existing RPM as dependencies. If there's none suitable, you can add the dependency to the [xcp-ng-deps RPM](https://github.com/xcp-ng-rpms/xcp-ng-deps).
 * Update `repodata/`
+
   ```
   rm repodata/ -rf
   createrepo_c . -o .
@@ -133,6 +146,7 @@ To achieve this:
 ## Build a new ISO image with your changes
 
 From the `iso/` directory:
+
 ```
 OUTPUT=/path/to/destination/iso/file # change me
 VERSION=8.3 # change me

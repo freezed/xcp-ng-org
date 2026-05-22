@@ -6,7 +6,6 @@ sidebar_position: 5
 
 All about the hardware supported by XCP-ng
 
-
 XCP-ng comes with a large range of hardware support.
 
 A given device may be supported at one of two levels:
@@ -43,6 +42,7 @@ In this section we provide instructions that are common to all the provided driv
 Just replace `package-name` with the actual package name.
 
 ### Installation
+
 ```
 yum install package-name
 ```
@@ -52,6 +52,7 @@ yum install package-name
 The simplest way is to `reboot`.
 
 Else, if you know the module name, you can unload it from the kernel and reload it.
+
 ```
 modprobe -r module-name
 modprobe -v module-name
@@ -60,6 +61,7 @@ modprobe -v module-name
 ### Uninstallation
 
 If the driver does not work as intended, just remove the package from the system and follow the "Activation" steps above.
+
 ```
 yum remove package-name
 ```
@@ -80,31 +82,32 @@ A list is maintained at [https://github.com/xcp-ng/xcp/wiki/Drivers](https://git
 
 Check the "XCP-ng X.Y alternate driver" column, which provides packages names and versions for every available alternate driver.
 
-
 ## 🎁 Additional kernel modules
 
 Additional kernel modules are a lot like [alternate drivers](#-alternate-drivers) (most of the above section applies to them) except that they don't replace an existing driver from the system. They add a new one that didn't exist at all.
 
 Their list is maintained at [https://github.com/xcp-ng/xcp/wiki/Drivers](https://github.com/xcp-ng/xcp/wiki/Drivers), in a table named "Other kernel modules available in XCP-ng X.Y".
 
-
 ## 🚒 Alternate kernel
 
 We provide an "alternate Linux kernel" on XCP-ng 8.0 and above, named `kernel-alt`. It is kernel 4.19, as the main kernel, but with all updates from the Linux 4.19 branch applied. By construction, it should thus be stable. However it **receives less testing** so we cannot fully guarantee against regressions (any detected regression we'd work on a fix quickly, of course). We also backport security fixes from the main kernel to the alternate kernel when needed.
 
 This kernel is mainly targeted at:
+
 * Testing whether kernel.org fixes situations where the main kernel and drivers have issues on specific hardware.
 * Allowing a system to work temporarily when the main kernel has an issue regarding your specific hardware, until we can fix the main kernel. **For this to happen, you need to tell us if you are in a situation where the main kernel doesn't work whereas the alternate kernel does!**
 
 Report issues [here](https://github.com/xcp-ng/xcp/issues).
 
 ### During system installation
+
 * In BIOS mode, press F2 at early boot stage when offered the choice then type `install-alt`.
 * In UEFI mode, select the boot option mentioning the alternate kernel from the grub menu.
 
 This will boot the installer with the alternate kernel and also install the alternate kernel on the system in addition to the main one (but will not make the alternate kernel the default boot option for the installed system).
 
 ### Installation on an existing system
+
 You can install it using
 
 ```
@@ -120,7 +123,9 @@ yum install kernel-alt --enablerepo=xcp-ng-testing
 ```
 
 ### Uninstall
+
 Boot the main kernel, then:
+
 ```
 yum remove kernel-alt
 ```
@@ -140,24 +145,24 @@ Reference: [https://xcp-ng.org/forum/topic/350/amd-epyc-compatible](https://xcp-
 EPYC CPUs are working well on XCP-ng, but people with SuperMicro motherboard saw random reboot sometimes. Turning off the C-state control solved the issue:
 
 In BIOS:
- - Advanced -> CPU Configuration -> Global C-state Control: Disabled
- - Advanced -> North Bridge -> Determinism Slider: Performance
+
+* Advanced -> CPU Configuration -> Global C-state Control: Disabled
+* Advanced -> North Bridge -> Determinism Slider: Performance
 
 ### Network Cards
-
 
 #### Emulex Corporation OneConnect NIC (Skyhawk) (rev 10) - 10Gbps NIC "OCe14102-NT"
 
 **Current State:** Works, but sporadic card/port lockups - avoid in production!
 
-- PCI-Vendor-ID: 10df (Emulex Corporation)
-- PCI-Device-ID: 0720
-- Downloads (long loading times, wait a bit!): [https://www.broadcom.com/support/download-search/?pg=Legacy+Products&pf=Legacy+Products&pn=OCe14102-NT+Ethernet+Network+Adapter&pa=All&po=&dk=](https://www.broadcom.com/support/download-search/?pg=Legacy+Products&pf=Legacy+Products&pn=OCe14102-NT+Ethernet+Network+Adapter&pa=All&po=&dk=)
-
+* PCI-Vendor-ID: 10df (Emulex Corporation)
+* PCI-Device-ID: 0720
+* Downloads (long loading times, wait a bit!): [https://www.broadcom.com/support/download-search/?pg=Legacy+Products&pf=Legacy+Products&pn=OCe14102-NT+Ethernet+Network+Adapter&pa=All&po=&dk=](https://www.broadcom.com/support/download-search/?pg=Legacy+Products&pf=Legacy+Products&pn=OCe14102-NT+Ethernet+Network+Adapter&pa=All&po=&dk=)
 
 Known to work (relatively stable) with latest Firmware 11.2.1153.23 on XCP-ng 7.5
+
 * Bootable Upgrade ISO: [https://docs.broadcom.com/docs/12378839](https://docs.broadcom.com/docs/12378839)
-    * If you are coming from firmware below 10.0.803.37 -> "You must perform the firmware
+  * If you are coming from firmware below 10.0.803.37 -> "You must perform the firmware
 update procedure twice to ensure that the flash regions are properly configured, and
 you must reboot the system after each firmware update." (from Release Notes)
 * Firmware Release Notes: [https://docs.broadcom.com/docs/12378898](https://docs.broadcom.com/docs/12378898)
@@ -166,12 +171,11 @@ you must reboot the system after each firmware update." (from Release Notes)
 Known Issues (with old firmware; also on XenServer 7.2 with current firmware)
 
 * Card Lockup
-    * pulling the network cable puts the card in a locked state, LED's keeps flashing; putting the cable back does nothing; network connection stays lost
-    * Solutions
-        * Short Term: power off the host and pull power cords (the card needs to be completely powerless!, just switching the host OFF is not enough)
-        * Mid Term: Upgrade Firmware to match XCP-ng Driver version (for XCP-ng 7.5 -> 11.2.XXXXX)
-        * Long Term: Avoid Emulex cards!
-
+  * pulling the network cable puts the card in a locked state, LED's keeps flashing; putting the cable back does nothing; network connection stays lost
+  * Solutions
+    * Short Term: power off the host and pull power cords (the card needs to be completely powerless!, just switching the host OFF is not enough)
+    * Mid Term: Upgrade Firmware to match XCP-ng Driver version (for XCP-ng 7.5 -> 11.2.XXXXX)
+    * Long Term: Avoid Emulex cards!
 
 #### Broadcom Netxtreme II BCM57711E
 
@@ -183,14 +187,13 @@ On XCP-ng \<= 8.0, using default `bnx2x` driver triggers a kernel Oops on XCP-ng
 
 Fixed drivers have been released as official [updates](../../management/updates).
 
-
 #### Marvell/Aquantia AQC111U
 
-There are several USB 5Gbps NICs based on this chipset available on the market. A [dedicated kernel module driver](https://github.com/xcp-ng-rpms/aqc111u-module) is available to add support to XCP-ng for _(supposedly)_ all NICs based on Marvell _(originally Aquantia)_ AQC111U over USB3. The driver should not be confused with the generic AQC111 that supports the whole family of NICs based on the AQC111 chipset, but NOT the ones connected over USB3. The kernel module provides support only for AQC111U-based NICs.
+There are several USB 5Gbps NICs based on this chipset available on the market. A [dedicated kernel module driver](https://github.com/xcp-ng-rpms/aqc111u-module) is available to add support to XCP-ng for *(supposedly)* all NICs based on Marvell *(originally Aquantia)* AQC111U over USB3. The driver should not be confused with the generic AQC111 that supports the whole family of NICs based on the AQC111 chipset, but NOT the ones connected over USB3. The kernel module provides support only for AQC111U-based NICs.
 
 The kernel module is just a repackage for XCP-ng of [the AQC111U drivers available for Linux Kernel 3.10 on the Marvell website](https://www.marvell.com/support/downloads.html).
 
-To install the driver follow the instructions provided in the [**Alternate drivers** section below](#-alternate-drivers) and use `aqc111u-module` as `package-name` _(`module-name` would be `aqc111u`)_.
+To install the driver follow the instructions provided in the [**Alternate drivers** section below](#-alternate-drivers) and use `aqc111u-module` as `package-name` *(`module-name` would be `aqc111u`)*.
 
 Known compatible NICs are [^1]:
 
@@ -204,4 +207,4 @@ Known compatible NICs are [^1]:
 | StarTech | US5GC30    |                    |
 | Trendnet | TUC-ET5G   |                    |
 
-Despite the AQC111U-based adapters support the IEEE 802.3bz standard _(AKA 5BASE-T)_ and will correctly negotiate with compatible peripherals the communication at 5Gbps, the actual bandwidth will not exceed 3.5Gbps due to the overhead of the incapsulation of the ethernet protocol over the 5Gbps connection via USB 3.0 _(AKA USB 3.1 Gen 1)_.
+Despite the AQC111U-based adapters support the IEEE 802.3bz standard *(AKA 5BASE-T)* and will correctly negotiate with compatible peripherals the communication at 5Gbps, the actual bandwidth will not exceed 3.5Gbps due to the overhead of the incapsulation of the ethernet protocol over the 5Gbps connection via USB 3.0 *(AKA USB 3.1 Gen 1)*.

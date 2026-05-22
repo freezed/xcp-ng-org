@@ -11,6 +11,7 @@ Xen Orchestra is the **officially supported client for XCP-ng**. It's currently 
 ![XO VMs list view, with the "New" submenu opened.](https://xen-orchestra.com/assets/featuresadmin.png)
 
 It's also far more than just a client: because it runs 24/7 in a daemon, a lot of extra cool stuff is possible:
+
 * Various reports
 * ACLs
 * Self Service
@@ -36,7 +37,9 @@ We advise to start using XOA by deploying it really easily in [few clicks on thi
 :::
 
 ## 🚀 Deploy Xen Orchestra virtual Appliance
+
 You can deploy Xen Orchestra from a web UI, using:
+
 * [Web deploy directly](https://vates.tech/deploy/) (fastest & recommended)
 * Using [XO Lite](../manage-locally/xo-lite.md)
 
@@ -49,6 +52,7 @@ You can check the progress in [XO Lite](../manage-locally/xo-lite.md)
 ### Alternative way to deploy XOA
 
 From the CLI using a deploy script, by running this in your XCP-ng host:
+
 ```
 bash -c "$(wget -qO- https://xoa.io/deploy)"
 ```

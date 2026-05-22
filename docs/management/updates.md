@@ -11,12 +11,13 @@ This page details how to keep your XCP-ng system updated (bug fixes and security
 If you want to manage your XCP-ng updates, we suggest that you use Xen Orchestra. It's the fastest & easiest way to keep your infrastructure up-to-date. See the [dedicated section](updates.md#from-xen-orchestra). If you want to learn more about Xen Orchestra, also check the [management section](management.md).
 
 :::info
-Each update is covered by a dedicated blog post. Browse all update posts at https://xcp-ng.org/blog/tag/update/
+Each update is covered by a dedicated blog post. Browse all update posts at <https://xcp-ng.org/blog/tag/update/>
 :::
 
 ## ♻️ Support cycle
 
 We maintain one or several releases in parallel:
+
 * LTS releases (currently `8.3`).
 * Non-LTS releases, which receive rolling updates (currently none, as `8.3` is now a LTS).
 
@@ -33,13 +34,14 @@ Your dom0 system must either have access to the internet, or to a local mirror. 
 If your hosts require a proxy to access the repositories, you have several options depending on your needs:
 
 For all yum repositories:
-- Set `proxy=<proxy_url>` in the `[main]` section of `/etc/yum.conf`
+* Set `proxy=<proxy_url>` in the `[main]` section of `/etc/yum.conf`
 
 For specific repositories:
-- Set `proxy=<proxy_url>` in the relevant repository section within files located in `/etc/yum.repos.d`
+* Set `proxy=<proxy_url>` in the relevant repository section within files located in `/etc/yum.repos.d`
 
 Set a system-wide proxy that will be used for everything, not only yum:
-- Export the `http_proxy` and `https_proxy` variables in `/etc/environment`:
+* Export the `http_proxy` and `https_proxy` variables in `/etc/environment`:
+
 ```bash
 export http_proxy=<proxy_url>
 export https_proxy=<proxy_url>
@@ -56,6 +58,7 @@ If you have enabled third party repositories (CentOS, EPEL...) in the past, make
 Set `enabled=0` in the relevant files in `/etc/yum.repos.d/`. Warning: when added manually, the EPEL repository is automatically enabled. Make sure to disable it right away and then use this syntax to install packages from it: `yum install packagename --enablerepo='epel'`.
 
 In any case, installing extra packages from outside the XCP-ng repositories can lead to various issues, including update or system upgrade problems, so make sure to:
+
 * install only packages that are known not to have any adverse effect on XCP-ng (when in doubt, [ask on the forum](https://xcp-ng.org/forum/));
 * check the dependencies pulled by such packages: they must not overwrite existing packages in XCP-ng;
 * know that you are doing it at your own risk and be prepared to fix any issues that would arise, especially unforeseen upgrade issues (we can't test upgrade scenarios where unknown packages are installed on the system).
@@ -113,11 +116,13 @@ LINSTOR expects that we always use satellites and controllers with the same vers
 Without precautions and after a reboot of a just updated host, it's possible that a machine can no longer communicate with other hosts through LINSTOR satellites.
 
 To avoid problems, it is strongly recommended to update all satellites, controllers packages of each host without rebooting:
+
 ```
 yum update linstor-satellite linstor-controller
 ```
 
 After updating all hosts without reboot:
+
 ```
 systemctl stop linstor-controller # "stop" is not a typo, it will auto restart the controller.
 systemctl restart linstor-satellite
@@ -133,6 +138,7 @@ Please consult the [updates tag](https://xcp-ng.org/blog/tag/update/) in the XCP
 #### 4. Updating with host reboot
 
 To update each of the hosts, they need to be disabled, evacuated, updated and finally restarted, one host at a time, and starting with the pool coordinator:
+
 ```
 xe host-disable uuid=<uuid>
 xe host-evacuate uuid=<uuid>
@@ -149,10 +155,12 @@ Once the host has restarted, it should be enabled back again. If it hasn't enabl
 ### 5. Updating with a control plane restart
 
 To update each of the hosts, they need to be disabled, updated and finally the control plane needs to be restarted, one host at a time, and starting with the pool coordinator:
+
 ```
 xe host-disable uuid=<uuid>
 yum update
 ```
+
 Once you've made sure that there are no tasks happening in the host by running `xe task-list`, you can restart the control plane with `xe-toolstack-restart`.
 
 Once the control plane has been fully restarted, it should be enabled back again. If it hasn't enabled itself, enable it with `xe host-enable uuid=<uuid>`, and repeat the procedure with another host of the pool, until all are updated.
@@ -181,20 +189,22 @@ Rolling Pool Updates (RPUs) can now handle pools that utilize XOSTOR. If there i
 
 Rolling Pool Updates (RPUs) can handle pools that utilize XOSTOR, if:
 
-- your host uses `xcp-ng-xapi-plugins-1.12.0` or a later version.\
+* your host uses `xcp-ng-xapi-plugins-1.12.0` or a later version.\
     To verify your XAPI plugins version, run `rpm -q xcp-ng-xapi-plugins` on your host.
-- XO is on version 5.105 or later
+* XO is on version 5.105 or later
 
 **What about older versions?**
 
 What happens with older versions of the XAPI plugins is that, after rebooting a recently updated host, it might no longer be able to communicate with other hosts through LINSTOR satellites. In fact, LINSTOR expects that we always use satellites and controllers with the same version.
 
 To avoid problems, it is strongly recommended to update the satellites, controllers packages of each host without rebooting:
+
 ```
 yum update linstor-satellite linstor-controller
 ```
 
 After updating all hosts without reboot:
+
 ```
 systemctl stop linstor-controller # "stop" is not a typo, it will auto restart the controller.
 systemctl restart linstor-satellite
@@ -232,6 +242,7 @@ There is currently no way for XCP-ng to automatically tell you if a reboot is re
 The safest way is to reboot every time an update is installed (*pool master* **first**).
 
 Else base your decision on an educated guess. Look at the list of the updated packages (`yum update` always tells you. If you missed it, see `/var/log/yum.log`) and then decide:
+
 * Was there a kernel update? Reboot. Those are usually security fixes that require a reboot.
 * Were `xen-hypervisor` and/or other `xen-*` packages updated? Reboot too.
 * Other low-level packages may require a reboot too, for example `glibc`.

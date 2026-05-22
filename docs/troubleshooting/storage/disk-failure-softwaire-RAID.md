@@ -17,10 +17,13 @@ Boot to the XCP-ng installer ISO in shell mode.
 ### Once booted into your XCP-ng install or the ISO
 
 Enter the following commands:
+
 ```
 cat /proc/mdstat
 ```
+
 This will return a similar output:
+
 ```
 Personalities : [raid1]
 md127 : active raid1 nvme0n2[3] nvme0n1[2]
@@ -28,15 +31,19 @@ md127 : active raid1 nvme0n2[3] nvme0n1[2]
 
 unused devices: <none>
 ```
+
 `[U_]` indicates that the RAID is damaged. Now we will repair it.
 
 ### Remove damaged disk
 
 Let's assume we want to remove `nvme0n1`:
+
 ```
 mdadm --manage /dev/md127 --fail /dev/nvme0n1
 ```
+
 Now `mdstat` shows `nvme0n1` as *failed*:
+
 ```
 Personalities : [raid1]
 md127 : active raid1 nvme0n2[3] nvme0n1[2](F)
@@ -44,11 +51,15 @@ md127 : active raid1 nvme0n2[3] nvme0n1[2](F)
 
 unused devices: <none>
 ```
+
 Now we can remove the disk from the raid:
+
 ```
 mdadm --manage /dev/md127 --remove /dev/nvme0n1
 ```
+
 The disk is removed from `mdstat`:
+
 ```
 Personalities : [raid1]
 md127 : active raid1 nvme0n2[3]
@@ -56,15 +67,19 @@ md127 : active raid1 nvme0n2[3]
 
 unused devices: <none>
 ```
+
 The disk is successfully removed.
 
 ### Add a new/replacement disk to the RAID
 
 Now we can add a replacement disk. Shutdown your host, install the disk on your system, then boot it to your XCP-ng install or the installer ISO once more. Now add the disk to the RAID:
+
 ```
 mdadm --manage /dev/md127 --add /dev/nvme0n1
 ```
+
 `mdstat` shows that disk `nvme0n1` is in the RAID and is synchronizing with `nvme0n2`:
+
 ```
 Personalities : [raid1]
 md127 : active raid1 nvme0n2[3] nvme0n1[4]
@@ -73,13 +88,16 @@ md127 : active raid1 nvme0n2[3] nvme0n1[4]
 
 unused devices: <none>
 ```
+
 Wait for completion, the rebuild is complete once `mdstat` looks like:
+
 ```
 md127 : active raid1 nvme0n2[3] nvme0n1[4]
       62914432 blocks super 1.0 [2/2] [UU]
 
 unused devices: <none>
 ```
+
 `[UU]` is back, the RAID is repaired and you should now reboot the host.
 
 ### If the system is still unbootable

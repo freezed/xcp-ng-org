@@ -15,6 +15,7 @@ You can activate it on the "fly", per XCP-ng host (Advanced tab), but it is reco
 ## iSCSI
 
 ### Requirements
+
 * Two different network interfaces.
 * Two different switches.
 * Multiple targets per LUN on your storage unit.
@@ -27,22 +28,24 @@ Since each architecture is unique, feel free to check with the storage vendor if
 :::
 
 :::warning
+
 1. We recommend that you do not use bonded network interfaces on the XCP-ng host and on the storage unit for iSCSI interfaces.
 2. We recommend that you do not configure network routes on iSCSI interfaces.
 
 This could have an impact on expected performance.
 :::
 
-
 ### Target architecture
 
 #### Configuration example
+
 | Path | Vlan | Subnet | XCP-ng Host PIF address | Storage Controller 1 address | Storage Controller 2 address |
 | :---: | :---: | :---: | :---: | :---: | :---: |
 | 🔵 | 421 | 10.42.1.0/24 | 10.42.1.11 | 10.42.1.101 | 10.42.1.102 |
 | 🟢 | 422 | 10.42.2.0/24 | 10.42.2.11 | 10.42.2.101 | 10.42.2.102 |
 
 #### Target architecture diagram
+
 ```mermaid
 ---
 config:
@@ -135,6 +138,7 @@ linkStyle 13 stroke:#8C8C8C,stroke-width:2px;
 ### Operating procedure
 
 #### 1. Prepare XCP-ng hosts
+
 1. On one of the XCP-ng hosts, make sure that the `multipath.conf` configuration includes your storage equipment.
 
    This can be found in the file `/etc/multipath.xenserver/multipath.conf`
@@ -147,6 +151,7 @@ linkStyle 13 stroke:#8C8C8C,stroke-width:2px;
    Add it to the file ```/etc/multipath/conf.d/custom.conf```
 
    For example:
+
    ```
    devices {
 
@@ -177,17 +182,22 @@ linkStyle 13 stroke:#8C8C8C,stroke-width:2px;
 5. Do the same for all XCP-ng hosts in the pool (step 2. to 4.).
 
 #### 2. Prepare the pool
+
 Make sure that multipathing is enabled on the pool. To do this, go to the advanced configuration of the pool.
 
 If this is not the case:
+
 1. Make sure there are **no VMs running** on an iSCSI and/or HBA SR in the pool.
 2. Activate "Enable multipathing for all XCP-ng hosts.
 
 #### 3. Configure the SR
+
 Proceed with the iSCSI SR configuration as indicated in the [storage documentation](../../storage/#iscsi).
 
 ## Fibre Channel (HBA)
+
 ### Requirements
+
 * Check that the Fibre Channel cards model(s) is supported via the [HCL](../../installation/hardware/#-hardware-compatibility-list-hcl).
 * Two different Fibre Channel ports.
 * Two different SAN switches.
@@ -199,7 +209,9 @@ Make sure not to mix Fibre Channel speeds.
 :::
 
 ### Target architecture
+
 #### Target architecture diagram
+
 ```mermaid
 ---
 config:
@@ -257,9 +269,11 @@ linkStyle 3 stroke:#5CB85C,stroke-width:2px;
 linkStyle 4 stroke:#5CB85C,stroke-width:2px;
 linkStyle 5 stroke:#5CB85C,stroke-width:2px;
 ```
+
 ### Operating procedure
 
 #### 1. Prepare XCP-ng hosts
+
 1. On one of the XCP-ng hosts, make sure that the multipath.conf configuration includes your storage equipment.
 
    This can be found in the file `/etc/multipath.xenserver/multipath.conf`.
@@ -272,6 +286,7 @@ linkStyle 5 stroke:#5CB85C,stroke-width:2px;
    Add it to the file ```/etc/multipath/conf.d/custom.conf```
 
    For example:
+
    ```
    devices {
 
@@ -302,17 +317,20 @@ linkStyle 5 stroke:#5CB85C,stroke-width:2px;
 5. Do the same for all XCP-ng hosts in the pool (step 2. to 4.).
 
 #### 2. Prepare the pool
+
 Make sure that multipathing is enabled on the pool. To do this, go to the advanced configuration of the pool.
 
 If this is not the case:
+
 1. Make sure there are **no VMs running** on an iSCSI and/or HBA SR in the pool.
 2. Activate "Enable multipathing for all XCP-ng hosts.
 
 #### 3. Configure the SR
+
 Proceed with the HBA SR configuration as indicated in the [storage documentation](../../storage/#hba).
 
-
 ## Maintenance operations
+
 ### Add a new XCP-ng host to an existing multipathing pool
 
 :::warning
@@ -326,6 +344,7 @@ Do not add the new XCP-ng host to the pool without completing these steps.
 ## Troubleshooting
 
 ### Verify multipathing
+
 You can use the command ```multipath -ll``` to check if multipathing is active.
 
 ```
@@ -338,12 +357,15 @@ size=500G features='1 queue_if_no_path' hwhandler='1 alua' wp=rw
   |- 8:0:2:1  sdf  8:80   active ready running
   |- 8:0:3:1  sdh  8:112  active ready running
 ```
+
 :::info
 In this example, we have four active paths: our multipathing is working correctly.
 :::
 
 ### iSCSI
+
 #### Verify iSCSI sessions
+
 You can use the command ```iscsiadm -m session``` to check if iSCSI session is active.
 
 ```
@@ -352,16 +374,19 @@ tcp: [2] 10.42.1.102:3260,1 iqn.2024-02.com.acme:ultrasan.lun01 (non-flash)
 tcp: [3] 10.42.2.101:3260,2 iqn.2024-02.com.acme:ultrasan.lun01 (non-flash)
 tcp: [4] 10.42.2.102:3260,2 iqn.2024-02.com.acme:ultrasan.lun01 (non-flash)
 ```
+
 :::info
 In this example, we have four iSCSI sessions with one LUN.
 :::
 
 #### iSCSI: Verify Jumbo Frame configuration
+
 To check the Jumbo Frames configuration, connect to a XCP-ng host and try pinging all IP addresses involved in your iSCSI storage (target and initiator) using this command.
 
 ```
 ping -M do -s 8972 <REMOTE_IP_ADDRESS>
 ```
+
 :::warning
 If you get an error, usually ```ping: sendmsg: Message too long```, your MTU settings are incorrect, and you need to fix your network configuration.
 :::

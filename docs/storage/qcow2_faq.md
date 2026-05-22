@@ -33,9 +33,9 @@ Before entering the FAQ itself, let's talk about image formats.
 By default, SR types which support QCOW2 use `vhd,qcow2` as their preferred image formats. This means that they'll first try to create VHD VDIs, and only create QCOW2 VDIs when you ask for a disk size which is bigger than what VHD can support.
 
 Other possible values, set at SR creation or by re-creating their PBDs, are:
-* `qcow2,vhd`: will always prefer QCOW2, unless you specifically ask for VHD
-* `qcow2`: will only create QCOW2 VDIs
-* `vhd`: will only create VHD VDIs
+- `qcow2,vhd`: will always prefer QCOW2, unless you specifically ask for VHD
+- `qcow2`: will only create QCOW2 VDIs
+- `vhd`: will only create VHD VDIs
 
 ### Configure a new SR's preferred-image-formats
 
@@ -53,12 +53,11 @@ xe sr-create name-label="test-lvmsr" type=lvm device-config:device=/dev/nvme1n1 
 
 As said above, by default, an existing SR has `vhd,qcow2` as its preferred image formats. This is our recommended default at the moment.
 
-To tell an existing SR that it must prefer the `qcow2` image format for new disks, it is necessary to unplug, destroy, recreate and re-plug its PBD with the added parameter in the device-config: https://docs.xcp-ng.org/storage/#-how-to-modify-an-existing-sr-connection
+To tell an existing SR that it must prefer the `qcow2` image format for new disks, it is necessary to unplug, destroy, recreate and re-plug its PBD with the added parameter in the device-config: <https://docs.xcp-ng.org/storage/#-how-to-modify-an-existing-sr-connection>
 
 In order to unplug the PBD, any VMs with a VDI on the SR will have to be stopped, or the VDI moved temporarily to another SR.
 
 This operation will not affect the contents of the SR. The PBD object represents the connection to the SR, not its contents.
-
 
 ## FAQ
 
@@ -111,6 +110,7 @@ Yes, you can by setting the `preferred-image-formats` parameter to `qcow2` (and 
 You can do so directly in the SR creation form of Xen Orchestra.
 
 Here's also a command line example:
+
 ```
 xe sr-create name-label="test-lvmsr" type=lvm device-config:device=/dev/nvme1n1 device-config:preferred-image-formats=qcow2
 ```
@@ -118,6 +118,7 @@ xe sr-create name-label="test-lvmsr" type=lvm device-config:device=/dev/nvme1n1 
 ### Can I create QCOW2 disks smaller than 2 TiB?
 
 By default, a SR will create VHD for such disks, unless:
+
 - either you configure the SR so that it only manages QCOW2 disks;
 - or you create the VDI manually, via command line, by adding `sm-config:image-format=qcow2` to the `xe vdi-create` operation.
 

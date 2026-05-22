@@ -1,6 +1,7 @@
 # Contributing
 
 How to contribute to XCP-ng? There are many ways of contributing:
+
 * by giving some of your time to work on the project. Code isn't the only way! Community support, translation, documentation, testing…
 * with money, by subscribing to [Pro Support](https://vates.tech), which funds further developments.
 
@@ -31,6 +32,7 @@ Your results are very welcome in our [Hardware Compatibility List (HCL)](../../i
 It's also important to test Operating Systems on XCP-ng. You have fun to install different Operating Systems? -> great! Test them all on XCP-ng!
 
 Most community testing is organized on the forum, on dedicated threads.
+
 * Watch the [thread dedicated to update candidates on stable releases](https://xcp-ng.org/forum/topic/365/updates-announcements-and-testing) (and make sure you enable mail notifications in your forum settings).
 * Check beta and RC announcements for new releases of XCP-ng [on the forum](https://xcp-ng.org/forum), and provide feedback before the final releases. Usually announced in the [News](https://xcp-ng.org/forum/category/11/news) section.
 * Check other topics created by our developers who look for feedback about new features. Topics usually created in the [Development](https://xcp-ng.org/forum/category/7/development) section.
@@ -44,9 +46,9 @@ You are a developer and want to code with us? Cool!
 There are many components, in various languages: C, ocaml, python and more.
 
 * Connect with us via
-    * IRC: [irc://irc.oftc.net/#xcp-ng](irc://irc.oftc.net/#xcp-ng) and [irc://irc.oftc.net/#xcp-ng-dev](irc://irc.oftc.net/#xcp-ng-dev)
-    * [Discord](https://discord.gg/aNCR3yPaPn)
-    * Forum -> Development Corner: [https://xcp-ng.org/forum/category/7/development](https://xcp-ng.org/forum/category/7/development)
+  * IRC: [irc://irc.oftc.net/#xcp-ng](irc://irc.oftc.net/#xcp-ng) and [irc://irc.oftc.net/#xcp-ng-dev](irc://irc.oftc.net/#xcp-ng-dev)
+  * [Discord](https://discord.gg/aNCR3yPaPn)
+  * Forum -> Development Corner: [https://xcp-ng.org/forum/category/7/development](https://xcp-ng.org/forum/category/7/development)
 * Read [this introduction](../development-process/development). The rest of the [Development Process Tour](../../category/development-process) is also of interest for anyone who wants to help on development.
 
 ## 📦 Package
@@ -62,9 +64,11 @@ Another valuable way to help is by talking about XCP-ng to people you know or to
 ## 🪪 Developer Certificate of Origin (DCO)
 
 As a member of the Linux Foundation, XCP-ng asks that every contributor certifies that they are allowed to contribute the code or documentation they submit to us. This is done with a simple
+
 ```
 Signed-off-by: Full Name <email>
 ````
+
 line added at the end of the commit message. Git even has an option to add it for you: `git commit -s`. By adding this mention to your commit message, you state that you agree to the terms published at [https://developercertificate.org/](https://developercertificate.org/) (and also written below) for that contribution.
 
 ```

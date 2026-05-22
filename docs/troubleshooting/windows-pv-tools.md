@@ -32,7 +32,6 @@ Consult your motherboard manual for details; for example, on Dell systems with i
 ![System Profile Settings interface showing "Performance" being selected in the System Profile dropdown.](../../static/img/performance-setting.png)
 </div>
 
-
 ## Windows fails to boot (hangs, `INACCESSIBLE_BOOT_DEVICE`)
 
 In some situations (failed uninstallation, major Windows version upgrades), Xen PV drivers (whether Citrix or XCP-ng) may cause Windows to fail to start (hanging at boot, BSOD with Stop code `INACCESSIBLE_BOOT_DEVICE`).
@@ -47,25 +46,29 @@ Below is a procedure for using XenBootFix to recover a non-booting VM:
 1. Take a snapshot of your VM in case uninstallation fails.
 2. Disable the "Manage Citrix PV drivers via Windows Update" option on your VM if it's enabled.
 3. Boot into Windows PE or Windows RE in command line-only mode. There are a few ways to accomplish this:
-  * If your Windows installation BSODs on boot multiple times, it will automatically boot into Windows RE. Choose **Troubleshoot** - **Command Prompt**.
-  * When running Windows Server, press **F8** before Windows starts, then choose **Repair Your Computer**. Choose **Troubleshoot** - **Command Prompt**.
-  * Boot your VM using a Windows Setup or Windows PE CD image. If you don't see a command line, press **Shift+F10**.
-4. Identify your Windows installation drive letter.
-  * Use the `dir` command to list files in a given drive letter. For example: `dir C:\` (the backslash is required)
-  * In some cases, your Windows partition should already be mounted. Try the first few letters (`C:`, `D:`, `E:`).
-  * If you cannot find your Windows drive letter, you may need to assign a new drive letter with Diskpart.
-    * Type `diskpart` at the command line. The command prompt should change to `DISKPART>`
-    * Type `list vol` then make a note of your Windows partition and its drive letter (if any).
-    * If your Windows partition does not have a drive letter, type `sel vol N` where `N` is the volume number shown in Diskpart, then type `assign letter=W`. Your Windows partition will be assigned the drive letter `W:`.
-    * Finally, at the `DISKPART>` prompt, type `exit` to exit Diskpart.
-5. Obtain XenBootFix.
-  * The easiest way is to download and use the [latest release ISO](https://github.com/xcp-ng/win-pv-drivers/releases) of XCP-ng Windows Guest Tools, which includes a copy of XenBootFix at `package\XenBootFix\XenBootFix.exe`.
-  * If you're using XCP-ng Windows Guest Tools 9.0 or later, it is also located at `W:\Program Files\XCP-ng\Windows PV Drivers\XenBootFix\XenBootFix.exe` where `W:` is your Windows drive letter.
-  * **Note**: If using Windows PE, do not remove its CD image when it's running. You may encounter unexpected errors otherwise.
-6. Run the command `<path to XenBootFix.exe> W:\Windows` where `W:` is your Windows drive letter.
-  * **Note**: Make sure the drive letter belongs to your actual Windows installation and not Windows PE/RE. By default, Windows PE/RE use the drive letter **X:**.
-7. Type `exit` to close Command Prompt. If using Windows RE, choose **Continue** to boot into Windows. Windows should now start normally.
-8. **You must immediately run XenClean from within Windows to remove the remaining Xen drivers**. See instructions above.
+
+* If your Windows installation BSODs on boot multiple times, it will automatically boot into Windows RE. Choose **Troubleshoot** - **Command Prompt**.
+* When running Windows Server, press **F8** before Windows starts, then choose **Repair Your Computer**. Choose **Troubleshoot** - **Command Prompt**.
+* Boot your VM using a Windows Setup or Windows PE CD image. If you don't see a command line, press **Shift+F10**.
+1. Identify your Windows installation drive letter.
+
+* Use the `dir` command to list files in a given drive letter. For example: `dir C:\` (the backslash is required)
+* In some cases, your Windows partition should already be mounted. Try the first few letters (`C:`, `D:`, `E:`).
+* If you cannot find your Windows drive letter, you may need to assign a new drive letter with Diskpart.
+  * Type `diskpart` at the command line. The command prompt should change to `DISKPART>`
+  * Type `list vol` then make a note of your Windows partition and its drive letter (if any).
+  * If your Windows partition does not have a drive letter, type `sel vol N` where `N` is the volume number shown in Diskpart, then type `assign letter=W`. Your Windows partition will be assigned the drive letter `W:`.
+  * Finally, at the `DISKPART>` prompt, type `exit` to exit Diskpart.
+1. Obtain XenBootFix.
+
+* The easiest way is to download and use the [latest release ISO](https://github.com/xcp-ng/win-pv-drivers/releases) of XCP-ng Windows Guest Tools, which includes a copy of XenBootFix at `package\XenBootFix\XenBootFix.exe`.
+* If you're using XCP-ng Windows Guest Tools 9.0 or later, it is also located at `W:\Program Files\XCP-ng\Windows PV Drivers\XenBootFix\XenBootFix.exe` where `W:` is your Windows drive letter.
+* **Note**: If using Windows PE, do not remove its CD image when it's running. You may encounter unexpected errors otherwise.
+1. Run the command `<path to XenBootFix.exe> W:\Windows` where `W:` is your Windows drive letter.
+
+* **Note**: Make sure the drive letter belongs to your actual Windows installation and not Windows PE/RE. By default, Windows PE/RE use the drive letter **X:**.
+1. Type `exit` to close Command Prompt. If using Windows RE, choose **Continue** to boot into Windows. Windows should now start normally.
+2. **You must immediately run XenClean from within Windows to remove the remaining Xen drivers**. See instructions above.
 
 ## Connecting to guests using serial console
 
@@ -78,10 +81,12 @@ You can use the following procedure:
   * Note that any host running the VM will need this command.
 * Connecting to port 7001 on the host will connect to your VM's serial port. You can use Telnet, PuTTY or any similar tools.
 * To configure kernel debugging on Windows, disable Secure Boot and BitLocker then run the following commands within the VM:
+
   ```
   bcdedit /debug on
   bcdedit /dbgsettings serial debugport:1 baudrate:115200
   ```
+
   Connect using [WinDbg](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/) using the `Attach to kernel` option with a connection string: `com:ipport=7001,port=<host IP>`
 * To undo the changes and remove the serial setting, use `xe vm-param-remove uuid=<uuid> param-name=platform param-key=hvm_serial`
 
@@ -115,12 +120,12 @@ If you encounter this issue, ensure that all hosts in the pool have the same CPU
 These settings are often found in the processor and power settings pages of your hosts' BIOS.
 Focus on the following settings (naming depends on BIOS vendor):
 
-- Fast String
-- Prefetchers
-- MONITOR/MWAIT
-- C-states (C1, C2, C3 etc.)
-- Power and thermal controls
-- Event counters
+* Fast String
+* Prefetchers
+* MONITOR/MWAIT
+* C-states (C1, C2, C3 etc.)
+* Power and thermal controls
+* Event counters
 
 ## Windows fails to boot after updating
 

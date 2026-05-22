@@ -4,7 +4,7 @@ A guide to run pfSense in a VM.
 
 Despite pfSense and OPNsense do work great in a VM, there are a few extra steps that need to be taken first.
 
-## 1. Create VM as normal.
+## 1. Create VM as normal
 
 * When creating the VM, choose the `other install media` VM template
 * Prefer `UEFI` boot mode for pfSense versions > 2.4 (`BIOS` mode works but will be slower to boot)
@@ -26,7 +26,7 @@ service xenguest start
 
 Option 2 is via the Web GUI (only available on OPNsense):
 Open the web UI on `http(s)://your-configured-ip` and go to:
-*System -> Firmware -> Plugins*, 
+*System -> Firmware -> Plugins*,
 above the list header (in center) tick **Show (Tier 3) community plugins** (otherwise it will not be shown even via search box), scroll down to / search **os-xen** and click the plus sign next to it to install them.  
 Next: Reboot the system to have the guest tools started (installer doesn't do this the first time):
 *Power -> Reboot*
@@ -49,8 +49,8 @@ Many guides on the internet for pfSense in Xen VMs will tell you to uncheck chec
 
 ## Using Xen Orchestra
 
-- Head to the "Network" tab of your VM : in the advanced settings (click the blue gear icon) for each adapter, disable TX checksumming.
-- Restart the VM.
+* Head to the "Network" tab of your VM : in the advanced settings (click the blue gear icon) for each adapter, disable TX checksumming.
+* Restart the VM.
 
 That's it !
 
@@ -63,6 +63,7 @@ First get the UUID of the VM to modify:
 ```
 xe vm-list
 ```
+
 Find your pfSense / OPNsense VM in the list, and copy the UUID. Now stick the UUID in the following command:
 
 ```

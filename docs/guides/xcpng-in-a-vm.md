@@ -66,47 +66,46 @@ _The following steps can be performed under VMware Workstation Pro, the settings
 
 The first step, and without a doubt the most important step, will be to modify the virtual network configuration of our ESXi host. Without this configuration, the network will not work for your virtual machines running on your nested XCP-ng.
 
-   * Start by going to the network settings of your ESXi host.
-   * Then select the **port group** on which your XCP-ng virtual machine will be connected. By default, this concerns the
+* Start by going to the network settings of your ESXi host.
+* Then select the **port group** on which your XCP-ng virtual machine will be connected. By default, this concerns the
      vSwitch0 and the '**VM Network**' group port.
 
      Click on the "Edit Settings" button to edit the parameters of this port group.
 
-   * Click on the **Accept** checkbox for Promiscuous mode.
-   * Save this settings by using the Save button at the bottom of the window.
+* Click on the **Accept** checkbox for Promiscuous mode.
+* Save this settings by using the Save button at the bottom of the window.
 
    A little explanation from the VMware documentation website : [Promiscuous mode under VMware ESXi](https://docs.vmware.com/en/VMware-vSphere/6.0/com.vmware.vsphere.security.doc/GUID-92F3AB1F-B4C5-4F25-A010-8820D7250350.html)
 
    **These settings can be done at the vSwitch itself (same configuration menu). By default, the group port inherits the vSwitch settings on which it is configured. It all depends on the network configuration you want to accomplish on your host.**
 
-
 ### XCP-ng virtual machine settings
 
 Once your host's network is set up, we'll look at configuring the XCP-ng virtual machine.
 
-   * Create a virtual machine and move to the "Customize settings" section.
-   * Then edit the CPU settings and check the "**Expose hardware assisted virtualization to the guest OS**" box in the
+* Create a virtual machine and move to the "Customize settings" section.
+* Then edit the CPU settings and check the "**Expose hardware assisted virtualization to the guest OS**" box in the
      "**Hardware Virtualization**" line.
 
-     _Enable virtualized CPU performance counters can be checked if necessary_ : [VMware CPU Performance Counters ](https://kb.vmware.com/s/article/2030221)
+     _Enable virtualized CPU performance counters can be checked if necessary_ : [VMware CPU Performance Counters](https://kb.vmware.com/s/article/2030221)
 
-   * For the other virtual machine settings, some explanations :
-     * Dual CPU sockets for improving vCPU performance.
-     * **The virtual disk must be at least 60 GB in size to install XCP-ng !**
-     * **LSI Logic SAS** controller is chosen to maximize at possible the compatibility and the performance. vNVMe
+* For the other virtual machine settings, some explanations :
+  * Dual CPU sockets for improving vCPU performance.
+  * **The virtual disk must be at least 60 GB in size to install XCP-ng !**
+  * **LSI Logic SAS** controller is chosen to maximize at possible the compatibility and the performance. vNVMe
        controller works too, it can reduce CPU overhead and latency. **PVSCSI controller won't work**.
-     * **Unlike the PVSCSI controller, the VMXNET3 controller works with XCP-ng**. It will be useful if heavy network
+  * **Unlike the PVSCSI controller, the VMXNET3 controller works with XCP-ng**. It will be useful if heavy network
        loads are planned between different XCP-ng virtual machines (XOSTOR)
 
-   * Finally, install XCP-ng as usual, everything should work as expected. After installation, your XCP-ng virtual machine
+* Finally, install XCP-ng as usual, everything should work as expected. After installation, your XCP-ng virtual machine
      is manageable from XCP-ng Center or Xen Orchestra.
-   * You can then create a virtual machine and test how it works (network especially).
+* You can then create a virtual machine and test how it works (network especially).
 
 ### Configuration under VMware Workstation Pro 14/15
 
-   * Create a XCP-ng virtual machine like in ESXi.
-   * Check the following CPU setting : **Virtualize Intel VT-x/EPT or AMD-V/RVI**
-   * An additional option is to be added to the virtual machine's .vmx file. You will also add the option to enable
+* Create a XCP-ng virtual machine like in ESXi.
+* Check the following CPU setting : **Virtualize Intel VT-x/EPT or AMD-V/RVI**
+* An additional option is to be added to the virtual machine's .vmx file. You will also add the option to enable
      promiscuous mode for the virtual machine.
 
      **hypervisor.cpuid.v0 = "FALSE"** : Addition to the checked CPU option on Workstation
@@ -114,16 +113,13 @@ Once your host's network is set up, we'll look at configuring the XCP-ng virtual
 
      _**Be careful, 'ethernet0' is the name of the bridged network interface of my virtual machine, remember to check that it's the same name in your .vmx file (search the 'ethernet' string using your favorite text editor).**_
 
-
-   * If you want to use the VMXNET3 card, this is possible. For this you must also modify the .vmx file of your XCP-ng virtual machine.
+* If you want to use the VMXNET3 card, this is possible. For this you must also modify the .vmx file of your XCP-ng virtual machine.
 
      Replace _**ethernet0.virtualDev = "e1000"**_ by _**ethernet0.virtualDev = "vmxnet3"**_
 
-   * Check if the virtual machine correctly works by trying to connect using XCP-ng Center and by creating a virtual machine on your nested XCP-ng.
-
+* Check if the virtual machine correctly works by trying to connect using XCP-ng Center and by creating a virtual machine on your nested XCP-ng.
 
 ## Nested XCP-ng using Microsoft Hyper-V (Windows 10 - Windows Server 2016)
-
 
 _The following steps can be performed with Hyper-V on Windows 10 (version 1607 minimum) and Windows Server 2016 (Hyper-V Server also). The settings will remain the same for both OS._
 
@@ -136,6 +132,7 @@ Unlike VMware, you must first create the virtual machine to configure nested vir
 The configuration of the virtual machine uses legacy components. Indeed XenServer / XCP-ng does not have the necessary drivers to work on a "modern" Hyper-V virtual hardware . **The consequences are that the performance of this XCP-ng virtual machine will be poor.**
 
 The VM settings :
+
 * **VM Generation** : 1 (even if the latest versions of CentOS work in Gen 2)
 * **Memory** : 4GB minimum
 * **Disk Controller** : IDE
@@ -170,7 +167,7 @@ Like VMware, you must first enable the nested virtualization feature on your hos
 
    On most Linux distributions :
 
-    `egrep -wo 'vmx|ept' /proc/cpuinfo `
+    `egrep -wo 'vmx|ept' /proc/cpuinfo`
 
    EPT is required to run nested XS/XCP-ng : [https://xcp-ng.org/forum/topic/550/shadow-paging-disable](https://xcp-ng.org/forum/topic/550/shadow-paging-disable)
 

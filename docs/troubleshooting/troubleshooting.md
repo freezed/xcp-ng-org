@@ -3,6 +3,7 @@
 If you have a problem or a question on XCP-ng, there's 2 options: community support (mostly on [XCP-ng Forum](https://xcp-ng.org/forum)) or [pro support](https://xcp-ng.com).
 
 ## The 3-Step-Guide
+
 Here is our handy **3-Step-Guide**:
 
 1. Check the [logs](log-files). Check your settings. Check all the articlesbelow here. If you already did, proceed to Step 2.

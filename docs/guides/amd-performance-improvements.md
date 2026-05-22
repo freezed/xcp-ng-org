@@ -32,10 +32,11 @@ Xenopsd supports a new option, allowing the grant-tables to be mapped as `writeb
 Guests need their kernel to support the feature that enables the fix (See partial list below). Windows and BSD guests were not affected by the performance problem solved by this change.
 
 The change has to be opt-in, so that users:
+
 - know of the change
 - know how to revert the change (should side-effects occur in edge cases)
 
-* To enable the fix pool-wide, create a file named `/etc/xenopsd.conf.d/amd-gnttab-wb.conf` with the following line:
+- To enable the fix pool-wide, create a file named `/etc/xenopsd.conf.d/amd-gnttab-wb.conf` with the following line:
 
 ```
 xen-platform-pci-bar-uc=false
@@ -75,35 +76,32 @@ Some currently-supported LTS distros don't have the patch yet. Specifically: RHE
 
 End-of-Life distros will never be updated and therefore, will never benefit from this improvement.
 
-
 Guest kernel version determines whether the performance fix is supported or not. All kernel versions **equal to or newer than 5.19** support it. LTS kernels include 5.15.189+.
 
-* Debian:
-  * Debian 11 "Bullseye" (5.10 -> _EOL_)
-  * Debian 12 "Bookworm" (6.1 -> **OK**)
-* Ubuntu:
-  * 20.04 LTS "Focal Fossa" (5.4: _EOL_)
-  * 22.04 LTS "Jammy Jellyfish" (5.15: _SOON_, HWE 6.8: **OK**)
-  * 24.04 LTS "Noble Numbat" (6.8 & HWE 6.14: **OK**)
-* openSUSE Leap:
-  * 15.5 (5.14: _EOL_)
-  * 15.6 (6.4: **OK**)
-* SUSE Enterprise (LTSS):
-  * SLE15 SP3 - LTSS (5.3: _Not upstream_)
-  * SLE15 SP4/5 - LTSS (5.14: _Not upstream_)
-  * SLE15 SP6+ (**OK**)
-* RHEL (+derivates):
-  * 8 (4.19: _EOL_)
-  * 9 (5.14: _Not upstream_)
-  * 10 (6.12: **OK**)
-* Fedora: All supported: **OK** (37+)
-* Alpine Linux: All supported: **OK** (v3.18+)
+- Debian:
+  - Debian 11 "Bullseye" (5.10 -> _EOL_)
+  - Debian 12 "Bookworm" (6.1 -> **OK**)
+- Ubuntu:
+  - 20.04 LTS "Focal Fossa" (5.4: _EOL_)
+  - 22.04 LTS "Jammy Jellyfish" (5.15: _SOON_, HWE 6.8: **OK**)
+  - 24.04 LTS "Noble Numbat" (6.8 & HWE 6.14: **OK**)
+- openSUSE Leap:
+  - 15.5 (5.14: _EOL_)
+  - 15.6 (6.4: **OK**)
+- SUSE Enterprise (LTSS):
+  - SLE15 SP3 - LTSS (5.3: _Not upstream_)
+  - SLE15 SP4/5 - LTSS (5.14: _Not upstream_)
+  - SLE15 SP6+ (**OK**)
+- RHEL (+derivates):
+  - 8 (4.19: _EOL_)
+  - 9 (5.14: _Not upstream_)
+  - 10 (6.12: **OK**)
+- Fedora: All supported: **OK** (37+)
+- Alpine Linux: All supported: **OK** (v3.18+)
 
-
-* _EOL_ = distro is End-of-Life
-* _Not upstream_ = not covered by Linux stable project
-* _SOON_: Distro needs to update its kernel
-
+- _EOL_ = distro is End-of-Life
+- _Not upstream_ = not covered by Linux stable project
+- _SOON_: Distro needs to update its kernel
 
 ## Fix 2: spurious interrupts
 
@@ -130,13 +128,13 @@ Since the fix is very recent, no distribution includes it yet.
 
 However, the fix is upstream in the Linux kernel (v6.17) and LTS kernels are up-to-date.
 Here are the LTS kernels that have been fixed:
-* v5.10.241
-* v5.15.190
-* v6.1.149
-* v6.6.103
-* v6.12.43
-* v6.15.11
-* v6.16.2
+- v5.10.241
+- v5.15.190
+- v6.1.149
+- v6.6.103
+- v6.12.43
+- v6.15.11
+- v6.16.2
 
 ## Future improvements and leads
 

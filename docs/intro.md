@@ -89,6 +89,6 @@ About the project itself, please see the [project page](/category/project).
 
 ### Follow us
 
-* Our YouTube channel: https://www.youtube.com/@Vates_tech
-* Latest XCP-ng news: https://xcp-ng.org/blog
-* XCP-ng community: https://xcp-ng.org/forum
+* Our YouTube channel: <https://www.youtube.com/@Vates_tech>
+* Latest XCP-ng news: <https://xcp-ng.org/blog>
+* XCP-ng community: <https://xcp-ng.org/forum>

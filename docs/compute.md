@@ -45,7 +45,7 @@ and an error in `/var/log/xen/hypervisor.log`
 
 On XCP-ng 8.3, this limitation is lifted for most hardware.
 
-### 1. Find your devices ID ([B/D/F](https://en.wikipedia.org/wiki/PCI_configuration_space#BDF)) on the PCI bus using one of the following methods:
+### 1. Find your devices ID ([B/D/F](https://en.wikipedia.org/wiki/PCI_configuration_space#BDF)) on the PCI bus using one of the following methods
 
 **Method 1: List PCI Devices with `lspci`**
 
@@ -94,9 +94,11 @@ XCP-ng 8.2 is EOL. This 8.2-specific information is retained solely to assist wi
 :::
 
 Add the **`xen-pciback.hide`** parameter to the kernel boot parameters:
+
 ```bash
 /opt/xensource/libexec/xen-cmdline --set-dom0 "xen-pciback.hide=(0000:04:01.0)"
 ```
+
 > You can hide multiple devices. If you wanted to add another device at `00:19.0` just append it to the parameter.
 >
 > `/opt/xensource/libexec/xen-cmdline --set-dom0 "xen-pciback.hide=(0000:04:01.0)(0000:00:19.0)"`
@@ -123,9 +125,10 @@ XCP-ng 8.2 is EOL. This 8.2-specific information is retained solely to assist wi
 
 `/opt/xensource/libexec/xen-cmdline --delete-dom0 xen-pciback.hide`
 
-
 :::tip
+
 ### NVMe storage devices on Linux
+
 For NVMe storage devices, the Linux driver will try to allocate too many PCI MSI-X vectors, exceeding the number of extra IRQs allocated by Xen for a guest. Failing MSI-X setup might lead to very low performances on some buggy hardware if the driver cannot manage to fallback to legacy IRQs handling.
 
 The default number of extra guest IRQs (which is 64) needs to be increased with Xen's `extra_guest_irqs` boot parameter:
@@ -139,6 +142,7 @@ To remove the parameter from Xen command line:
 ```bash
 /opt/xensource/libexec/xen-cmdline --delete-xen extra_guest_irqs
 ```
+
 :::
 
 ### 3. Reboot the XCP-ng host
@@ -186,6 +190,7 @@ If you want to get the PCI device accessible again in the Dom0, you also need to
 It will be back in the Dom0 after a reboot.
 
 ## 🎮 GPU Passthrough
+
 To passthrough a complete graphics card to a VM (not virtualize it into multiple virtual vGPUs, which is different, see the vGPU section below), just follow the regular PCI passthrough instructions, no special steps are needed. Most Nvidia and AMD video cards should work without issue.  
 
 :::tip
@@ -215,12 +220,13 @@ Version 2.0 of the mxgpu iso should work on any 8.X version of XCP-ng
 
 `xe-install-supplemental-pack mxgpu-2.0.0.amd.iso`
 
-6. Reboot the XCP-ng
-7. Assign an MxGPU to the VM from the VM properties page.  Go to the GPU section.  From the Drop down choose how big of a slice of the GPU you want on the VM and click OK
+1. Reboot the XCP-ng
+2. Assign an MxGPU to the VM from the VM properties page.  Go to the GPU section.  From the Drop down choose how big of a slice of the GPU you want on the VM and click OK
 
 Start the VM and log into the guest OS and load the appropriate guest driver from AMD's Drivers & Support page.
 
 > Known working cards:
+
 * S7150x2
 
 ## 🖱️ USB Passthrough
@@ -245,47 +251,64 @@ uuid ( RO)            : 10fbec89-4472-c215-5d55-17969b473ee6
 ```
 
 Find your USB device there, and note the `uuid`. Then use that uuid to enable passthrough for it:
+
 ```
 [root@xenserver ~]# xe pusb-param-set uuid=10fbec89-4472-c215-5d55-17969b473ee6 passthrough-enabled=true
 ```
-This will create a `usb-group` containing this USB device. We need to find the uuid of that group, so we use the `usb-group-list` command, specifying the physical USB uuid we got in step one: 
+
+This will create a `usb-group` containing this USB device. We need to find the uuid of that group, so we use the `usb-group-list` command, specifying the physical USB uuid we got in step one:
+
 ```
 [root@xenserver ~]# xe usb-group-list PUSB-uuids=10fbec89-4472-c215-5d55-17969b473ee6
 uuid ( RO)                : 1f731f6a-6025-8858-904d-c98548f8bb23
 name-label ( RW): Group of 0781 5591 USBs
 name-description ( RW):
 ```
+
 Note the uuid of this usb-group, then use it in the following command to attach this USB device to your desired VM. Remember to first shut down the target VM as hot-plug for USB passthrough is not supported:
+
 ```
 xe vusb-create usb-group-uuid=<usb_group_uuid> vm-uuid=<vm_uuid>
 ```
+
 So using the examples above, it would look like:
+
 ```
 xe vusb-create usb-group-uuid=1f731f6a-6025-8858-904d-c98548f8bb23 vm-uuid=4feeb9b2-2176-b69d-b8a8-cf7289780a3f
 ```
+
 Finally, start the target guest VM:
+
 ```
 [root@xenserver ~]# xe vm-start uuid=<vm_uuid>
 ```
 
 **Note:** If you get a message containing `internal error` when trying to start the VM after assigning it a USB device, try the following command to ensure its `platform:usb` parameter is set correctly:
+
 ```
 xe vm-param-set uuid=<vm_uuid> platform:usb=True
 ```
+
 In the future if you ever need to unplug the virtual USB device from your VM, or remove and unassign it completely, find the uuid of the virtual USB device by running `xe vusb-list`. Then use the uuid of the virtual USB device in one or both of the following commands:
+
 ```
 xe vusb-unplug uuid=<vusb_uuid>
 xe vusb-destroy uuid=<vusb_uuid>
 ```
+
 ### Passing through Keyboards and Mice
+
 xcp-ng host uses usb-policy.conf at `/etc/xensource/usb-policy.conf` with ALLOW and DENY rules for different classes of usb devices.
 The default file contains Mice and Keyboards with DENY rules. You can edit this file to allow these devices (and any other ones similarly).
 
 Once edited, run the following command to refresh:
+
 ```
 /opt/xensource/libexec/usb_scan.py -d
 ```
+
 Then run
+
 ```
 xe pusb-scan host-uuid=<host_uuid>
 ```
@@ -307,7 +330,6 @@ Xen Orchestra previously offered a "Nested Virtualization" toggle in a VM's adva
 **But I really need it!**
 
 We understand the use cases that necessitate nested virtualization and are committed to making this feature available in a supported form in the future. Until it is implemented, there is unfortunately no supported way to enable it.
-
 
 ## 🐼 Advanced Xen
 
@@ -333,16 +355,19 @@ xe vm-param-set uuid=[VM-UUID] VCPUs-params:mask=8,9,10,11,12,13,14,15`
 ```
 
 Check the new affinity. It'll now display `1` instead of `all`, indicating that the VM will only be allowed to run on `node1` cores:
+
 ```
 xl list --numa
 ```
 
 In order to reset the config, just remove the attribute (VM reboot required):
+
 ```
 xe vm-param-remove uuid=[VM-UUID] param-name=VCPUs-params param-key=mask`
 ```
 
 Other useful commands for listing the VM core affinity and cores per NUMA node(s):
+
 ```
 xl vcpu-list
 xenpm get-cpu-topology
@@ -350,13 +375,16 @@ xl info --numa
 ```
 
 Other ways control the vCPUs placement, using the `xl` CLI:
+
 ```
 xl vcpu-pin <Domain> <vcpu id> <cpu id>
 xl vcpu-pin "Domain 0" all 2-5
 ```
+
 You can use the domain name or the domain ID you can obtain from the `xl list` command.
 
 Or using the CPUPool functionality:
+
 ```
 xl cpupool-numa-split # Will create a cpupool by NUMA node
 xl cpupool-migrate <VM> <Pool> # Will migrate a VM to the given pool
@@ -369,6 +397,7 @@ Be careful, the changes done using `xl` only affect vCPU at the moment, the memo
 You can see the current memory scheme of the VM using the `debug-key` interface with the `u` key. e.g. `xl debug-key u; xl dmesg`.
 
 References:
+
 * [https://xcp-ng.org/forum/topic/2265/using-numa-split-on-xcp-ng](https://xcp-ng.org/forum/topic/2265/using-numa-split-on-xcp-ng)
 * [https://wiki.xen.org/wiki/Xen_on_NUMA_Machines](https://wiki.xen.org/wiki/Xen_on_NUMA_Machines)
 * [https://wiki.xenproject.org/wiki/Tuning_Xen_for_Performance](https://wiki.xenproject.org/wiki/Tuning_Xen_for_Performance)

@@ -34,6 +34,7 @@ See [Installation](../../../installation/install-xcp-ng).
 ## Upgrade from previous releases
 
 Despite being an LTS, you can upgrade from previous releases. Both upgrade methods are supported:
+
 * From the installation ISO
 * From command line using `yum` (**from XCP-ng 8.0 or 8.1 only!**)
 
@@ -46,15 +47,17 @@ Refer to the [Upgrade Howto](../../../installation/upgrade).
 Full release notes at [https://docs.citrix.com/en-us/citrix-hypervisor/whats-new.html](https://docs.citrix.com/en-us/citrix-hypervisor/whats-new.html)
 
 Main changes announced by Citrix:
+
 * Maximum host RAM raised to 6 TB and maximum number of logical processors per host raised to 448 CPUs.
-* Support for installing TLS certificates on hosts (see https://docs.citrix.com/en-us/citrix-hypervisor/hosts-pools.html#install-a-tls-certificate-on-your-server)
+* Support for installing TLS certificates on hosts (see <https://docs.citrix.com/en-us/citrix-hypervisor/hosts-pools.html#install-a-tls-certificate-on-your-server>)
 * TLS 1.2 protocol enforced for HTTPS traffic, and between XCP-ng components. Support for legacy SSL mode and TLS 1.0/1.1 protocols have been removed.
 * Support for SLES 12 SP5 and Ubuntu 20.04 added
 * Support for Windows 7, Windows Server 2008 SP2 and Windows Server 2008 R2 SP1 removed. They may still work, but are not supported officially nor tested anymore by Citrix. Consider upgrading.
 
 Other changes:
-  * Bug fixed for hosts configured with DHCP. `xcp-networkd` used not to send the hostname along with the DHCP request. Fix contributed by XCP-ng team.
-  * Backup restore fixed for UEFI hosts. Bug reported by XCP-ng community.
+
+* Bug fixed for hosts configured with DHCP. `xcp-networkd` used not to send the hostname along with the DHCP request. Fix contributed by XCP-ng team.
+* Backup restore fixed for UEFI hosts. Bug reported by XCP-ng community.
 
 **The rest, below, is about changes specific to XCP-ng.**
 
@@ -81,11 +84,13 @@ With Core Scheduling, you now have another solution: you can choose to leave Hyp
 A new XAPI method allowing you to choose the frequency of the core scheduler was written. You will have the option to select different granularity: CPU, core or socket, depending on the performance/security ratio you are looking for.
 
 ### New storage drivers
+
 We added three new experimental storage drivers: `zfs`, `glusterfs` and `cephfs`.
 
 We also decided to include all SR drivers by default in XCP-ng now, including experimental ones. We do not, however, install all the dependencies on dom0 by default: `xfsprogs`, `gluster-server`, `ceph-common`, `zfs`... They need to be installed using `yum` for you to use the related SR drivers. Check the documentation for each storage driver.
 
 #### `zfs`
+
 We already provided `zfs` packages in our repositories before, but there was no dedicated SR driver. Users would use the `file` driver, which has a major drawback: if the zpool is not active, that driver may believe that the SR suddenly became empty, and drop all VDI metadata.
 
 So we developed a dedicated `zfs` SR driver that checks whether `zfs` is present before drawing such conclusions.
@@ -95,16 +100,19 @@ See [Transition to the new ZFS SR driver](#transition-to-the-new-zfs-sr-driver) 
 => [ZFS SR Documentation](../../../storage#zfs)
 
 #### `glusterfs`
+
 Use this driver to connect to an existing Gluster storage as a shared SR.
 
 => [GlusterFS SR Documentation](../../../storage#glusterfs)
 
 #### `cephfs`
+
 Use this driver to connect to an existing Ceph storage through the CephFS storage interface.
 
 => [CephFS SR Documentation](../../../storage#cephfs)
 
 ### Guest tools ISO
+
 Not really a change from XCP-ng 8.1, but rather a change from Citrix Hypervisor 8.2: they dropped the guest tools ISO, replaced by downloads from their website. We chose to retain the feature and still provide a guest tools ISO that you can mount to your VMs. Many thanks go to the [XAPI](https://github.com/xapi-project/xen-api/) developers who have accepted to keep the related source code in the XAPI project for us to keep using, rather than deleteing it.
 
 ### Other changes
@@ -140,6 +148,7 @@ Although we host XCP-ng Center on our GitHub organisation and authorized its con
 If you created a storage repository before upgrading to XCP-ng 8.2, be it manually or using Xen Orchestra's SR creation form, its type will be `file`. As explained [above](#zfs), this leaves you at risk of losing your VM metadata, so we strongly advise to transition to the new `zfs` SR driver.
 
 There exists no easy way to convert an existing storage repository from a given type, so the conversion procedure is:
+
 * Upgrade the pool to XCP-ng 8.2
 * Then for each host with a local ZFS storage that needs being re-created, starting with the pool master:
   * Install the `zfs` package if not installed already (`yum install zfs`).
@@ -192,6 +201,7 @@ An up to date XCP-ng 8.2 will not be affected anymore.
 ### Missing files in `/etc/modprobe.d` after an upgrade
 
 When a host is upgraded to XCP-ng 8.2 using the installation ISO, two files are missing in the resulting system:
+
 * `/etc/modprobe.d/blacklist-bridge.conf`
 * `/etc/modprobe.d/disable-ipv6.conf`
 
@@ -220,6 +230,7 @@ In general, issues inherited from Citrix Hypervisor and already described in the
 See [Citrix Hypervisor's known issues](https://docs.citrix.com/en-us/citrix-hypervisor/whats-new/known-issues.html) (link only valid for the latest release of Citrix Hypervisor). Most apply to XCP-ng.
 
 Some exceptions to those Citrix Hypervisor known issues:
+
 * Issues related to Citrix-specific things like licenses or GFS2 do not apply to XCP-ng.
 
 ### Older known issues
@@ -231,6 +242,7 @@ Some hardware-related issues are also described in [this page](../../installatio
 #### Cross-pool live migration from XenServer < 7.1
 
 Live migrating a VM from an old XenServer can sometimes end with an error, with the following consequences:
+
 * The VM reboots
 * It gets duplicated: the same VM uuid (and usually its VDIs too) is present both on the sender and the receiver host. Remove it from the receiver host.
 

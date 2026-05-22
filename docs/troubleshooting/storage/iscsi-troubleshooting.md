@@ -5,36 +5,43 @@ This page is dedicated to common issues you might have with iSCSI.
 ## 🎓 Basic iSCSI commands
 
 Discover available targets from a discovery portal:
+
 ```sh
 iscsiadm -m discovery -t sendtargets -p <IP_address>
 ```
 
 Log into a specific target:
+
 ```sh
 iscsiadm -m node -T targetname -p <IP_address> -l
 ```
 
 Log into all targets:
+
 ```sh
 iscsiadm -m node -l
 ```
 
 Display a list of all current sessions logged in:
+
 ```sh
 iscsiadm -m session
 ```
 
 Log out of all targets:
+
 ```sh
 iscsiadm -m node -u
 ```
 
 Display information about a target:
+
 ```sh
 iscsiadm -m node -T targetname -p <IP_address>
 ```
 
 Rescan a volume after expanding a LUN:
+
 ```sh
 iscsiadm -m node -p <IP_address> --rescan
 ```

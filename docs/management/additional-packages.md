@@ -10,7 +10,9 @@ It may be useful to add more packages to it, with precaution. The XCP-ng project
 
 :::note
 Best effort support is provided for additional packages provided by the XCP-ng project. No support is provided for other additional packages, even if installed from our repositories, as they contain build dependencies not supposed to be installed in production.
+
 * [supported list for XCP-ng 8.3](http://reports.xcp-ng.org/8.3/extra_installable.txt)
+
 :::
 
 ## 📜 Rules
@@ -52,6 +54,7 @@ Some third party repositories - including CentOS repositories and EPEL - contain
 ### 4. Keep your dom0 minimal
 
 The controller domain is not an all-purpose Linux system. It must remain minimal to do what it is meant to do efficiently, and also to ensure that every component installed receives relevant security fixes.
+
 * Avoid bloat (do not attempt to transform it into a Linux workstation. Use a VM instead.)
 * Avoid CPU or RAM-intensive programs
 * Avoid software that pulls in many dependencies
@@ -68,17 +71,17 @@ Additional packages are not meant to be in the base installation. They are only 
 
 The `wpa_supplicant` package is provided for homelab and testing purposes only. Wi-Fi is not supported for production environments, therefore vulnerabilities in `wpa_supplicant` are not treated as critical. If you are using Wi-Fi anyway, be aware of these known, unpatched vulnerabilities:
 
-- [CVE-2023-52160](https://www.cvedetails.com/cve/CVE-2023-52160): A configuration that does not verify the TLS certificate when using PEAP can allow authentication bypass.
-- [CVE-2019-9494](https://www.cvedetails.com/cve/CVE-2019-9494),[CVE-2019-9495](https://www.cvedetails.com/cve/CVE-2019-9495), [CVE-2022-23303](https://www.cvedetails.com/cve/CVE-2022-23303), [CVE-2022-23304](https://www.cvedetails.com/cve/CVE-2022-23304): SAE and EAP-PWD are vulnerable to side channel attacks as a result of cache access patterns leakage.
-- [CVE-2021-27803](https://www.cvedetails.com/cve/CVE-2021-27803): Improper handling of P2P provision discovery requests may lead to security issues, including Denial of Service, and possibly arbitrary code execution.
-- [CVE-2019-16275](https://www.cvedetails.com/cve/CVE-2019-16275): An attacker can send specially crafted 802.11 frames to trigger a Denial of Service (DoS) condition.
-- [CVE-2019-11555](https://www.cvedetails.com/cve/CVE-2019-11555): Improper validation of EAP-PWD fragmentation reassembly could lead to a Denial of Service.
-- [CVE-2019-9496](https://www.cvedetails.com/cve/CVE-2019-9496):  An invalid authentication sequence could result in Denial of Service.
-- [CVE-2019-9497](https://www.cvedetails.com/cve/CVE-2019-9497), [CVE-2019-9498](https://www.cvedetails.com/cve/CVE-2019-9498), [CVE-2019-9499](https://www.cvedetails.com/cve/CVE-2019-9499):  These vulnerabilities may allow an attacker to complete EAP-PWD authentication without knowing the password.
+* [CVE-2023-52160](https://www.cvedetails.com/cve/CVE-2023-52160): A configuration that does not verify the TLS certificate when using PEAP can allow authentication bypass.
+* [CVE-2019-9494](https://www.cvedetails.com/cve/CVE-2019-9494),[CVE-2019-9495](https://www.cvedetails.com/cve/CVE-2019-9495), [CVE-2022-23303](https://www.cvedetails.com/cve/CVE-2022-23303), [CVE-2022-23304](https://www.cvedetails.com/cve/CVE-2022-23304): SAE and EAP-PWD are vulnerable to side channel attacks as a result of cache access patterns leakage.
+* [CVE-2021-27803](https://www.cvedetails.com/cve/CVE-2021-27803): Improper handling of P2P provision discovery requests may lead to security issues, including Denial of Service, and possibly arbitrary code execution.
+* [CVE-2019-16275](https://www.cvedetails.com/cve/CVE-2019-16275): An attacker can send specially crafted 802.11 frames to trigger a Denial of Service (DoS) condition.
+* [CVE-2019-11555](https://www.cvedetails.com/cve/CVE-2019-11555): Improper validation of EAP-PWD fragmentation reassembly could lead to a Denial of Service.
+* [CVE-2019-9496](https://www.cvedetails.com/cve/CVE-2019-9496):  An invalid authentication sequence could result in Denial of Service.
+* [CVE-2019-9497](https://www.cvedetails.com/cve/CVE-2019-9497), [CVE-2019-9498](https://www.cvedetails.com/cve/CVE-2019-9498), [CVE-2019-9499](https://www.cvedetails.com/cve/CVE-2019-9499):  These vulnerabilities may allow an attacker to complete EAP-PWD authentication without knowing the password.
 
 #### mc ((Midnight Commander)
 
-- [CVE-2021-36370](https://www.cvedetails.com/cve/CVE-2021-36370): When establishing an SFTP connection, the fingerprint of the server is neither checked nor displayed, therefore a user will not be able to verify its authenticity.
+* [CVE-2021-36370](https://www.cvedetails.com/cve/CVE-2021-36370): When establishing an SFTP connection, the fingerprint of the server is neither checked nor displayed, therefore a user will not be able to verify its authenticity.
 
 ### 6. Ask before
 
@@ -87,6 +90,7 @@ If you have [pro support](https://xcp-ng.com), ask there. As part of the support
 ## 🦮 How to install
 
 Before doing any change, start keeping track somewhere of any change you bring to the system. This will help for:
+
 * support
 * knowing what packages you need to update regularly for security fixes or bugfixes
 * reinstalling them after a system upgrade via the installation ISO
@@ -98,6 +102,7 @@ Before doing any change, start keeping track somewhere of any change you bring t
 ### From CentOS repositories
 
 The CentOS repos are already installed but are disabled, on purpose. Install from them with:
+
 ```
 yum install name_of_package --enablerepo=base,updates
 ```
@@ -111,11 +116,13 @@ CentOS 7 reached its end of life, so installing additional packages from its rep
 ### From EPEL repositories
 
 On XCP-ng, the EPEL repos are already installed but are disabled, on purpose. Install from them with:
+
 ```
 yum install name_of_package --enablerepo=epel
 ```
 
 Sometimes you'll need extra dependencies from CentOS. Replace the command with:
+
 ```
 yum install name_of_package --enablerepo=epel,base,updates
 ```

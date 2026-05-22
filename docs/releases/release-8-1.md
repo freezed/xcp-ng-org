@@ -21,11 +21,13 @@ SHA256 checksums, GPG signatures and net-install ISO are available [here](http:/
 * Kernel 4.19, with patches. Latest kernel hotfix from CH 8.1 at the date of release included in the release.
 
 ## Install
+
 See [Installation](../../installation/install-xcp-ng).
 
 ## Upgrade from previous releases
 
 Since XCP-ng 8.1.0 is a minor release, both upgrade methods are supported:
+
 * From the installation ISO
 * From command line using `yum` (**from XCP-ng 8.0 only!**)
 
@@ -38,6 +40,7 @@ Refer to the [Upgrade Howto](../../installation/upgrade).
 Full release notes at [https://docs.citrix.com/en-us/citrix-hypervisor/whats-new.html](https://docs.citrix.com/en-us/citrix-hypervisor/whats-new.html)
 
 Citrix announces:
+
 * "Improved performance for VM imports and exports that use the XVA format" thanks to the use of a very efficient hash algorithm. Tests made with a 20G VM did not show any difference. According to the announcement the bigger the VM, the bigger the gains. One can suppose that the gain is only visible with large VMs.
 * "Storage performance improvements"
 * "New Windows I/O drivers with improved performance"
@@ -46,6 +49,7 @@ Citrix announces:
 * Support for **AMD EPYC 7xx2(P)** added
 
 Other changes:
+
 * Windows drivers delivered through Windows Update should now work well with non-English locales.
 * `chrony` replaces `ntp` for time synchronisation
 * **PV guests are not supported anymore**
@@ -78,6 +82,7 @@ For more information and use cases, you can check [this Devblog](https://xen-orc
 ### Installer improvements in 8.1
 
 Our installer now offers two new installation options. In legacy boot mode, access them with F2 when offered the choice. In UEFI mode, see the added boot menu entries.
+
 * First new option: boot the installer with a 2G RAM limit instead of the 8G default. This is a workaround for installation issues on hardware with Ryzen CPUs. Though those are Desktop-class CPUs and not supported officially in the HCL, we tried to make it easier to workaround the infamous "installer crashes on Ryzen" issue.
 * Second new option: boot the installer with our [alternate kernel](../../installation/hardware#-alternate-kernel) (kernel-alt). That kernel, built and maintained by @r1 for the team, is based on the main kernel, with all upstream kernel.org patches from the LTS 4.19 branch applied.It should be very stable by construction **but it receives less testing**. That option is there for cases when the main kernel and drivers have issues, so that you can quickly test if kernel.org patches have fixed it already. It will also install the alternate kernel in addition to the main kernel as a convenience. **If kernel-alt fixes issues for you, the most important thing to do is to tell us so that we may fix the main kernel!**
 
@@ -122,6 +127,7 @@ Our experimental driver will be completely removed in a later release, possibly 
 #### Migrate from experimental EXT4 Storage Repositories
 
 Our former experimental `ext4` storage driver is deprecated, because the official `ext` storage driver now defaults to ext4 for new storage repositories. XCP-ng 8.1 still has support for the experimental `ext4` driver for existing storage repositories, but:
+
 * In a future release, that driver will be removed and associated SRs will not work anymore.
 * In XCP-ng 8.1, the driver will refuse to create new `ext4` storage repositories.
 
@@ -173,6 +179,7 @@ This issue has forced us to add the `gpumon` package to XCP-ng although it's not
 We want to thank our community of users who was very helpful in helping us identify, debug and fix this issue quickly, through an update and new installation ISOs.
 
 **If you are affected:**
+
 * Did you upgrade using the installation ISO? If yes, the safest is to rollback to the on-disk backup using the installation ISO then download a new, fixed, ISO (`xcp-ng-8.1.0-2`) from [xcp-ng.org](https://xcp-ng.org) and upgrade again.
 * Else, or if reverting to the backup would make you lose important changes to your setup:
   * [Update your hosts](../../management/updates) and reboot.
@@ -183,7 +190,9 @@ We want to thank our community of users who was very helpful in helping us ident
     * Possibly others that haven't been reported yet
 
 ### Longer boot times when the ntp server cannot be reached
+
 If the ntp server can't be reached, the `chrony-wait` service may stall the boot process for several minutes before it gives up:
+
 * up to 10 minutes if you installed with `xcp-ng-8.1.0.iso`, or with yum update before 2020-04-03;
 * up to 2 minutes only if you installed with `xcp-ng-8.1.0-2.iso`, with yum update after 2020-04-03, or have updated your host after 2020-04-03.
 
@@ -200,6 +209,7 @@ Avoid running `yum update` in the host's remote console. Prefer ssh. If you real
 See [this forum thread](https://xcp-ng.org/forum/topic/2822/xcp-ng-8-0-upgrade-to-8-1-via-yum-warning).
 
 ### Backup partition restore from installer fails on UEFI hosts
+
 Context: the installer creates a backup of the root partition when you upgrade. It also allows to restore that backup when a backup is found.
 
 On UEFI hosts, the backup restore function of the installer fails with the following error message: `setEfiBootEntry() takes exactly 5 arguments (4 given)`. This is a bug inherited from Citrix Hypervisor 8.1.
@@ -207,9 +217,11 @@ On UEFI hosts, the backup restore function of the installer fails with the follo
 Consequences: although the root filesystem is correctly restored, the system is unbootable.
 
 Workaround:
+
 * Make a disk backup of the disk that contains the system, just in case.
 * Boot the XCP-ng 8.1 installer, and select the `shell` boot entry.
 * Once you get a shell prompt follow these steps (adapt to your situation regarding partition layout, device names and labels):
+
 ```
 # get information about the disks:
 blkid
@@ -244,6 +256,7 @@ e2label /dev/sda5 logs-abcdef
 # 5. set swap partition label (adapt device name and label)
 swaplabel -L swap-abcdef /dev/sda6
 ```
+
 * remove installation media then reboot
 
 Forum thread: [https://xcp-ng.org/forum/topic/2849/post-8-1-upgrade-boot-fails-and-restore-fails](https://xcp-ng.org/forum/topic/2849/post-8-1-upgrade-boot-fails-and-restore-fails)
@@ -255,6 +268,7 @@ In general, issues inherited from Citrix Hypervisor and already described in the
 See [Citrix Hypervisor's known issues](https://docs.citrix.com/en-us/citrix-hypervisor/whats-new/known-issues.html) (link only valid for the latest release of Citrix Hypervisor). Most apply to XCP-ng.
 
 Some exceptions to those CH 8.1 known issues:
+
 * The errors due to to `xapi-wait-init-complete.service` not being enabled were already fixed during XCP-ng 8.1's beta phase.
 * Issues related to Citrix-specific things like licenses or GFS2 do not apply to XCP-ng.
 * Though not mentioned yet in their known issues (as of 2020-03-30), an update of CH 8.0 to CH 8.1 using the update ISO fails at enabling the `chronyd` service. In XCP-ng 8.1, updated from 8.0 using `yum`, we fixed that issue before the release.
@@ -268,6 +282,7 @@ Some hardware-related issues are also described in [this page](../../installatio
 #### Cross-pool live migration from XenServer < 7.1
 
 Live migrating a VM from an old XenServer can sometimes end with an error, with the following consequences:
+
 * The VM reboots
 * It gets duplicated: the same VM uuid (and usually its VDIs too) is present both on the sender and the receiver host. Remove it from the receiver host.
 

@@ -165,6 +165,7 @@ echo 'MAILADDR root' >> /etc/mdadm.conf
 echo 'DEVICE /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde' >> /etc/mdadm.conf
 mdadm --examine --scan >> /etc/mdadm.conf
 ```
+
 And then edit the file to change the format of the array names from `/dev/md/0` to `/dev/md0` and remove the `name=` parameters from each line. This isn't strictly necessary but keeps the array names in the file consistent with what is reported in `/proc/mdstat` and `/proc/partitions` and avoids giving each array another name (in our case those names would be `localhost:127` and `XCP-ng:0`).
 
 So what do these lines do? The first line instructs the system to allow or attempt automatic assembly for all arrays defined in the file. The second specifies to report errors in the system by email to the root user. The third is a list of all drives in the system participating in RAID arrays. Not all drives need to be specified on a single DEVICE line. Drives can be split among multiple lines and we could even have one DEVICE line for each drive. The last two are descriptions of each array in the system.
@@ -247,6 +248,7 @@ The way to avoid this problem is to make sure the drives are thoroughly wiped be
 ```
 dd if=/dev/zero of=/dev/sde bs=1M
 ```
+
 This writes zeroes to every block on the drive and will wipe any traces of previous filesystems or RAID configurations.
 
 Sometimes only one drive has a problem when assembling the RAID and we'll see a working RAID with one drive missing. We'll assume that our md0 RAID was assembled correctly except that it is missing drive `/dev/sde`. In that case, it should be possible to add the missing drive into the array like this:
@@ -304,6 +306,7 @@ md127 : active raid1 sda[0] sdb[1]
 
 unused devices: <none>
 ```
+
 This list shows both of the RAID arrays in the example system and shows that both are active and healthy. At this point it should be safe to shut down the host and reboot from CD to install the upgrade.
 
 When installing the upgrade, no differences from a normal upgrade process are needed to account for either the RAID 1 boot array or the RAID 5 storage array. We should only need to ensure that the installer recognizes the previous installation and that we select an upgrade instead of an installation when prompted.
@@ -317,6 +320,7 @@ Missing files can be copied from the previous system by mounting the partition c
 ```
 [15:06 XCP-ng ~]# mount /dev/md127p2 /mnt
 ```
+
 We then copy one or both files from the original system to the correct locations in the upgraded system using one or both of the commands:
 
 ```

@@ -15,7 +15,6 @@ If you have one host or small pool (a cluster), you can use those following tool
 
 As soon you start to management multiple hosts and/or pools, you might need a single/central orchestrator. That's the point of Xen Orchestra, which can be used via a web UI, a CLI or its API:
 
-
 * [Xen Orchestra web UI](manage-at-scale/xo-web-ui) (web interface)
 * [Xen Orchestra CLI](manage-at-scale/xo-cli) (command line tool)
 * [Xen Orchestra API](manage-at-scale/xo-api) (REST and JSON-RPC APIs)

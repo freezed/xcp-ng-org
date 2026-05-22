@@ -5,6 +5,7 @@ sidebar_position: 3
 # Xen Orchestra API
 
 There's two different APIs to manage XCP-ng at scale via Xen Orchestra:
+
 * a REST API, simple to use to read content
 * a JSON-RPC over websocket API, more complex but coming with all features
 
@@ -68,10 +69,10 @@ Collections of objects are available at `/<name>` (e.g. `/vms`)
 
 The following query parameters are supported:
 
-- `limit`: max number of objects returned
-- `fields`: if specified, instead of plain URLs, the results will be objects containing the requested fields
-- `filter`: a string that will be used to select only matching objects, see [the syntax documentation](https://xen-orchestra.com/docs/manage_infrastructure.html#live-filter-search)
-- `ndjson`: if specified, the result will be in [NDJSON format](https://github.com/ndjson/ndjson-spec)
+* `limit`: max number of objects returned
+* `fields`: if specified, instead of plain URLs, the results will be objects containing the requested fields
+* `filter`: a string that will be used to select only matching objects, see [the syntax documentation](https://xen-orchestra.com/docs/manage_infrastructure.html#live-filter-search)
+* `ndjson`: if specified, the result will be in [NDJSON format](https://github.com/ndjson/ndjson-spec)
 
 Simple request:
 
@@ -204,9 +205,9 @@ This request returns the UUID of the created VDI.
 
 The following query parameters are supported to customize the created VDI:
 
-- `name_label`
-- `name_description`
-- `raw`: this parameter must be used if importing a raw export instead of a VHD
+* `name_label`
+* `name_description`
+* `raw`: this parameter must be used if importing a raw export instead of a VHD
 
 ### Actions
 

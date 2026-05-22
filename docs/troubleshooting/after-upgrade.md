@@ -3,14 +3,15 @@
 ## 🔧 The Server stays in Maintenance Mode
 
 ### Causes and Solutions
+
 * You enabled the maintenance mode and forgot about it.
-    * No big deal, just exit maintenance mode :-)
+  * No big deal, just exit maintenance mode :-)
 * The server is still booting.
-    * Take your time and let him boot up :-) this takes sometimes some time, but typically not longer than some minutes.
+  * Take your time and let him boot up :-) this takes sometimes some time, but typically not longer than some minutes.
 * A Storage Repository (SR) could not be attached.
-    * Check the corresponding disk(s), network(s) and setting(s). Follow the [3-Step-Guide](../#the-3-step-guide).
+  * Check the corresponding disk(s), network(s) and setting(s). Follow the [3-Step-Guide](../#the-3-step-guide).
 * There is a serious problem.
-    * Follow the 3-Step-Guide.
+  * Follow the 3-Step-Guide.
 
 ***
 
@@ -19,9 +20,11 @@
 With the following error: "This operation cannot be performed because the specified virtual disk could not be found."
 
 ### Cause
+
 It's mostly related to an inserted ISO that is no longer accessible.
 
 ### Solution
+
 Eject the ISO on those VMs.
 
 ***
@@ -39,21 +42,21 @@ To access the backup (with all your tools and modifications) just mount the back
 
 ***
 
-## 🐛 After upgrading my XCP-ng host is unstable, network card freezes, kernel errors, etc.
+## 🐛 After upgrading my XCP-ng host is unstable, network card freezes, kernel errors, etc
 
 ### Causes and Solutions
 
 * Maybe your hardware got an issue
-    * Check caps on your mainboard
-    * Check power supply
-    * Check cables
-    * Check drives SMART values with something like `smartctl -A /dev/sda` ([Smartmontools](https://www.smartmontools.org))
-    * Check memory with something like [Memtest86+](https://www.memtest.org)
+  * Check caps on your mainboard
+  * Check power supply
+  * Check cables
+  * Check drives SMART values with something like `smartctl -A /dev/sda` ([Smartmontools](https://www.smartmontools.org))
+  * Check memory with something like [Memtest86+](https://www.memtest.org)
 * Maybe your firmware got an issue
-    * update BIOS
-    * update network card firmware
-    * update RAID controller / HBA firmware
-    * update system firmware
+  * update BIOS
+  * update network card firmware
+  * update RAID controller / HBA firmware
+  * update system firmware
 * Maybe we (or upstream Citrix XenServer) removed/updated something.
-    * Please check our [Hardware Compatibility List (HCL)](../../installation/hardware).
-    * Follow the [3-Step-Guide](../#the-3-step-guide).
+  * Please check our [Hardware Compatibility List (HCL)](../../installation/hardware).
+  * Follow the [3-Step-Guide](../#the-3-step-guide).

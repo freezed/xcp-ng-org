@@ -26,11 +26,11 @@ You can configure four different types of networks in XCP-ng:
 This section uses three types of server-side software objects to represent networking entities. These objects are:
 
 * A PIF, which is a way to connect outside of a host. PIF objects have:
-    -  * a name
-    -  * a description
-    -  * a UUID
-    -  * the parameters of the NIC they represent
-    -  * the network and server they are connected to.
+  * * a name
+  * * a description
+  * * a UUID
+  * * the parameters of the NIC they represent
+  * * the network and server they are connected to.
 PIFs can represent:
   * A physical NIC
   * A VLAN on top of a physical NIC
@@ -128,16 +128,19 @@ Once a NIC is physically installed, in Xen Orchestra, go to your host's networki
 ![XO's Network tab with the refresh button highlighted.](../../assets/img/screenshots/PIFs-refresh.png)
 
 This can also be done on the command line. After physically installing a new NIC, you'll need to run a `xe pif-scan` command on the host to get this NIC added as an available PIF.
+
 ```
 xe pif-scan host-uuid=<HOST UUID>
 ```
 
 Check new NIC by UUID:
+
 ```
 xe pif-list
 ```
 
 Plug new NIC:
+
 ```
 xe pif-plug uuid=<NIC UUID>
 ```
@@ -155,44 +158,55 @@ These commands are meant to be done on non-active interfaces. Typically this wil
 ```
 interface-rename --help
 ```
+
 This will display all available options.
 
 ```
 interface-rename --list
 ```
+
 This will display the current interface mapping/assignments.
 
 Interfaces you wish to rename need to be downed first:
+
 ```
 ifconfig eth4 down
 ifconfig eth8 down
 ```
 
 The most common use will be an update statement like the following:
+
 ```
 interface-rename --update eth4=00:24:81:80:19:63 eth8=00:24:81:7f:cf:8b
 ```
+
 This example will set the mac-address for eth4 & eth8, switching them in the process.
 
 The XAPI database needs the old PIFs removed. First list your PIFs for the affected NICs:
+
 ```
 xe pif-list
 xe pif-forget uuid=<uuid of eth4>
 xe pif-forget uuid=<uuid of eth8>
 ```
+
 Reboot the host to apply these settings.
 
 The interfaces by their new names need to be re-enabled:
+
 ```
 ifconfig eth4 up
 ifconfig eth8 up
 ```
 
 The new interfaces need to be introduced to the PIF database:
+
 ```
 xe host-list
 ```
+
 Make note of the host uuid. Then introduce the interfaces:
+
 ```
 xe pif-introduce device=eth4 host-uuid=<host uuid> mac=<mac>
 xe pif-introduce device=eth8 host-uuid=<host uuid> mac=<mac>
@@ -200,14 +214,15 @@ xe pif-introduce device=eth8 host-uuid=<host uuid> mac=<mac>
 
 By renaming/updating interfaces like this, you can assure all your hosts have the same interface order.
 
-
 ### Remove a physical NIC
 
 Before removing a physical NIC, ensure that no VMs are using the interface. Shutdown the host, physically remove the NIC and boot.
 After boot, the PIF will need to be removed. You can do it this way:
+
 ```
 xe pif-forget uuid=<PIF UUID>
 ```
+
 The `<PIF UUID>` can be obtained with either `xe pif-list` or with Xen Orchestra. This command only needs to be ran once on the pool.
 
 ## 🛞 SDN controller
@@ -219,9 +234,9 @@ An SDN controller is provided by a [Xen Orchestra](../management#%EF%B8%8F-manag
 Private network (using tunnels) are very handy when you want to access resources in a secure manner, that are not in the same physical network.
 
 So we want a network that is:
-- reachable by all the hosts in a pool or **even between different pools!**
-- unreachable by anything outside the network
-- reactive when the pool changes (new host, host ejected, `PIF` unplugged etc):
+* reachable by all the hosts in a pool or **even between different pools!**
+* unreachable by anything outside the network
+* reactive when the pool changes (new host, host ejected, `PIF` unplugged etc):
 
 That's exactly what you can have thanks to XO SDN controller (here via GRE tunnels):
 
@@ -248,15 +263,16 @@ More information available on [XO official documentation for SDN controller](htt
 This section describes the new implementation (currently available in BETA). For the previous implementation, see the [Xen Orchestra documentation](https://docs.xen-orchestra.com/sdn_controller#openflow-protocol).
 
 :::warning
-- This is still in BETA. Do not use in production!
-- `xcp-ng-xapi-plugins` >= 0.15.0 is required. To check the version, run  `yum info xcp-ng-xapi-plugins`.
+* This is still in BETA. Do not use in production!
+* `xcp-ng-xapi-plugins` >= 0.15.0 is required. To check the version, run  `yum info xcp-ng-xapi-plugins`.
+
 :::
 
 Using Open vSwitch OpenFlow rules, you can setup traffic rules limiting some network accesses directly at the hypervisor vswitch level. No need for an additional layer of firewalling or filtering setup or equipment.
 
 There are 2 ways to configure OpenFlow rules:
-- Through [Xen Orchestra](https://docs.xen-orchestra.com/sdn_controller#openflow-rules)'s web UI (currently only available for per VIF rules)
-- Using `xo-cli` as explained in the [Xen Orchestra documentation](https://docs.xen-orchestra.com/sdn_controller#xapi-plugin)
+* Through [Xen Orchestra](https://docs.xen-orchestra.com/sdn_controller#openflow-rules)'s web UI (currently only available for per VIF rules)
+* Using `xo-cli` as explained in the [Xen Orchestra documentation](https://docs.xen-orchestra.com/sdn_controller#xapi-plugin)
 
 :::tip
 For debugging purposes, internals are documented in the [sdncontroller.py](https://github.com/xcp-ng/xcp-ng-xapi-plugins?tab=readme-ov-file#sdncontroller) plugin repository.
@@ -270,9 +286,9 @@ The error would look like this:
 > Client network socket disconnected before secure TLS connection was established
 
 It means the TLS certificate, used to identify an SDN controller, on the host doesn't match the one of the plugin, to solve it:
-- unload the SDN Controller plugin
-- in plugin config, set `override-certs` option to on (it will allow the plugin to uninstall the existing certificate before installing its own)
-- load the plugin
+* unload the SDN Controller plugin
+* in plugin config, set `override-certs` option to on (it will allow the plugin to uninstall the existing certificate before installing its own)
+* load the plugin
 
 The issue should be fixed.
 
@@ -293,15 +309,19 @@ You **must** restart the toolstack on the host for the new route to be added!
 :::
 
 You can check the result with a `route -n` afterwards to see if the route is now present. If you must add multiple static routes, it must be in one command, and the routes separated by commas. For example, to add both 10.88.0.0/14 via 10.88.113.193 *and* 10.0.0.0/24 via 192.168.1.1, you would use this:
+
 ```
 xe network-param-set uuid=<network UUID> other-config:static-routes=10.88.0.0/14/10.88.113.193,10.0.0.0/24/192.168.1.1
 ```
+
 ### Removing static routes
 
 To **remove** static routes you have added, stick the same network UUID from before in the below command:
+
 ```
 xe network-param-remove uuid=<network UUID> param-key=static-routes param-name=other-config
 ```
+
 A toolstack restart is needed as before.
 
 :::tip
@@ -331,6 +351,7 @@ These steps will require reboot of all 3 nodes multiple times. They will also re
 #### Switch to bridge mode on all nodes
 
 SSH to dom0
+
 ```
 # on dom0 on each hypervisor as root user
 xe-switch-network-backend bridge
@@ -345,6 +366,7 @@ In XCP-ng Center go to NICs tab and create a bond, selecting eth1 and eth2 as bo
 #### Reconfigure the bond device to broadcast mode
 
 Again, ssh to dom0 on all nodes and execute
+
 ```
 xe pif-list
 # Example output
@@ -385,6 +407,7 @@ reboot
 Go to tab Networking, rename bond1+2 device to something more memorable such as "MeshLAN", then add IP to all dom0 VMs to test it out, click "Configure" in IP configuration, add IP address and insert following addresses (you can use different addresses and range if you prefer to):
 
 On each node respectively
+
 * 192.168.10.1
 * 192.168.10.2
 * 192.168.10.3
@@ -406,6 +429,7 @@ This setup will save you costs of 2 network switches you would otherwise have to
 When XCP-ng is configured for static IP configuration there are no DNS search domains added. It is possible to add search domains into `/etc/resolv.conf`, however those won't persist across reboots. Use `xe pif-param-set` to add search domains that should persist across reboots.
 
 * First identify the PIF used as management interface.
+
 ```
 # xe pif-list host-name-label=xcpng-srv01 management=true
 uuid ( RO)                  : 76608ca2-e099-9344-af36-5b63c0022913
@@ -414,10 +438,13 @@ uuid ( RO)                  : 76608ca2-e099-9344-af36-5b63c0022913
                   VLAN ( RO): -1
           network-uuid ( RO): cc966455-d5f8-0257-04a7-d3d7c671636b
 ```
+
 * Take note of the `uuid` field and pass that to `xe pif-param-set`
+
 ```
 # xe pif-param-set uuid=76608ca2-e099-9344-af36-5b63c0022913 other-config:domain=searchdomain1.com,searchdomain2.com,searchdomain3.com
 ```
+
 This procedure has to be done for all hosts in the same pool.
 
 ## 👷 Network Troubleshooting
@@ -464,8 +491,10 @@ Use the `xe-reset-networking` utility only in an emergency because it deletes th
 If the pool master requires a network reset, reset the network on the pool master first before applying a network reset on pool members. Apply the network reset on all remaining hosts in the pool to ensure that the pool’s networking configuration is homogeneous. Network homogeneity is an important factor for live migration.
 
 :::tip
+
 * If the pool master’s IP address (the management interface) changes as a result of a network reset or xe host-management-reconfigure, apply the network reset command to other hosts in the pool. This is to ensure that the pool members can reconnect to the Pool Master on its new IP address. In this situation, the IP address of the Pool Master must be specified.
 * Network reset is NOT supported when High Availability is enabled. To reset network configuration in this scenario, you must first manually disable high availability, and then run the network reset command.
+
 :::
 
 #### Verifying the network reset
@@ -488,7 +517,7 @@ You can't live migrate a VM with SR-IOV enabled. Use it only if you really need 
 #### Setup
 
 * enable SR-IOV in your BIOS
-* enable ASPM (seem to be needed acording to https://www.juniper.net/documentation/en_US/contrail3.1/topics/concept/sriov-with-vrouter-vnc.html and https://www.supermicro.com/support/faqs/faq.cfm?faq=26448)
+* enable ASPM (seem to be needed acording to <https://www.juniper.net/documentation/en_US/contrail3.1/topics/concept/sriov-with-vrouter-vnc.html> and <https://www.supermicro.com/support/faqs/faq.cfm?faq=26448>)
 * enable SR-IOV in your network card firmware
 
 Then, you can enable and configure it with `xe` CLI:
@@ -502,11 +531,13 @@ xe network-sriov-param-list uuid=<SR-IOV Network_uuid>
 The last command will tell you if you need to reboot or not.
 
 Assign the SR-IOV network to your VM:
+
 ```
 xe vif-create device=<device index> mac=<vf_mac_address> network-uuid=<sriov_network> vm-uuid=<vm_uuid>
 ```
 
 If you want to disable it:
+
 ```
 xe network-sriov-destroy uuid=<network_sriov_uuid>
 ```

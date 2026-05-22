@@ -12,9 +12,11 @@ For updates that don't change the version numbers (bugfixes, security fixes), se
 
 :::info
 There are 3 upgrade methods, detailed below:
+
 * [Using the installation ISO (recommended)](#-upgrade-via-installation-iso-recommended).
 * [Using the installation ISO when you can't boot from it: remote upgrade](#using-the-installation-iso-when-you-cant-boot-from-it-remote-upgrade).
 * [From command line a.k.a. yum-style upgrade](#-from-command-line). ⚠️ Only for some point version upgrades.
+
 :::
 
 :::warning
@@ -26,6 +28,7 @@ For upgrading XCP-ng machines with an XOSTOR SR, please refer to this [additiona
 Read the [Release Notes and Known Issues](../../releases#xcp-ng-release-history) for every release that is higher than your current release. They may provide additional instructions for specific situations. Also **please read the following warnings**:
 
 :::warning
+
 * Always upgrade and reboot the pool master **FIRST**
 * DON'T use the `Maintenance Mode` in XCP-ng Center. It moves the pool master to another host, which has to be avoided in the upgrade procedure.
 * If HA (High Availability) is enabled, disable it before upgrading.
@@ -33,10 +36,13 @@ Read the [Release Notes and Known Issues](../../releases#xcp-ng-release-history)
 * Read [Handling alternate drivers or kernel](#%EF%B8%8F-handling-alternate-drivers-or-kernel) if your host depends on them.
 * [Update your pool with the latest updates](../../management/updates) **before** upgrading, and reboot or restart the toolstack, depending on the nature of the installed updates.
 * [Install the latest updates](../../management/updates) **after** upgrading.
+
 :::
 
 :::warning
+
 * When upgrading from *XCP-ng 7.5 or lower* or from *XenServer* or *Citrix Hypervisor*, **it is very important to make sure clustering is not enabled on your pool**. It's a functionality that relies on proprietary software and that is not available in XCP-ng, and having it enabled before the upgrade will lead to XAPI being unable to start due to unexpected data in the database. If it is enabled or you already upgraded, see [this comment](https://github.com/xcp-ng/xcp/issues/94#issuecomment-437838544).
+
 :::
 
 ## 💿 Upgrade via installation ISO (recommended)
@@ -48,22 +54,23 @@ It will backup your system to the backup partition and reinstall the system from
 **Any additional changes made by you to the system will be lost, so remember to make them again after the upgrade. Including: kernel or Xen boot parameters, changes to `/etc`, additional users created and their homes, local ISO SRs, [additional packages](../../management/additional-packages)...** Some boot parameters and configuration files are saved, but it's a short list.
 
 Steps:
+
 1. Download an installation ISO from the [download page](https://xcp-ng.org/download/). Choose either the standard installer or the network installer.
 2. [Check the authenticity and the integrity of the downloaded ISO](../../project/mirrors#check-an-iso-image).
 
 Then, for every host of the pool, starting with the pool master:
 
-3. Move all VMs off the host if your setup allows it, or turn them off.
-4. Follow the installation procedure on the [installation page](../install-xcp-ng#start-the-host).
+1. Move all VMs off the host if your setup allows it, or turn them off.
+2. Follow the installation procedure on the [installation page](../install-xcp-ng#start-the-host).
 
 :::warning
 You must boot the ISO in the firmware mode that was used for initial installation: UEFI or BIOS. Otherwise, the installer won't detect the existing installation and offer to upgrade.
 :::
 
-5. When offered the choice, choose to upgrade your existing XCP-ng installation.
-6. After the upgrade completed, reboot your host.
-7. [Install the updates](../../management/updates) that have been released after the installation ISO was created. They can fix bugs and/or security issues.
-8. Reboot.
+1. When offered the choice, choose to upgrade your existing XCP-ng installation.
+2. After the upgrade completed, reboot your host.
+3. [Install the updates](../../management/updates) that have been released after the installation ISO was created. They can fix bugs and/or security issues.
+4. Reboot.
 
 Once upgraded, **keep the system regularly updated** (see [the updates section](../../management/updates)).
 
@@ -81,18 +88,24 @@ If you do not have access to your server or remote KVM in order to upgrade using
 
 * Unpack/extract the XCP-ng ISO to a folder on an HTTP server. Make sure not to miss the hidden .treeinfo file (common mistake if you `cp` the files with `*`).
 * Get the UUID of your host by running the below command:
+
   ```
   xe host-list
   ```
+
 * Using that host UUID, as well as the URL to the folder hosting the unpacked XCP-ng ISO, run the following command to test access:
+
   ```
   xe host-call-plugin plugin=prepare_host_upgrade.py host-uuid=750d9176-6468-4a08-8647-77a64c09093e fn=testUrl args:url=http://<ip-address>/xcp-ng/unpackedexample/
   ```
+
   The returned output must be true to continue.
 * Now tell the host to automatically boot to the ISO and upgrade itself on next reboot (using the UUID and URL from before):
+
   ```
   xe host-call-plugin plugin=prepare_host_upgrade.py host-uuid=750d9176-6468-4a08-8647-77a64c09093e fn=main args:url=http://<ip-address>/xcp-ng/unpackedexample/
   ```
+
   The output should also be true. It has created a temporary entry in the grub bootloader which will automatically load the upgrade ISO on the next boot. It then automatically runs the XCP-ng upgrade with no user intervention required. It will also backup your existing XenServer dom0 install to the secondary backup partition, just like the normal upgrade.
 * To start the process, just tell the host to reboot. It is best to watch the progress by using KVM if it's available, but if not, it should proceed fine and boot into the upgraded XCP-ng in 10 to 20 minutes.
 
@@ -115,9 +128,9 @@ This information about EOL releases is retained solely to assist with the transi
 :::
 
 Though it's been successfully tested by numerous people, this method is still considered *riskier* than using the installation ISO:
-- this upgrade method **does not create a backup of your system**, unlike an upgrade via the installation ISO, so there's no possible return to the previous version (unless reinstalling it from scratch and reconfiguring it).
-- there are more things that can go wrong when you upgrade lots of packages one by one than when you reinstall from scratch (which is what the installation ISO does, without losing your data of course).
-- additional packages installed by the user on the system from CentOS, EPEL or third party repositories can sometimes make the upgrade fail.
+* this upgrade method **does not create a backup of your system**, unlike an upgrade via the installation ISO, so there's no possible return to the previous version (unless reinstalling it from scratch and reconfiguring it).
+* there are more things that can go wrong when you upgrade lots of packages one by one than when you reinstall from scratch (which is what the installation ISO does, without losing your data of course).
+* additional packages installed by the user on the system from CentOS, EPEL or third party repositories can sometimes make the upgrade fail.
 
 On the plus side, it's a lot *faster* provided you have a decent internet connection or a local mirror, and changes you have made to the host are retained.
 
@@ -136,6 +149,7 @@ If you have enabled third party repositories (CentOS, EPEL...) in the past, make
 Set `enabled=0` in the relevant files in `/etc/yum.repos.d/`. Warning: when added, the EPEL repository is automatically enabled. Make sure to disable it right away and use this syntax instead to install anything from it: `yum install packagename --enablerepo='epel'`.
 
 In any case, installing extra packages from outside the XCP-ng repositories can lead to various issues, including update or system upgrade problems, so make sure to:
+
 * install only packages that are known not to have any adverse effect on XCP-ng (when in doubt, [ask on the forum](https://xcp-ng.org/forum/) or check with your [pro support](https://xcp-ng.com/));
 * check the dependencies pulled by such packages: they must not overwrite existing packages in XCP-ng;
 * know that you are doing it at your own risk and be prepared to fix any issues that would arise, especially unforeseen upgrade issues (we can't test upgrade scenarios where unknown packages are installed on the system).
@@ -159,14 +173,17 @@ Let's start: open a terminal to your XCP-ng server, as root.
 #### 0. Migrate the VMs to another host or shutdown or suspend them
 
 #### 1. Download and verify the yum `.repo` file
+
 We will download the repository file that will tell yum where to download the packages from, and we will verify its authenticity and its integrity.
 
 * Define the target version, replacing X and Y as appropriate:
+
   ```
   export VER=X.Y
   ```
 
   Example:
+
   ```
   export VER=8.2
   ```
@@ -174,6 +191,7 @@ We will download the repository file that will tell yum where to download the pa
 In the commands below your shell will automatically replace `$VER` with the value that you defined.
 
 * Download the files
+
   ```
   # the repository file
   wget https://updates.xcp-ng.org/8/xcp-ng-$VER.repo -O xcp-ng-$VER.repo
@@ -181,8 +199,10 @@ In the commands below your shell will automatically replace `$VER` with the valu
   wget https://updates.xcp-ng.org/8/SHA256SUMS -O SHA256SUMS
   wget https://updates.xcp-ng.org/8/SHA256SUMS.asc -O SHA256SUMS.asc
   ```
+
 * Follow the steps to [check the integrity and origin of the repository file](../../project/mirrors#check-a-downloaded-file) (optional)
 * Install the verified repository file so that yum uses it.
+
   ```
   cp xcp-ng-$VER.repo /etc/yum.repos.d/xcp-ng.repo
   # help yum taking the change into account immediately
@@ -198,6 +218,7 @@ yum update
 #### 3. Check the configuration files
 
 When `rpm` needs to update configuration files that you had modified previously, there's a conflict of changes. There exists two strategies:
+
 * either keep your file and write the new configuration file as `yourfile.rpmnew`.
 * or overwrite your file with the new one and save it as `yourfile.rpmsave`.
 For a given configuration file, only one of those can be created, depending on whether the RPM defines that it's more important to keep the user configuration or to put the new configuration in place. If you haven't made any change to the configuration file or the RPM does not bring any change during the update, then neither will be created.
@@ -225,6 +246,7 @@ This article describes how to proceed in order to convert your Citrix XenServer 
 :::
 
 :::warning
+
 * Always upgrade and reboot the pool master **FIRST**
 * DON'T use the `Maintenance Mode` in XCP-ng Center. It moves the pool master to another host, which has to be avoided in the upgrading procedure.
 * If HA (High Availability) is enabled, disable it before upgrading
@@ -241,6 +263,7 @@ This article describes how to proceed in order to convert your Citrix XenServer 
   XenServer hosts whose xapi version is equal to or lower than the version
   included with XCP-ng. If your xapi version exceeds this, the upgrade process may
   not proceed correctly.
+
 :::
 
 ### Before you start
@@ -357,9 +380,11 @@ If a live migration doesn't work, Xen Orchestra is able to do a warm migration f
 If - before the upgrade - your host depends on [alternate drivers](../../installation/hardware#-alternate-drivers) or on the [alternate kernel](../../installation/hardware#-alternate-kernel) to function, then it is possible that the upgraded system doesn't need such alternatives anymore. It is also possible that it still needs them.
 
 When upgrading using the upgrade ISO:
+
 * Alternate drivers will not be installed automatically: install them from the repositories after the first reboot.
 * The alternate kernel will not be installed automatically, unless you tell the installer to do so (see [Alternate kernel](../../installation/hardware#-alternate-kernel)).
 
 When upgrading using `yum`:
+
 * Alternate drivers will usually be kept and upgraded if a newer version is provided, but that is not a general rule: we handle it on a case by case basis. Sometimes a newer "default" driver will obsolete an older alternate driver.
 * The alternate kernel will be retained and upgraded to the latest version available in the new release. If the alternate kernel was your default boot option, it will remain such.

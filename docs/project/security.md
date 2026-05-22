@@ -20,7 +20,7 @@ You can also see the change history with dates of each organization added into i
 
 A quick recap of the key steps involved in this security process:
 
-* **Reporting**: Vulnerabilities in Xen Project software should be reported via email to security@xenproject.org.
+* **Reporting**: Vulnerabilities in Xen Project software should be reported via email to <security@xenproject.org>.
 * **Notification and Negotiation**: The Hypervisor team, upon becoming aware of a problem, notifies the security team. If the vulnerability isn't public, an embargo date and disclosure schedule are negotiated with the discoverer.
 * **CVE Number and Advisory Preparation**: A CVE number is acquired and an advisory is prepared, including determining affected systems and the vulnerability's impact.
 * **Advisory Pre-Release**: If the issue is under embargo, an advisory, including patches, is sent to the Xen security pre-disclosure list.

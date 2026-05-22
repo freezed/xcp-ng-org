@@ -47,8 +47,10 @@ For more details, refer to the [Hardware Compatibility List (HCL)](../../install
 
 :::danger
 **Strongly discouraged** due to heavy write operations in XCP-ng:
+
 - **XAPI Database**: Undergoes frequent changes, resulting in extensive write operations, potentially reducing USB drive lifespan. The XAPI database maintains the state of all XCP-ng operations and is replicated across all hosts.
 - **Logging**: XCP-ng generates a high volume of logs. Consider using a remote syslog service as an alternative.
+
 :::
 
 #### Installation on SD Cards
@@ -194,8 +196,8 @@ In addition to the hardware prerequisites identified previously, there are some 
 - Must not be part of an existing pool.
 - No running or suspended VMs, or active VM operations (shut down VMs before joining).
 - No configured shared storage.
-* It cannot have a bonded management interface. Reconfigure the management interface and move it to a physical NIC before adding the server to the pool. Once the server has joined the pool, you can reconfigure the management interface again.
-* It must be running the same version of XCP-ng, at the same update level, as servers already in the pool.
+- It cannot have a bonded management interface. Reconfigure the management interface and move it to a physical NIC before adding the server to the pool. Once the server has joined the pool, you can reconfigure the management interface again.
+- It must be running the same version of XCP-ng, at the same update level, as servers already in the pool.
 
 Resource pools can have hosts with varying physical network interfaces and local storage capacities. In practice, it is often difficult to obtain multiple servers with the exact same CPUs, and so minor variations are permitted. If you want your environment to have hosts with varying CPUs in the same resource pool, you can force join a pool together using the CLI. To know more on forced joining operation, see Hosts and Resource Pools.
 

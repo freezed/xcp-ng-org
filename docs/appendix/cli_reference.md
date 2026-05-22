@@ -8,7 +8,6 @@ This section groups the commands by the objects that the command addresses. Thes
 This section is in construction
 :::
 
-
 ## Appliance commands
 
 Commands for creating and modifying VM appliances (also known as vApps).
@@ -145,10 +144,10 @@ bond-create network-uuid=network_uuid pif-uuids=pif_uuid_1,pif_uuid_2,...
 
 Create a bonded network interface on the network specified from a list of existing PIF objects. The command fails in any of the following cases:
 
--   If PIFs are in another bond already
--   If any member has a VLAN tag set
--   If the referenced PIFs are not on the same XCP-ng server
--   If fewer than 2 PIFs are supplied
+- If PIFs are in another bond already
+- If any member has a VLAN tag set
+- If the referenced PIFs are not on the same XCP-ng server
+- If fewer than 2 PIFs are supplied
 
 ### `bond-destroy`
 
@@ -1445,6 +1444,7 @@ sdn-controller-forget uuid=uuid
 Remove an SDN controller.
 
 ## Tunnel commands
+
 -----------------------------------
 
 Commands for working with tunnels.
@@ -1985,6 +1985,7 @@ From the network UUID specified, UUID of the PIF object is identified and mapped
 :::warning
 Be careful when using this CLI command off-host and ensure that you have network connectivity on the new interface. Use `xe pif-reconfigure` to set one up first. Otherwise, subsequent CLI commands are unable to reach the XCP-ng server.
 :::
+
 ### `pool-recover-slaves`
 
 ```
@@ -2516,19 +2517,19 @@ Templates cannot be directly converted into VMs by setting the `is-a-template` p
 
 Templates have the following parameters:
 
--   `uuid` (read only) the unique identifier/object reference for the template
--   `name-label` (read/write) the name of the template
--   `name-description` (read/write) the description string of the template
--   `user-version` (read/write) string for creators of VMs and templates to put version information
--   `is-a-template` (read/write) true if this VM is a template. Template VMs can never be started, they are used only for cloning other VMs. After this value has been set to true, it cannot be reset to false. Template VMs cannot be converted into VMs using this parameter.
--   `is-control-domain` (read only) true if this is a control domain (domain 0 or a driver domain)
--   `power-state` (read only) current power state. The value is always halted for a template
--   `memory-dynamic-max` (read only) dynamic maximum memory in bytes. Currently unused, but if changed the following constraint must be obeyed: `memory_static_max` `>=` `memory_dynamic_max` `>=` `memory_dynamic_min` `>=` `memory_static_min`.
--   `memory-dynamic-min` (read/write) dynamic minimum memory in bytes. Currently unused, but if changed the same constraints for `memory-dynamic-max` must be obeyed.
--   `memory-static-max` (read/write) statically set (absolute) maximum memory in bytes. This field is the main value used to determine the amount of memory assigned to a VM.
--   `memory-static-min` (read/write) statically set (absolute) minimum memory in bytes. This field represents the absolute minimum memory, and `memory-static-min` must be less than `memory-static-max`. This value is unused in normal operation, but the previous constraint must be obeyed.
--   `suspend-VDI-uuid` (read only) the VDI that a suspend image is stored on (has no meaning for a template)
--   `VCPUs-params` (read/write map parameter) configuration parameters for the selected vCPU policy.
+- `uuid` (read only) the unique identifier/object reference for the template
+- `name-label` (read/write) the name of the template
+- `name-description` (read/write) the description string of the template
+- `user-version` (read/write) string for creators of VMs and templates to put version information
+- `is-a-template` (read/write) true if this VM is a template. Template VMs can never be started, they are used only for cloning other VMs. After this value has been set to true, it cannot be reset to false. Template VMs cannot be converted into VMs using this parameter.
+- `is-control-domain` (read only) true if this is a control domain (domain 0 or a driver domain)
+- `power-state` (read only) current power state. The value is always halted for a template
+- `memory-dynamic-max` (read only) dynamic maximum memory in bytes. Currently unused, but if changed the following constraint must be obeyed: `memory_static_max` `>=` `memory_dynamic_max` `>=` `memory_dynamic_min` `>=` `memory_static_min`.
+- `memory-dynamic-min` (read/write) dynamic minimum memory in bytes. Currently unused, but if changed the same constraints for `memory-dynamic-max` must be obeyed.
+- `memory-static-max` (read/write) statically set (absolute) maximum memory in bytes. This field is the main value used to determine the amount of memory assigned to a VM.
+- `memory-static-min` (read/write) statically set (absolute) minimum memory in bytes. This field represents the absolute minimum memory, and `memory-static-min` must be less than `memory-static-max`. This value is unused in normal operation, but the previous constraint must be obeyed.
+- `suspend-VDI-uuid` (read only) the VDI that a suspend image is stored on (has no meaning for a template)
+- `VCPUs-params` (read/write map parameter) configuration parameters for the selected vCPU policy.
 
 You can tune a vCPU’s pinning with:
 

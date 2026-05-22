@@ -13,8 +13,9 @@ The configuration is located in `/etc/logrotate.conf`; the `/etc/logrotate.d` di
 This configuration is used by the daily cron task `/etc/cron.daily/logrotate`.
 
 By default a file is rotated if:
-  - its size is greater than 100 MiB (since XCP-ng 8.2.1)
-  - it's a new day (daily rotation)
+
+- its size is greater than 100 MiB (since XCP-ng 8.2.1)
+- it's a new day (daily rotation)
 
 Also a file is compressed after two rotations, the first time it is just renamed.
 

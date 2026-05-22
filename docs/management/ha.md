@@ -43,32 +43,30 @@ Here are the possible cases and how they are dealt with:
 
 Enabling HA in XCP-ng requires thorough planning and validation of several prerequisites:
 
-- **Pool-Level HA only**: HA can only be configured at the pool level, not across different pools.
-- **Minimum of 3 hosts recommended**: While HA can function with just 2 XCP-ng servers in a pool, we recommend using **at least 3** to prevent issues such as a split-brain scenario. With only 2 hosts, they risk getting fenced if the connection between them is lost.
-- **Shared storage requirements**: You must have shared storage available, including at least one iSCSI, NFS, XOSTOR or Fiber Channel LUN with a minimum size of **356 MB for the heartbeat Storage Repository (SR)**. The HA mechanism creates two volumes on this SR:
-    - A **4 MB heartbeat volume** for monitoring host status.
-    - A **256 MB metadata volume** to store pool master information for master failover situations.
-- **Dedicated heartbeat SR optional**: While it's not necessary to dedicate a separate SR for the heartbeat, you can choose to do so. Alternatively, you can use the same SR that hosts your VMs.
-- **Unsupported storage for heartbeat**: Storage using SMB or iSCSI authenticated via CHAP **cannot be used as the heartbeat SR**.
-- **Static IP addresses**: Make sure that all hosts have static IP addresses to avoid disruptions from DHCP servers potentially reassigning IPs.
-- **Dedicated bonded interface recommended**: For optimal reliability, we recommend using a dedicated bonded interface for the HA management network.
-- **VM agility for HA protection**: For a VM to be protected by HA, it must meet certain agility requirements:
-    - The VM’s virtual disks must **reside on shared storage**, such as iSCSI, NFS, or Fibre Channel LUN, which is also necessary for the storage heartbeat.
-    - The VM must **support live migration**.
-    - The VM should **not have a local DVD drive connection configured**.
-    - The VM’s network interfaces should be on **pool-wide networks**.
+* **Pool-Level HA only**: HA can only be configured at the pool level, not across different pools.
+* **Minimum of 3 hosts recommended**: While HA can function with just 2 XCP-ng servers in a pool, we recommend using **at least 3** to prevent issues such as a split-brain scenario. With only 2 hosts, they risk getting fenced if the connection between them is lost.
+* **Shared storage requirements**: You must have shared storage available, including at least one iSCSI, NFS, XOSTOR or Fiber Channel LUN with a minimum size of **356 MB for the heartbeat Storage Repository (SR)**. The HA mechanism creates two volumes on this SR:
+  * A **4 MB heartbeat volume** for monitoring host status.
+  * A **256 MB metadata volume** to store pool master information for master failover situations.
+* **Dedicated heartbeat SR optional**: While it's not necessary to dedicate a separate SR for the heartbeat, you can choose to do so. Alternatively, you can use the same SR that hosts your VMs.
+* **Unsupported storage for heartbeat**: Storage using SMB or iSCSI authenticated via CHAP **cannot be used as the heartbeat SR**.
+* **Static IP addresses**: Make sure that all hosts have static IP addresses to avoid disruptions from DHCP servers potentially reassigning IPs.
+* **Dedicated bonded interface recommended**: For optimal reliability, we recommend using a dedicated bonded interface for the HA management network.
+* **VM agility for HA protection**: For a VM to be protected by HA, it must meet certain agility requirements:
+  * The VM’s virtual disks must **reside on shared storage**, such as iSCSI, NFS, or Fibre Channel LUN, which is also necessary for the storage heartbeat.
+  * The VM must **support live migration**.
+  * The VM should **not have a local DVD drive connection configured**.
+  * The VM’s network interfaces should be on **pool-wide networks**.
 
 :::tip
 For enabling HA, we **strongly recommend** to use a bonded management interface for servers in the pool, and to configure multipathed storage for the heartbeat SR.
 :::
-
 
 If you create VLANs and bonded interfaces via the CLI, they might not be active or properly connected, causing a VM to appear non-agile and, therefore, unprotected by HA.
 
 Use the `pif-plug` command in the CLI to activate VLAN and bond PIFs, ensuring the VM becomes agile.
 
 Additionally, the `xe diagnostic-vm-status` CLI command can help identify why a VM isn’t agile, allowing you to take corrective action as needed.
-
 
 ## ⚙️ Configuration
 
@@ -122,10 +120,10 @@ If more hosts fail than this number, the system will raise an **over-commitment*
 
 In XCP-ng, you can choose between 3 high availability modes: restart, best-effort, and disabled:
 
-- **Restart**: if a protected VM cannot be immediately restarted after a server failure, HA will attempt to restart the VM when additional capacity becomes available in the pool. However, there is no guarantee that this attempt will be successful.
-- **Best-Effort**: for VMs configured with best-effort, HA will try to restart them on another host if their original host goes offline.\
+* **Restart**: if a protected VM cannot be immediately restarted after a server failure, HA will attempt to restart the VM when additional capacity becomes available in the pool. However, there is no guarantee that this attempt will be successful.
+* **Best-Effort**: for VMs configured with best-effort, HA will try to restart them on another host if their original host goes offline.\
 This attempt will only occur after all VMs set to the "restart" mode have been successfully restarted. HA will make only one attempt to restart a best-effort VM. If it fails, no further attempts will be made.
-- **Disabled**: if an unprotected VM or its host is stopped, HA will not attempt to restart the VM.
+* **Disabled**: if an unprotected VM or its host is stopped, HA will not attempt to restart the VM.
 
 #### Choosing a high availability mode
 
@@ -200,6 +198,7 @@ Starting with XAPI 25.16.0, VM restart behavior can be changed. To do this, run 
 ```
 xe pool-param-set uuid=... ha-reboot-vm-on-internal-shutdown=false
 ```
+
 As a result, VMs that are shut down internally or through the API will restart the exact same way.
 
 :::
@@ -256,17 +255,17 @@ As you can see, a `XHA daemon` is running on each host and two main paths are us
 For HA to operate properly, two communication paths are used: one over the network and another reserved for storage.
 There are two paths because this is the solution chosen to distinguish a network problem between hosts and a storage issue.
 In both cases, data is constantly transmitted through these paths to ensure proper HA operation:
-- UDP packets are exchanged over the network management interface so that each server can indicate it is alive.
-- Disk data is written to and read by the hosts through a volume called `ha-statefile`. In this example, the volume resides on an NFS SR, which is shared and accessible by the entire pool. It’s a standard SR containing VHD files used by VMs.
+* UDP packets are exchanged over the network management interface so that each server can indicate it is alive.
+* Disk data is written to and read by the hosts through a volume called `ha-statefile`. In this example, the volume resides on an NFS SR, which is shared and accessible by the entire pool. It’s a standard SR containing VHD files used by VMs.
 The only difference is that `ha-statefile` is a raw volume in which data is written directly.
 
 Regarding the structure of this SR heartbeat volume:
 
 ![The ha-statefile has info about each alive hosts in the pool.](../../assets/img/xha-statefile-structure.png)
 
-- As the picture shows, this volume contains a single entry for each host, where each host writes to its own dedicated area AND can also read the state of other hosts. In other words, each host writes a “heartbeat” value indicating that it’s alive at a given time, which is verified by the whole pool.
+* As the picture shows, this volume contains a single entry for each host, where each host writes to its own dedicated area AND can also read the state of other hosts. In other words, each host writes a “heartbeat” value indicating that it’s alive at a given time, which is verified by the whole pool.
 
-- There is no write lock; each host can write at any time. It's why there is one entry for each host.
+* There is no write lock; each host can write at any time. It's why there is one entry for each host.
 
 ### XOSTOR
 

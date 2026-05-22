@@ -67,12 +67,12 @@ XCP-ng 8.3 is special, as it started as a standard release, then became as annou
 XCP-ng 9.0 might follow the same path.
 :::
 
-
 ## 🔴 Pre Releases
 
 Using a pre-release is relevant only for testing purposes. Check [the `Release` tag on our blog](https://xcp-ng.org/blog/tag/release/) for (pre-)release announcements.
 
 :::warning
+
 ### Important Note on Pre-Releases
 
 Pre-releases are designed for testing before final General Availability. Although generally stable, they are **NOT SUITABLE FOR PRODUCTION USE**. Key considerations include:
