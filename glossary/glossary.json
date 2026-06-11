@@ -1,0 +1,138 @@
+{
+  "title": "Glossary",
+  "description": "A collection of technical terms and their definitions",
+  "terms": [
+    {
+      "term": "CoW",
+      "definition": "empty",
+      "abbreviation": "Copy-on-write"
+    },
+    {
+      "term": "Dom0",
+      "definition": "The first VM created by Xen, to run the management toolstack",
+      "abbreviation": "Domain 0",
+      "aliases": ["domain zero", "host domain"],
+      "relatedTerms": ["DomU", "VM"]
+    },
+    {
+      "term": "DomU",
+      "definition": "A regular VM running under the control of Dom0",
+      "abbreviation": "user domain",
+      "relatedTerms": ["Dom0", "VM"]
+    },
+    {
+      "term": "DRBD",
+      "definition": "A distributed replicated storage system for the Linux platform",
+      "abbreviation": "Distributed Replicated Block Device",
+      "relatedTerms": ["LINSTOR", "XOSTOR"]
+    },
+    {
+      "term": "HVM",
+      "definition": "HVM refers to a set of extensions that make it much simpler to virtualize the processor",
+      "abbreviation": "Hardware Virtual Machine",
+      "relatedTerms": ["VM", "PV"]
+    },
+    {
+      "term": "LUN",
+      "definition": "A number used to identify a logical unit",
+      "abbreviation": "Logical Unit Number"
+    },
+    {
+      "term": "LVM",
+      "abbreviation": "Logical Volume Manager",
+      "definition": "https://en.wikipedia.org/wiki/Logical_Volume_Manager_(Linux)"
+    },
+    {
+      "term": "NBD",
+      "abbreviation": "Network Block Device",
+      "definition": "https://en.wikipedia.org/wiki/Network_block_device"
+    },
+    {
+      "term": "PBD",
+      "abbreviation": "Physical Block Device",
+      "definition": "/storage/#-how-to-modify-an-existing-sr-connection"
+    },
+    {
+      "term": "PIF",
+      "abbreviation": "Physical Interface",
+      "definition": "/project/architecture/#pifs"
+    },
+    {
+      "term": "PV",
+      "abbreviation": "Para-Virtualization",
+      "definition": "https://wiki.xenproject.org/wiki/Paravirtualization_(PV)",
+      "relatedTerms": ["HVM", "VM"]
+    },
+    {
+      "term": "QCOW",
+      "abbreviation": "_QEMU Copy On Write_",
+      "definition": "https://en.wikipedia.org/wiki/Qcow"
+    },
+    {
+      "term": "SMAPI",
+      "abbreviation": "Storage Manager API",
+      "definition": "https://github.com/xapi-project/xapi-storage"
+    },
+    {
+      "term": "SR",
+      "abbreviation": "Storage Repository",
+      "definition": "/storage"
+    },
+    {
+      "term": "VBD",
+      "abbreviation": "Virtual Block Device",
+      "definition": "https://docs.kernel.org/block/ublk.html"
+    },
+    {
+      "term": "VG",
+      "abbreviation": "LVM Volume Group",
+      "definition": "https://www.man7.org/linux/man-pages/man8/lvm.8.html#DESCRIPTION"
+    },
+    {
+      "term": "VHD",
+      "abbreviation": "Virtual Hard Disk file format",
+      "definition": "https://en.wikipedia.org/wiki/VHD_(file_format)",
+      "relatedTerms": ["VMDK"]
+    },
+    {
+      "term": "VMDK",
+      "abbreviation": "_Virtual Machine Disk_ file format",
+      "definition": "https://en.wikipedia.org/wiki/VMDK",
+      "relatedTerms": ["VHD", "VMDK"]
+    },
+    {
+      "term": "VM",
+      "abbreviation": "Virtual Machine",
+      "definition": "https://en.wikipedia.org/wiki/Virtual_machine, also called _guest_",
+      "relatedTerms": ["HVM", "PV"]
+    },
+    {
+      "term": "XAPI",
+      "abbreviation": "Xen Project Management API",
+      "definition": "https://github.com/xapi-project/xen-api"
+    },
+    {
+      "term": "XCP-ng",
+      "abbreviation": "XCP New Generation",
+      "definition": "https://xcp-ng.org/",
+      "relatedTerms": ["XCP"]
+    },
+    {
+      "term": "XCP",
+      "abbreviation": "Xen Cloud Platform",
+      "definition": "https://wiki.xenproject.org/wiki/XCP_Overview",
+      "relatedTerms": ["XCP-ng"]
+    },
+    {
+      "term": "XOA",
+      "abbreviation": "Xen Orchestra Appliance",
+      "definition": "/management/manage-at-scale/xo-web-ui/"
+    },
+    {
+      "term": "XOSTOR",
+      "definition": "Hyper-convergence solution based on LINSTOR",
+      "abbreviation": "Xen Orchestra STORage",
+      "relatedTerms": ["LINSTOR", "DRBD"]
+    }
+  ]
+}
