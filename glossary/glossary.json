@@ -58,11 +58,6 @@
       "abbreviation": "64-bit Arm (AArch64)"
     },
     {
-      "term": "ASCII",
-      "definition": "7-bit character encoding for basic Latin text.",
-      "abbreviation": "American Standard Code for Information Interchange"
-    },
-    {
       "term": "ASID",
       "definition": "A tag on TLB entries letting the CPU distinguish address spaces without full TLB flushes; relevant to Xen context-switch performance.",
       "abbreviation": "Address Space Identifier",
@@ -82,11 +77,6 @@
       "term": "BDR",
       "definition": "The combined practice of backing up data and being able to recover service after a disaster.",
       "abbreviation": "Backup and Disaster Recovery"
-    },
-    {
-      "term": "BGP",
-      "definition": "The routing protocol that exchanges reachability between autonomous systems; underpins EVPN/overlay fabrics.",
-      "abbreviation": "Border Gateway Protocol"
     },
     {
       "term": "BIOS",
@@ -196,11 +186,6 @@
         "hypervisor",
         "XCP-ng"
       ]
-    },
-    {
-      "term": "CMS",
-      "definition": "Software for authoring and publishing web content (e.g. Ghost, WordPress).",
-      "abbreviation": "Content Management System"
     },
     {
       "term": "Coalesce",
@@ -387,16 +372,6 @@
       ]
     },
     {
-      "term": "EDR",
-      "definition": "Security software that monitors a machine for threats; in XCP-ng the guidance is to run it inside VMs, not on the hypervisor host.",
-      "abbreviation": "Endpoint Detection and Response",
-      "relatedTerms": [
-        "hypervisor",
-        "XCP-ng",
-        "VM"
-      ]
-    },
-    {
       "term": "EFI",
       "definition": "Firmware interface between platform firmware and the OS; see UEFI, its modern form.",
       "abbreviation": "Extensible Firmware Interface",
@@ -452,11 +427,6 @@
       ]
     },
     {
-      "term": "ETSI",
-      "definition": "European standards body for ICT, including telecom and security standards.",
-      "abbreviation": "European Telecommunications Standards Institute"
-    },
-    {
       "term": "EUC",
       "definition": "Delivery of desktops and applications to end users (e.g. VDI); a workload class for virtualization platforms.",
       "abbreviation": "End-User Computing",
@@ -490,16 +460,6 @@
       ]
     },
     {
-      "term": "FIDO2",
-      "definition": "Open authentication standard (WebAuthn + CTAP) for passwordless and hardware-key login.",
-      "abbreviation": "FIDO2"
-    },
-    {
-      "term": "FIPS",
-      "definition": "US government standards, notably FIPS 140 for validated cryptographic modules.",
-      "abbreviation": "Federal Information Processing Standards"
-    },
-    {
       "term": "FLR",
       "definition": "PCIe mechanism to reset an individual device function; important for clean device passthrough.",
       "abbreviation": "Function Level Reset"
@@ -531,14 +491,6 @@
       "term": "GHA",
       "definition": "GitHub's built-in CI/CD automation system.",
       "abbreviation": "GitHub Actions"
-    },
-    {
-      "term": "Glacier",
-      "definition": "Amazon's low-cost archival storage tier; data retrieval takes hours. Dramatically cheaper than standard S3 but not suitable for frequent access.",
-      "abbreviation": "AWS Glacier / Deep Archive",
-      "relatedTerms": [
-        "S3"
-      ]
     },
     {
       "term": "GPG",
@@ -602,11 +554,6 @@
       "term": "HPC",
       "definition": "Use of clustered, high-throughput compute for demanding workloads such as simulation and large-scale data processing.",
       "abbreviation": "High Performance Computing"
-    },
-    {
-      "term": "HSM",
-      "definition": "Tamper-resistant device that generates and guards cryptographic keys.",
-      "abbreviation": "Hardware Security Module"
     },
     {
       "term": "HVM",
@@ -739,11 +686,6 @@
       "term": "JVM",
       "definition": "Runtime that executes Java bytecode.",
       "abbreviation": "Java Virtual Machine"
-    },
-    {
-      "term": "JWT",
-      "definition": "A compact, signed token format used to carry claims for authentication/authorization.",
-      "abbreviation": "JSON Web Token"
     },
     {
       "term": "KEK",
@@ -901,11 +843,6 @@
       ]
     },
     {
-      "term": "MFA",
-      "definition": "Authentication requiring two or more independent factors.",
-      "abbreviation": "Multi-Factor Authentication"
-    },
-    {
       "term": "MMIO",
       "definition": "Device registers exposed in the CPU's address space so I/O looks like memory access.",
       "abbreviation": "Memory-Mapped I/O"
@@ -919,16 +856,6 @@
       ]
     },
     {
-      "term": "MPLS",
-      "definition": "Carrier networking technique that forwards packets by short labels rather than IP lookups.",
-      "abbreviation": "Multiprotocol Label Switching"
-    },
-    {
-      "term": "MQTT",
-      "definition": "Lightweight publish/subscribe messaging protocol common in IoT.",
-      "abbreviation": "Message Queuing Telemetry Transport"
-    },
-    {
       "term": "MSI",
       "definition": "PCIe interrupt delivery via memory writes rather than dedicated pins; handled by the hypervisor for guests.",
       "abbreviation": "Message Signaled Interrupts",
@@ -940,14 +867,6 @@
       "term": "MSP",
       "definition": "A company that operates IT services on behalf of customers; a key XCP-ng/XO channel.",
       "abbreviation": "Managed Service Provider"
-    },
-    {
-      "term": "MSSQL",
-      "definition": "Microsoft's relational database; a common Windows VM workload.",
-      "abbreviation": "Microsoft SQL Server",
-      "relatedTerms": [
-        "VM"
-      ]
     },
     {
       "term": "MTU",
@@ -1053,11 +972,6 @@
       "abbreviation": "Original Equipment Manufacturer"
     },
     {
-      "term": "OIDC",
-      "definition": "Identity layer on top of OAuth 2.0 for federated single sign-on.",
-      "abbreviation": "OpenID Connect"
-    },
-    {
       "term": "ONOS",
       "definition": "An open-source SDN controller.",
       "abbreviation": "Open Network Operating System",
@@ -1149,11 +1063,6 @@
       "abbreviation": "Open vSwitch Database"
     },
     {
-      "term": "OWASP",
-      "definition": "Nonprofit producing widely-used web application security guidance (e.g. the OWASP Top 10).",
-      "abbreviation": "Open Worldwide Application Security Project"
-    },
-    {
       "term": "P2M",
       "definition": "Xen memory mapping from guest-physical to machine (host) addresses; implemented in xen/arch/x86/mm/p2m*.c.",
       "abbreviation": "Physical to Machine"
@@ -1242,18 +1151,7 @@
     {
       "term": "PIV",
       "definition": "Smart-card standard (FIPS 201) for credential-based authentication.",
-      "abbreviation": "Personal Identity Verification",
-      "relatedTerms": [
-        "FIPS"
-      ]
-    },
-    {
-      "term": "PKCS",
-      "definition": "A family of cryptography standards (e.g. PKCS#11 for HSM interfaces).",
-      "abbreviation": "Public Key Cryptography Standards",
-      "relatedTerms": [
-        "HSM"
-      ]
+      "abbreviation": "Personal Identity Verification"
     },
     {
       "term": "PLIC",
@@ -1423,11 +1321,6 @@
       ]
     },
     {
-      "term": "RFC",
-      "definition": "The IETF document series defining internet standards and protocols.",
-      "abbreviation": "Request for Comments"
-    },
-    {
       "term": "RHEL",
       "definition": "Red Hat's commercial Linux distribution; a common guest OS.",
       "abbreviation": "Red Hat Enterprise Linux"
@@ -1520,11 +1413,6 @@
       ]
     },
     {
-      "term": "SBOM",
-      "definition": "A formal inventory of the components and dependencies in a piece of software.",
-      "abbreviation": "Software Bill of Materials"
-    },
-    {
       "term": "SDN",
       "definition": "Decoupling network control from forwarding so networks are programmable.",
       "abbreviation": "Software-Defined Networking"
@@ -1567,11 +1455,6 @@
       "abbreviation": "Secure Hash Algorithm"
     },
     {
-      "term": "SIEM",
-      "definition": "Platform that aggregates and correlates security logs for detection and response.",
-      "abbreviation": "Security Information and Event Management"
-    },
-    {
       "term": "SKU",
       "definition": "A distinct sellable product/variant identifier.",
       "abbreviation": "Stock Keeping Unit"
@@ -1580,11 +1463,6 @@
       "term": "SLA",
       "definition": "A contract defining the service quality (e.g. uptime, response times) a provider commits to.",
       "abbreviation": "Service Level Agreement"
-    },
-    {
-      "term": "SLAAC",
-      "definition": "IPv6 mechanism by which hosts self-assign addresses from router advertisements.",
-      "abbreviation": "Stateless Address Autoconfiguration"
     },
     {
       "term": "SMAPI",
@@ -1740,14 +1618,6 @@
       "relatedTerms": [
         "XCP-ng",
         "TLS"
-      ]
-    },
-    {
-      "term": "SUNRPC",
-      "definition": "The ONC remote-procedure-call protocol underlying NFS.",
-      "abbreviation": "Sun RPC",
-      "relatedTerms": [
-        "NFS"
       ]
     },
     {
@@ -2055,25 +1925,12 @@
       "abbreviation": "Virtual Private Network"
     },
     {
-      "term": "VPS",
-      "definition": "A VM sold as a hosting product.",
-      "abbreviation": "Virtual Private Server",
-      "relatedTerms": [
-        "VM"
-      ]
-    },
-    {
       "term": "VRAM",
       "definition": "Memory dedicated to a GPU's framebuffer and workloads.",
       "abbreviation": "Video RAM",
       "relatedTerms": [
         "GPU"
       ]
-    },
-    {
-      "term": "VRF",
-      "definition": "Multiple independent routing tables coexisting on one device.",
-      "abbreviation": "Virtual Routing and Forwarding"
     },
     {
       "term": "VSAN",
@@ -2103,21 +1960,9 @@
       ]
     },
     {
-      "term": "WAF",
-      "definition": "A filter that inspects and blocks malicious HTTP traffic to web apps.",
-      "abbreviation": "Web Application Firewall"
-    },
-    {
       "term": "WAN",
       "definition": "A network spanning sites or regions.",
       "abbreviation": "Wide Area Network"
-    },
-    {
-      "term": "Wazuh",
-      "definition": "An open-source security monitoring / EDR platform (agent plus server).",
-      "relatedTerms": [
-        "EDR"
-      ]
     },
     {
       "term": "WHQL",
