@@ -21,18 +21,6 @@
       "abbreviation": "Advanced Configuration and Power Interface"
     },
     {
-      "term": "AGPL",
-      "definition": "Copyleft licence requiring source disclosure even when the software is offered only over a network; used by Xen Orchestra.",
-      "abbreviation": "GNU Affero General Public License",
-      "relatedTerms": [
-        "Xen Orchestra"
-      ]
-    },
-    {
-      "term": "ARM",
-      "definition": "RISC CPU architecture family; a Xen porting target alongside x86 and RISC-V."
-    },
-    {
       "term": "base copy",
       "definition": "The read-only parent image left in a VDI chain after a snapshot; reaped by garbage collection once the chain coalesces.",
       "abbreviation": "Base copy (disk chain)",
@@ -117,11 +105,6 @@
         "VM",
         "XO"
       ]
-    },
-    {
-      "term": "CSI",
-      "definition": "Standard API for exposing storage systems to container orchestrators such as Kubernetes; referenced here as a storage driver.",
-      "abbreviation": "Container Storage Interface"
     },
     {
       "term": "CSR",
@@ -237,27 +220,11 @@
       "abbreviation": "End of Life"
     },
     {
-      "term": "EPAC",
-      "definition": "The RISC-V accelerator developed under the European Processor Initiative (EPI).",
-      "abbreviation": "European Processor Accelerator",
-      "relatedTerms": [
-        "EPI"
-      ]
-    },
-    {
       "term": "EPEL",
       "definition": "Community repository of add-on packages for RHEL and derivatives.",
       "abbreviation": "Extra Packages for Enterprise Linux",
       "relatedTerms": [
         "RHEL"
-      ]
-    },
-    {
-      "term": "EPI",
-      "definition": "EU-funded programme to build sovereign European High Performance Computing (HPC) processors; its main CPU line is Arm-based, with a RISC-V accelerator track (EPAC).",
-      "abbreviation": "European Processor Initiative",
-      "relatedTerms": [
-        "EPAC"
       ]
     },
     {
@@ -420,14 +387,6 @@
       "abbreviation": "Internet Relay Chat"
     },
     {
-      "term": "ISA",
-      "definition": "The contract between hardware and software defining a processor's instructions. RISC-V and POWER are *open* ISAs (royalty-free specifications); x86 and ARM are proprietary/licensed. An open ISA does not by itself make a chip open hardware or open firmware.",
-      "abbreviation": "Instruction Set Architecture",
-      "relatedTerms": [
-        "ARM"
-      ]
-    },
-    {
       "term": "ISO",
       "definition": "International standards body; also the common name for an optical-disc image file.",
       "abbreviation": "International Organization for Standardization"
@@ -489,22 +448,6 @@
       "abbreviation": "Local Area Network"
     },
     {
-      "term": "LDAP",
-      "definition": "Industry-standard directory protocol used for centralised authentication. XO has a plugin to authenticate users against LDAP/Active Directory.",
-      "abbreviation": "Lightweight Directory Access Protocol",
-      "relatedTerms": [
-        "XO"
-      ]
-    },
-    {
-      "term": "LGPL",
-      "definition": "A weaker-copyleft GPL variant allowing linking from non-GPL software.",
-      "abbreviation": "GNU Lesser General Public License",
-      "relatedTerms": [
-        "GPL"
-      ]
-    },
-    {
       "term": "LINSTOR",
       "definition": "Management layer from LINBIT that sits above DRBD. Handles provisioning, snapshots, and placement of replicated storage volumes across a cluster. The control plane for XOSTOR.",
       "abbreviation": "Linux Storage Orchestrator",
@@ -520,14 +463,6 @@
       "relatedTerms": [
         "XAPI",
         "PCI"
-      ]
-    },
-    {
-      "term": "LTR",
-      "definition": "An XO backup setting that keeps the first backup of each day/week/month/year, so weekly/monthly fulls are retained without separate jobs.",
-      "abbreviation": "Long-Term Retention",
-      "relatedTerms": [
-        "XO"
       ]
     },
     {
@@ -665,27 +600,9 @@
       ]
     },
     {
-      "term": "OBS",
-      "definition": "openSUSE build system for compiling and signing packages across distributions; considered here as a signing backend.",
-      "abbreviation": "Open Build Service"
-    },
-    {
-      "term": "OCI",
-      "definition": "Standards body defining container image and runtime formats.",
-      "abbreviation": "Open Container Initiative"
-    },
-    {
       "term": "OEM",
       "definition": "A company whose hardware is sold or rebranded by another vendor; a hardware-partner channel.",
       "abbreviation": "Original Equipment Manufacturer"
-    },
-    {
-      "term": "ONOS",
-      "definition": "An open-source SDN controller.",
-      "abbreviation": "Open Network Operating System",
-      "relatedTerms": [
-        "SDN"
-      ]
     },
     {
       "term": "OOM",
@@ -693,19 +610,9 @@
       "abbreviation": "Out of Memory"
     },
     {
-      "term": "OSI",
-      "definition": "The seven-layer reference model for networking; also the Open Source Initiative in licensing contexts.",
-      "abbreviation": "Open Systems Interconnection"
-    },
-    {
       "term": "OSS",
       "definition": "Software released under a licence permitting use, modification, and redistribution.",
       "abbreviation": "Open Source Software"
-    },
-    {
-      "term": "OTP",
-      "definition": "A single-use code, often time-based (TOTP), used as a second authentication factor.",
-      "abbreviation": "One-Time Password"
     },
     {
       "term": "OVA",
@@ -785,16 +692,6 @@
       ]
     },
     {
-      "term": "PIV",
-      "definition": "Smart-card standard (FIPS 201) for credential-based authentication.",
-      "abbreviation": "Personal Identity Verification"
-    },
-    {
-      "term": "PLIC",
-      "definition": "The RISC-V external interrupt controller; part of the Xen-on-RISC-V bring-up.",
-      "abbreviation": "Platform-Level Interrupt Controller"
-    },
-    {
       "term": "POC",
       "definition": "A small build demonstrating feasibility before fuller investment.",
       "abbreviation": "Proof of Concept"
@@ -826,11 +723,6 @@
       ]
     },
     {
-      "term": "PVH",
-      "definition": "A lightweight Xen guest mode: hardware virtualization for CPU/memory with paravirtualized I/O and no emulated devices.",
-      "abbreviation": "PVH (paravirtualized hardware) mode"
-    },
-    {
       "term": "PVHVM",
       "definition": "An HVM guest that loads paravirtual (PV) drivers for fast disk/network I/O.",
       "abbreviation": "PV-on-HVM",
@@ -851,14 +743,6 @@
       "relatedTerms": [
         "QEMU",
         "VM"
-      ]
-    },
-    {
-      "term": "QCOW",
-      "abbreviation": "QEMU Copy-On-Write",
-      "definition": "QEMU's qcow2 virtual-disk format supporting snapshots and thin provisioning.",
-      "relatedTerms": [
-        "QEMU"
       ]
     },
     {
@@ -931,11 +815,6 @@
       ]
     },
     {
-      "term": "RPO",
-      "definition": "The maximum acceptable data loss, measured as the age of the last usable backup.",
-      "abbreviation": "Recovery Point Objective"
-    },
-    {
       "term": "RPU",
       "definition": "XCP-ng/XAPI procedure that patches a pool host-by-host, evacuating VMs to avoid downtime.",
       "abbreviation": "Rolling Pool Update",
@@ -947,24 +826,6 @@
       "term": "RSA",
       "definition": "A widely-used public-key cryptosystem.",
       "abbreviation": "Rivest–Shamir–Adleman"
-    },
-    {
-      "term": "RTAS",
-      "definition": "Firmware-provided runtime services on POWER (reboot, error logging, device config) that a pSeries guest calls; part of the PAPR contract.",
-      "abbreviation": "Run-Time Abstraction Services",
-      "relatedTerms": [
-        "pSeries",
-        "PAPR"
-      ]
-    },
-    {
-      "term": "RTL",
-      "definition": "The hardware-design abstraction (in Verilog/VHDL) describing a chip's logic. An \"open RTL\" core publishes this source (e.g. CVA6) — open hardware at the design level, distinct from an open ISA.",
-      "abbreviation": "Register-Transfer Level",
-      "relatedTerms": [
-        "CVA6",
-        "ISA"
-      ]
     },
     {
       "term": "S3",
@@ -988,15 +849,6 @@
       "abbreviation": "Software-Defined Networking"
     },
     {
-      "term": "SDS",
-      "definition": "Storage pooled and managed in software across commodity nodes; XOSTOR is XCP-ng's software-defined storage.",
-      "abbreviation": "Software-Defined Storage",
-      "relatedTerms": [
-        "XCP-ng",
-        "XOSTOR"
-      ]
-    },
-    {
       "term": "SEV",
       "definition": "AMD feature encrypting a VM's memory to isolate it from the hypervisor; of interest to Xen confidential computing.",
       "abbreviation": "Secure Encrypted Virtualization",
@@ -1014,11 +866,6 @@
       "term": "SHA",
       "definition": "A family of cryptographic hash functions (SHA-1/2/3).",
       "abbreviation": "Secure Hash Algorithm"
-    },
-    {
-      "term": "SLA",
-      "definition": "A contract defining the service quality (e.g. uptime, response times) a provider commits to.",
-      "abbreviation": "Service Level Agreement"
     },
     {
       "term": "SMAPI",
@@ -1108,11 +955,6 @@
       ]
     },
     {
-      "term": "SSO",
-      "definition": "Authenticating once to gain access to multiple applications.",
-      "abbreviation": "Single Sign-On"
-    },
-    {
       "term": "state.db",
       "definition": "XAPI's pool database file — the single source of truth for which VMs, hosts and storage exist in the pool.",
       "abbreviation": "XAPI pool database",
@@ -1120,11 +962,6 @@
         "XAPI",
         "VM"
       ]
-    },
-    {
-      "term": "STIG",
-      "definition": "US DoD hardening guides for configuring systems securely.",
-      "abbreviation": "Security Technical Implementation Guide"
     },
     {
       "term": "stunnel",
@@ -1227,11 +1064,6 @@
       "term": "UTC",
       "definition": "The primary time standard; clock skew between hosts causes subtle failures.",
       "abbreviation": "Coordinated Universal Time"
-    },
-    {
-      "term": "UTM",
-      "definition": "A security appliance combining firewall, IPS, filtering, and more.",
-      "abbreviation": "Unified Threat Management"
     },
     {
       "term": "UUID",
@@ -1368,25 +1200,9 @@
       ]
     },
     {
-      "term": "VNI",
-      "definition": "The 24-bit segment ID that isolates tenants on a VXLAN overlay.",
-      "abbreviation": "VXLAN Network Identifier",
-      "relatedTerms": [
-        "VXLAN"
-      ]
-    },
-    {
       "term": "VPN",
       "definition": "An encrypted tunnel extending a private network across untrusted links.",
       "abbreviation": "Virtual Private Network"
-    },
-    {
-      "term": "VRAM",
-      "definition": "Memory dedicated to a GPU's framebuffer and workloads.",
-      "abbreviation": "Video RAM",
-      "relatedTerms": [
-        "GPU"
-      ]
     },
     {
       "term": "VSAN",
