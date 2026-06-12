@@ -38,7 +38,8 @@
     },
     {
       "term": "ARM",
-      "definition": "RISC CPU architecture family; a Xen porting target alongside x86 and RISC-V.",
+      "definition": "RISC CPU architecture family; a Xen porting target alongside x86 and RISC-V."
+    },
     {
       "term": "base copy",
       "definition": "The read-only parent image left in a VDI chain after a snapshot; reaped by garbage collection once the chain coalesces.",
@@ -1278,6 +1279,7 @@
         "vCPU"
       ]
     },
+    {
       "term": "SNP",
       "definition": "AMD SEV-SNP feature adding memory-integrity protection for confidential VMs; relevant to Xen guest support.",
       "abbreviation": "Secure Nested Paging",
