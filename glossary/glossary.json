@@ -37,34 +37,8 @@
       ]
     },
     {
-      "term": "AHV",
-      "definition": "Nutanix's KVM-based hypervisor; one of the platforms VMware migrants come from.",
-      "abbreviation": "Acropolis Hypervisor",
-      "relatedTerms": [
-        "hypervisor"
-      ]
-    },
-    {
       "term": "ARM",
       "definition": "RISC CPU architecture family; a Xen porting target alongside x86 and RISC-V.",
-      "abbreviation": "Arm architecture",
-      "relatedTerms": [
-        "RISC"
-      ]
-    },
-    {
-      "term": "ARM64",
-      "definition": "The 64-bit Arm instruction set; a Xen/XCP-ng porting target.",
-      "abbreviation": "64-bit Arm (AArch64)"
-    },
-    {
-      "term": "ASID",
-      "definition": "A tag on TLB entries letting the CPU distinguish address spaces without full TLB flushes; relevant to Xen context-switch performance.",
-      "abbreviation": "Address Space Identifier",
-      "relatedTerms": [
-        "TLB"
-      ]
-    },
     {
       "term": "base copy",
       "definition": "The read-only parent image left in a VDI chain after a snapshot; reaped by garbage collection once the chain coalesces.",
@@ -114,60 +88,12 @@
       ]
     },
     {
-      "term": "BSD",
-      "definition": "A family of Unix-derived operating systems and the permissive licence sharing the name.",
-      "abbreviation": "Berkeley Software Distribution"
-    },
-    {
-      "term": "BTRFS",
-      "definition": "Modern Linux copy-on-write filesystem with built-in multi-disk RAID-like features. Used by Synology DSM on multi-bay NAS units; not native to XCP-ng but can appear in P2V / data-recovery scenarios.",
-      "abbreviation": "B-tree filesystem",
-      "relatedTerms": [
-        "XCP-ng",
-        "NAS",
-        "P2V"
-      ]
-    },
-    {
-      "term": "C1E",
-      "definition": "Enhanced halt state that drops CPU voltage and frequency when a core is idle to save power. A BIOS-level setting that can add wake latency for latency-sensitive workloads; covered in Tobias Kreidl's tuning series.",
-      "abbreviation": "C1 Enhanced (CPU idle state)"
-    },
-    {
-      "term": "CBR",
-      "definition": "An XO backup mode that keeps a near-live copy of a VM on another SR or pool by replicating incremental changes on a schedule.",
-      "abbreviation": "Continuous (Backup) Replication",
-      "relatedTerms": [
-        "VM",
-        "XO",
-        "SR"
-      ]
-    },
-    {
-      "term": "CBT",
-      "definition": "Mechanism that records which blocks of a virtual disk have changed since the last snapshot, so subsequent backups only copy what's new instead of scanning the whole disk.",
-      "abbreviation": "Changed Block Tracking"
-    },
-    {
-      "term": "CCM",
-      "definition": "Kubernetes control-plane component that integrates the cluster with a cloud provider's APIs (load balancers, nodes, routes).",
-      "abbreviation": "Cloud Controller Manager"
-    },
-    {
       "term": "certbot",
       "definition": "The standard EFF command-line client that requests and renews free Let's Encrypt (ACME) TLS certificates.",
       "abbreviation": "certbot",
       "relatedTerms": [
         "ACME",
         "TLS"
-      ]
-    },
-    {
-      "term": "CF AVERAGE",
-      "definition": "RRDtool's default way of condensing many raw samples into one stored data point by averaging them (others are MIN/MAX/LAST). Determines what XO's per-VM stats return at each granularity.",
-      "abbreviation": "Consolidation Function: Average",
-      "relatedTerms": [
-        "XO"
       ]
     },
     {
@@ -199,6 +125,8 @@
     {
       "term": "CPU weight",
       "definition": "Relative share of CPU time a VM gets when hosts are contended; XO exposes it as Default/Quarter/Half/etc.",
+      "aliases": "weight",
+      "caseSensitive": true,
       "relatedTerms": [
         "VM",
         "XO"
@@ -232,35 +160,9 @@
       "abbreviation": "Certificate Signing Request"
     },
     {
-      "term": "CUDA",
-      "definition": "NVIDIA's parallel-computing platform and API for general-purpose GPU workloads.",
-      "abbreviation": "Compute Unified Device Architecture",
-      "relatedTerms": [
-        "GPU"
-      ]
-    },
-    {
-      "term": "CVA6",
-      "definition": "An open-source 64-bit RISC-V application-class CPU core whose RTL is published; commonly run on FPGA. An example of open hardware at the core-design level (distinct from the open RISC-V ISA).",
-      "abbreviation": "(no expansion; formerly Ariane)",
-      "relatedTerms": [
-        "FPGA",
-        "ISA",
-        "RTL"
-      ]
-    },
-    {
       "term": "CVE",
       "definition": "The standard identifier scheme for publicly disclosed security vulnerabilities.",
       "abbreviation": "Common Vulnerabilities and Exposures"
-    },
-    {
-      "term": "DBPM",
-      "definition": "CPU power-management scheme that scales frequency to load. The BIOS chooses who controls it: OS DBPM lets the hypervisor/OS govern P-states, System DBPM keeps control in firmware. A central topic of Tobias Kreidl's \"Tale of Two Servers\" Part 1.",
-      "abbreviation": "Demand-Based Power Management",
-      "relatedTerms": [
-        "BIOS"
-      ]
     },
     {
       "term": "Debian",
@@ -470,11 +372,6 @@
       "abbreviation": "Free and Open Source Software"
     },
     {
-      "term": "FPGA",
-      "definition": "A reconfigurable logic chip programmed after manufacture.",
-      "abbreviation": "Field-Programmable Gate Array"
-    },
-    {
       "term": "GC",
       "definition": "XCP-ng background process that reclaims storage used by orphaned snapshot chains after backup or replication jobs.",
       "abbreviation": "Garbage Collection",
@@ -530,11 +427,6 @@
       "relatedTerms": [
         "SAS"
       ]
-    },
-    {
-      "term": "HCI",
-      "definition": "Architecture combining compute and software-defined storage on the same nodes.",
-      "abbreviation": "Hyper-Converged Infrastructure"
     },
     {
       "term": "HCL",
@@ -596,34 +488,10 @@
       "abbreviation": "Institute of Electrical and Electronics Engineers"
     },
     {
-      "term": "IMSIC",
-      "definition": "RISC-V interrupt controller delivering message-signalled interrupts; needed for dom0 console and IRQ handling on RISC-V.",
-      "abbreviation": "Incoming MSI Controller"
-    },
-    {
-      "term": "InCommon",
-      "definition": "A US research-and-education identity federation and certificate authority widely used by universities; issues certificates via ACME with EAB credentials.",
-      "abbreviation": "InCommon",
-      "relatedTerms": [
-        "ACME",
-        "EAB"
-      ]
-    },
-    {
       "term": "IO priority",
       "definition": "Relative disk-IO scheduling weight given to a VM's storage traffic (sched-pri).",
       "relatedTerms": [
         "VM"
-      ]
-    },
-    {
-      "term": "IOMMU",
-      "definition": "Hardware that translates and isolates device DMA addresses; the basis for safe PCI passthrough.",
-      "abbreviation": "Input/Output Memory Management Unit",
-      "relatedTerms": [
-        "PCI passthrough",
-        "PCI",
-        "DMA"
       ]
     },
     {
@@ -747,11 +615,6 @@
       ]
     },
     {
-      "term": "LKML",
-      "definition": "The primary mailing list where Linux kernel development happens.",
-      "abbreviation": "Linux Kernel Mailing List"
-    },
-    {
       "term": "lspci",
       "definition": "Standard Linux command that lists the PCI devices physically present on a host, regardless of what XAPI has recorded. Useful for spotting \"ghost\" or stale device entries.",
       "abbreviation": "list PCI",
@@ -777,16 +640,6 @@
       "term": "LUN",
       "definition": "A number used to identify a logical unit",
       "abbreviation": "Logical Unit Number"
-    },
-    {
-      "term": "lvhdutil",
-      "definition": "A Python helper module in XCP-ng's storage manager (SMAPIv1) for LVHD (LVM-backed VHD) volume operations; imported by CloudStack's XCP-ng plugin.",
-      "relatedTerms": [
-        "CloudStack",
-        "SMAPIv1",
-        "XCP-ng",
-        "VHD"
-      ]
     },
     {
       "term": "LVM",
@@ -917,11 +770,6 @@
       ]
     },
     {
-      "term": "NSX",
-      "definition": "VMware's network virtualization/SDN product.",
-      "abbreviation": "VMware NSX"
-    },
-    {
       "term": "NTFS",
       "definition": "Microsoft Windows' native filesystem. Reading or writing it on a Linux host (such as XCP-ng dom0) needs the ntfs-3g driver, which is not installable from dom0's default repos.",
       "abbreviation": "New Technology File System",
@@ -983,33 +831,6 @@
       "term": "OOM",
       "definition": "The condition where a system exhausts available RAM; the Linux kernel's OOM killer then terminates processes to recover memory.",
       "abbreviation": "Out of Memory"
-    },
-    {
-      "term": "OPA",
-      "definition": "Policy engine that evaluates declarative authorization/admission rules, e.g. at a gateway.",
-      "abbreviation": "Open Policy Agent"
-    },
-    {
-      "term": "OPAL",
-      "definition": "The firmware runtime-services interface on bare-metal OpenPOWER systems (implemented by the skiboot firmware); the PowerNV equivalent of what PAPR/RTAS provide to virtualized POWER guests.",
-      "abbreviation": "OpenPOWER Abstraction Layer",
-      "relatedTerms": [
-        "OpenPOWER",
-        "PowerNV"
-      ]
-    },
-    {
-      "term": "OpenPOWER",
-      "definition": "Open hardware/firmware initiative built around the POWER instruction set, enabling fully open bare-metal POWER systems (e.g. Raptor's Talos/Blackbird)."
-    },
-    {
-      "term": "OpenSBI",
-      "definition": "The open-source RISC-V firmware implementing the SBI runtime-services contract between the OS (supervisor mode) and machine mode; a genuinely open firmware layer on RISC-V.",
-      "abbreviation": "Open Supervisor Binary Interface (implementation)"
-    },
-    {
-      "term": "OpenTitan",
-      "definition": "Open-source silicon root-of-trust project (secure boot and hardware identity); a rare example of open-hardware security silicon."
     },
     {
       "term": "OSI",
@@ -1077,16 +898,6 @@
       ]
     },
     {
-      "term": "PAPR",
-      "definition": "The specification for how a POWER guest talks to a hypervisor (hypercalls + RTAS); the interface the pSeries platform implements.",
-      "abbreviation": "Power Architecture Platform Reference",
-      "relatedTerms": [
-        "hypervisor",
-        "pSeries",
-        "RTAS"
-      ]
-    },
-    {
       "term": "PBD",
       "abbreviation": "Physical Block Device",
       "definition": "The XAPI object connecting an XCP-ng host to a storage repository.",
@@ -1096,21 +907,9 @@
       ]
     },
     {
-      "term": "PBS",
-      "definition": "Proxmox's deduplicating backup server; appears in competitive comparisons with Xen Orchestra backup.",
-      "abbreviation": "Proxmox Backup Server",
-      "relatedTerms": [
-        "Xen Orchestra"
-      ]
-    },
-    {
       "term": "PCI",
       "definition": "The bus standard (PCIe) for attaching devices; the unit of device passthrough. (In payments, PCI also = PCI DSS.)",
       "abbreviation": "Peripheral Component Interconnect"
-    },
-    {
-      "term": "PCI ID",
-      "definition": "The vendor:device identifier a Linux driver matches against to claim a device; a missing ID means the driver won't bind and the hardware appears absent."
     },
     {
       "term": "PCI passthrough",
@@ -1203,23 +1002,6 @@
       "definition": "A network setting that lets a virtual interface receive all traffic on its segment, not just frames addressed to it."
     },
     {
-      "term": "pSeries",
-      "definition": "The POWER platform type for running as a guest under a hypervisor (PowerVM/KVM) via the PAPR interface. Contrast PowerNV (bare metal).",
-      "relatedTerms": [
-        "hypervisor",
-        "PowerNV",
-        "PAPR"
-      ]
-    },
-    {
-      "term": "PSP",
-      "definition": "AMD's on-die security coprocessor running closed, high-privilege firmware; the AMD counterpart to Intel's Management Engine (ME), and a hardware self-sovereignty concern.",
-      "abbreviation": "Platform Security Processor (AMD)",
-      "relatedTerms": [
-        "ME"
-      ]
-    },
-    {
       "term": "PV",
       "abbreviation": "Paravirtualization",
       "definition": "A Xen guest mode where a modified guest kernel makes hypercalls to the hypervisor instead of using hardware virtualization extensions. Xen's original lightweight mode; fully removed in XCP-ng 8.3 in favour of HVM and PVH.",
@@ -1288,10 +1070,6 @@
       "term": "RAID",
       "definition": "Combining disks for redundancy and/or performance.",
       "abbreviation": "Redundant Array of Independent Disks"
-    },
-    {
-      "term": "RAID-6",
-      "definition": "A disk-array layout that survives two simultaneous drive failures by storing double parity. The trade-off is a heavier write penalty than mirroring (RAID-1/10), which matters for write-heavy workloads such as backups."
     },
     {
       "term": "RBAC",
@@ -1427,15 +1205,6 @@
       ]
     },
     {
-      "term": "secondary storage",
-      "definition": "In CloudStack, the storage for templates, snapshots and ISOs (as opposed to primary storage for running VM disks).",
-      "relatedTerms": [
-        "CloudStack",
-        "ISO",
-        "VM"
-      ]
-    },
-    {
       "term": "SEV",
       "definition": "AMD feature encrypting a VM's memory to isolate it from the hypervisor; of interest to Xen confidential computing.",
       "abbreviation": "Secure Encrypted Virtualization",
@@ -1509,23 +1278,12 @@
         "vCPU"
       ]
     },
-    {
-      "term": "SNMP",
-      "definition": "Protocol for monitoring and managing network devices.",
-      "abbreviation": "Simple Network Management Protocol"
-    },
-    {
       "term": "SNP",
       "definition": "AMD SEV-SNP feature adding memory-integrity protection for confidential VMs; relevant to Xen guest support.",
       "abbreviation": "Secure Nested Paging",
       "relatedTerms": [
         "VM"
       ]
-    },
-    {
-      "term": "SOC",
-      "definition": "The team/function that monitors and responds to security events.",
-      "abbreviation": "Security Operations Center"
     },
     {
       "term": "SPDK",
@@ -1558,14 +1316,6 @@
       ]
     },
     {
-      "term": "SRPMS",
-      "definition": "Plural of SRPM; the source packages directory/set for a distribution.",
-      "abbreviation": "Source RPMs",
-      "relatedTerms": [
-        "SRPM"
-      ]
-    },
-    {
       "term": "SSD",
       "definition": "Flash-based storage device with no moving parts.",
       "abbreviation": "Solid-State Drive"
@@ -1575,15 +1325,6 @@
       "definition": "The legacy name (now TLS) for the protocol securing network connections.",
       "abbreviation": "Secure Sockets Layer",
       "relatedTerms": [
-        "TLS"
-      ]
-    },
-    {
-      "term": "SSL/TLS",
-      "definition": "The encryption layer behind https:// connections; TLS is the modern successor to the older SSL.",
-      "abbreviation": "Secure Sockets Layer / Transport Layer Security",
-      "relatedTerms": [
-        "SSL",
         "TLS"
       ]
     },
@@ -1648,20 +1389,6 @@
       "abbreviation": "Transmission Control Protocol"
     },
     {
-      "term": "TDX",
-      "definition": "Intel's confidential-computing feature isolating VMs from the hypervisor (Intel's counterpart to AMD SEV-SNP).",
-      "abbreviation": "Trust Domain Extensions",
-      "relatedTerms": [
-        "hypervisor",
-        "VM"
-      ]
-    },
-    {
-      "term": "TEE",
-      "definition": "A hardware-isolated environment for running code and data confidentially.",
-      "abbreviation": "Trusted Execution Environment"
-    },
-    {
       "term": "TFTP",
       "definition": "A minimal UDP file-transfer protocol, commonly used in PXE boot.",
       "abbreviation": "Trivial File Transfer Protocol",
@@ -1676,14 +1403,6 @@
       "relatedTerms": [
         "NFS",
         "SR"
-      ]
-    },
-    {
-      "term": "TLB",
-      "definition": "CPU cache of address translations; its flush behaviour matters for hypervisor performance.",
-      "abbreviation": "Translation Lookaside Buffer",
-      "relatedTerms": [
-        "hypervisor"
       ]
     },
     {
@@ -1726,11 +1445,6 @@
       ]
     },
     {
-      "term": "UEK8",
-      "definition": "Oracle's Linux kernel build shipped with Oracle Linux.",
-      "abbreviation": "Oracle Unbreakable Enterprise Kernel 8"
-    },
-    {
       "term": "UEM",
       "definition": "Centralised management of desktops, mobiles, and other endpoints.",
       "abbreviation": "Unified Endpoint Management"
@@ -1769,11 +1483,6 @@
         "XCP-ng",
         "VM"
       ]
-    },
-    {
-      "term": "VAAI",
-      "definition": "VMware APIs that offload storage operations to the array; needs a vendor host-side plugin.",
-      "abbreviation": "vSphere APIs for Array Integration"
     },
     {
       "term": "VBD",
@@ -1865,11 +1574,6 @@
       ]
     },
     {
-      "term": "VIP",
-      "definition": "An IP address not bound to a single physical interface, used for failover or load balancing.",
-      "abbreviation": "Virtual IP"
-    },
-    {
       "term": "VLAN",
       "definition": "A way to segment network traffic at the switch/bridge level so different groups of devices appear to be on separate networks.",
       "abbreviation": "Virtual Local Area Network"
@@ -1908,15 +1612,6 @@
       "abbreviation": "VXLAN Network Identifier",
       "relatedTerms": [
         "VXLAN"
-      ]
-    },
-    {
-      "term": "vNUMA",
-      "definition": "The virtual NUMA topology presented to a guest VM so it can make NUMA-aware decisions internally.",
-      "abbreviation": "virtual NUMA",
-      "relatedTerms": [
-        "NUMA",
-        "VM"
       ]
     },
     {
@@ -1998,14 +1693,6 @@
       ]
     },
     {
-      "term": "XCP9",
-      "definition": "The 9.x release line of XCP-ng (tracking newer Xen and a refreshed dom0).",
-      "abbreviation": "XCP-ng 9",
-      "relatedTerms": [
-        "XCP-ng"
-      ]
-    },
-    {
       "term": "Xen Orchestra",
       "definition": "The web management interface used to administer XCP-ng pools, hosts, backups, and networking.",
       "abbreviation": "Xen Orchestra",
@@ -2054,23 +1741,6 @@
       ]
     },
     {
-      "term": "XO5",
-      "definition": "The version 5 (current stable) web UI of Xen Orchestra.",
-      "abbreviation": "Xen Orchestra 5",
-      "relatedTerms": [
-        "Xen Orchestra"
-      ]
-    },
-    {
-      "term": "XO6",
-      "definition": "The next-generation Xen Orchestra UI, rolled out alongside XO5.",
-      "abbreviation": "Xen Orchestra 6",
-      "relatedTerms": [
-        "Xen Orchestra",
-        "XO5"
-      ]
-    },
-    {
       "term": "XOA",
       "abbreviation": "Xen Orchestra Appliance",
       "definition": "The pre-packaged virtual appliance version of Xen Orchestra distributed by Vates. Deploys as a ready-to-run VM rather than requiring a manual source build. Includes paid features (advanced backup, DR) not in the open-source edition.",
@@ -2078,14 +1748,6 @@
         "Xen Orchestra",
         "DR",
         "VM"
-      ]
-    },
-    {
-      "term": "XOPROXY",
-      "definition": "A lightweight XO component deployed near a pool to offload backup/replication traffic.",
-      "abbreviation": "Xen Orchestra Proxy",
-      "relatedTerms": [
-        "XO"
       ]
     },
     {
