@@ -16,14 +16,6 @@
       "abbreviation": "Access Control List"
     },
     {
-      "term": "ACME",
-      "definition": "The protocol certbot speaks to a certificate authority to prove domain control and obtain or renew certificates automatically.",
-      "abbreviation": "Automatic Certificate Management Environment",
-      "relatedTerms": [
-        "certbot"
-      ]
-    },
-    {
       "term": "ACPI",
       "definition": "Open standard for hardware discovery, configuration, and power management exposed by firmware to the OS.",
       "abbreviation": "Advanced Configuration and Power Interface"
@@ -49,35 +41,11 @@
       ]
     },
     {
-      "term": "BDR",
-      "definition": "The combined practice of backing up data and being able to recover service after a disaster.",
-      "abbreviation": "Backup and Disaster Recovery"
-    },
-    {
       "term": "BIOS",
       "definition": "Low-level firmware that initialises server hardware before the OS boots; its power and Turbo settings can affect VM performance.",
       "abbreviation": "Basic Input/Output System",
       "relatedTerms": [
         "VM"
-      ]
-    },
-    {
-      "term": "blocked_operations",
-      "definition": "A XAPI object flag listing operations forbidden on a VM; XOA sets it so the appliance cannot accidentally destroy itself. Cleared with xe vm-param-remove.",
-      "relatedTerms": [
-        "XAPI",
-        "XOA",
-        "VM"
-      ]
-    },
-    {
-      "term": "BMC",
-      "definition": "Dedicated chip on the server motherboard that lets you power-cycle, access the BIOS, and monitor hardware health out-of-band — even when the OS is off or crashed. iDRAC (Dell), iLO (HPE), and XCC (Lenovo) are BMC implementations; IPMI is the open standard protocol that BMCs speak.",
-      "abbreviation": "Baseboard Management Controller",
-      "relatedTerms": [
-        "iDRAC",
-        "IPMI",
-        "BIOS"
       ]
     },
     {
@@ -124,9 +92,9 @@
       "abbreviation": "Copy-on-Write"
     },
     {
-      "term": "CPU weight",
+      "term": "weight",
       "definition": "Relative share of CPU time a VM gets when hosts are contended; XO exposes it as Default/Quarter/Half/etc.",
-      "aliases": "weight",
+      "aliases": "CPU weight",
       "caseSensitive": true,
       "relatedTerms": [
         "VM",
@@ -247,31 +215,12 @@
       ]
     },
     {
-      "term": "DRP",
-      "definition": "Documented procedures for restoring IT services after a major outage or disaster.",
-      "abbreviation": "Disaster Recovery Plan"
-    },
-    {
       "term": "DRS",
       "definition": "VMware's feature that load-balances VMs across hosts; a capability often compared against XCP-ng.",
       "abbreviation": "Distributed Resource Scheduler",
       "relatedTerms": [
         "XCP-ng",
         "VM"
-      ]
-    },
-    {
-      "term": "DTS",
-      "definition": "Text description of non-discoverable hardware for Arm/RISC-V boot; consumed by Xen and the kernel.",
-      "abbreviation": "Device Tree Source"
-    },
-    {
-      "term": "EAB",
-      "definition": "An ACME extension where the CA issues a key ID and HMAC secret so automated certificate requests are tied to a specific (often paid) account; required by CAs such as InCommon.",
-      "abbreviation": "External Account Binding",
-      "relatedTerms": [
-        "InCommon",
-        "ACME"
       ]
     },
     {
@@ -305,11 +254,10 @@
     },
     {
       "term": "EPI",
-      "definition": "EU-funded programme to build sovereign European HPC processors; its main CPU line is Arm-based, with a RISC-V accelerator track (EPAC).",
+      "definition": "EU-funded programme to build sovereign European High Performance Computing (HPC) processors; its main CPU line is Arm-based, with a RISC-V accelerator track (EPAC).",
       "abbreviation": "European Processor Initiative",
       "relatedTerms": [
-        "EPAC",
-        "HPC"
+        "EPAC"
       ]
     },
     {
@@ -330,23 +278,6 @@
       ]
     },
     {
-      "term": "EUC",
-      "definition": "Delivery of desktops and applications to end users (e.g. VDI); a workload class for virtualization platforms.",
-      "abbreviation": "End-User Computing",
-      "relatedTerms": [
-        "VDI"
-      ]
-    },
-    {
-      "term": "EVPN",
-      "definition": "BGP-based control plane for Layer-2/3 VPNs over IP fabrics, commonly paired with VXLAN.",
-      "abbreviation": "Ethernet VPN",
-      "relatedTerms": [
-        "VXLAN",
-        "VPN"
-      ]
-    },
-    {
       "term": "EXT",
       "definition": "An alternative local SR type in XCP-ng that uses thin provisioning, meaning disk space is only consumed as data is written.",
       "abbreviation": "EXT SR",
@@ -361,11 +292,6 @@
       "relatedTerms": [
         "VM"
       ]
-    },
-    {
-      "term": "FLR",
-      "definition": "PCIe mechanism to reset an individual device function; important for clean device passthrough.",
-      "abbreviation": "Function Level Reset"
     },
     {
       "term": "FOSS",
@@ -384,11 +310,6 @@
       "term": "GFS2",
       "definition": "Red Hat's shared-disk cluster filesystem allowing concurrent access from multiple nodes.",
       "abbreviation": "Global File System 2"
-    },
-    {
-      "term": "GHA",
-      "definition": "GitHub's built-in CI/CD automation system.",
-      "abbreviation": "GitHub Actions"
     },
     {
       "term": "GPG",
@@ -435,18 +356,13 @@
       "abbreviation": "Hardware Compatibility List"
     },
     {
-      "term": "heap limit",
-      "definition": "The maximum memory the Node.js xo-server process will allocate; independent of the VM's total RAM until configured.",
-      "abbreviation": "Node.js heap limit",
+      "term": "heap",
+      "definition": "The memory the Node.js xo-server process will allocate; independent of the VM's total RAM until configured.",
+      "abbreviation": "Node.js heap",
       "relatedTerms": [
         "xo-server",
         "VM"
       ]
-    },
-    {
-      "term": "HPC",
-      "definition": "Use of clustered, high-throughput compute for demanding workloads such as simulation and large-scale data processing.",
-      "abbreviation": "High Performance Computing"
     },
     {
       "term": "HVM",
@@ -466,17 +382,9 @@
       ]
     },
     {
-      "term": "IAM",
-      "definition": "Systems and policies governing who can authenticate and what they may do.",
-      "abbreviation": "Identity and Access Management"
-    },
-    {
       "term": "iDRAC",
       "definition": "Dell's brand name for its BMC — the out-of-band management card built into Dell PowerEdge servers. Lets you access the console and manage hardware without an OS.",
-      "abbreviation": "Integrated Dell Remote Access Controller",
-      "relatedTerms": [
-        "BMC"
-      ]
+      "abbreviation": "Integrated Dell Remote Access Controller"
     },
     {
       "term": "IEC",
@@ -487,13 +395,6 @@
       "term": "IEEE",
       "definition": "Professional body and standards organisation (e.g. IEEE 802 networking).",
       "abbreviation": "Institute of Electrical and Electronics Engineers"
-    },
-    {
-      "term": "IO priority",
-      "definition": "Relative disk-IO scheduling weight given to a VM's storage traffic (sched-pri).",
-      "relatedTerms": [
-        "VM"
-      ]
     },
     {
       "term": "iostat",
@@ -511,10 +412,7 @@
     {
       "term": "IPMI",
       "definition": "Open standard (PICMG) for out-of-band server management. Defines the protocol that BMCs speak. ipmitool is the common CLI client.",
-      "abbreviation": "Intelligent Platform Management Interface",
-      "relatedTerms": [
-        "BMC"
-      ]
+      "abbreviation": "Intelligent Platform Management Interface"
     },
     {
       "term": "IRC",
@@ -547,14 +445,14 @@
       ]
     },
     {
-      "term": "ISV",
-      "definition": "A company that builds and sells software, often as an ecosystem partner.",
-      "abbreviation": "Independent Software Vendor"
-    },
-    {
-      "term": "JVM",
-      "definition": "Runtime that executes Java bytecode.",
-      "abbreviation": "Java Virtual Machine"
+      "term": "JSON-RPC",
+      "definition": "A JSON-based wire protocol for remote procedure calls (RPC), defining only a few data types and commands.",
+      "abbreviation": "JavaScript Object Notation-Remote Procedure Call",
+      "relatedTerms": [
+        "API",
+        "REST",
+        "XML-RPC"
+      ]
     },
     {
       "term": "KEK",
@@ -663,11 +561,6 @@
       ]
     },
     {
-      "term": "LXC",
-      "definition": "OS-level virtualization using Linux namespaces and cgroups.",
-      "abbreviation": "Linux Containers"
-    },
-    {
       "term": "MAC",
       "definition": "The hardware address identifying a network interface on a LAN.",
       "abbreviation": "Media Access Control address",
@@ -681,46 +574,12 @@
       "abbreviation": "Master Boot Record"
     },
     {
-      "term": "ME",
-      "definition": "A hidden, high-privilege microcontroller in Intel platforms running closed firmware; a central concern for hardware self-sovereignty and auditability. AMD's counterpart is the PSP.",
-      "abbreviation": "Management Engine (Intel)",
-      "relatedTerms": [
-        "PSP"
-      ]
-    },
-    {
-      "term": "MegaRAID 9560-16i",
-      "definition": "A Broadcom/LSI tri-mode hardware RAID controller (16 internal ports), driven by mpi3mr.",
-      "relatedTerms": [
-        "mpi3mr",
-        "RAID"
-      ]
-    },
-    {
-      "term": "MMIO",
-      "definition": "Device registers exposed in the CPU's address space so I/O looks like memory access.",
-      "abbreviation": "Memory-Mapped I/O"
-    },
-    {
-      "term": "mpi3mr",
-      "definition": "Linux kernel driver for Broadcom's newer tri-mode (SAS/SATA/NVMe) storage controllers (MegaRAID 9500 / Aero family); hardware support depends on the driver knowing the card's PCI ID.",
-      "relatedTerms": [
-        "PCI ID",
-        "PCI"
-      ]
-    },
-    {
       "term": "MSI",
       "definition": "PCIe interrupt delivery via memory writes rather than dedicated pins; handled by the hypervisor for guests.",
       "abbreviation": "Message Signaled Interrupts",
       "relatedTerms": [
         "hypervisor"
       ]
-    },
-    {
-      "term": "MSP",
-      "definition": "A company that operates IT services on behalf of customers; a key XCP-ng/XO channel.",
-      "abbreviation": "Managed Service Provider"
     },
     {
       "term": "MTU",
@@ -742,7 +601,7 @@
       "abbreviation": "Network Block Device",
       "definition": "Protocol exposing a block device over the network; used by Xen Orchestra to stream disk data during backups.",
       "relatedTerms": [
-        "Xen Orchestra"
+        "XO"
       ]
     },
     {
@@ -863,14 +722,6 @@
       ]
     },
     {
-      "term": "OVN",
-      "definition": "SDN layer on top of Open vSwitch providing virtual networks, considered as a networking option.",
-      "abbreviation": "Open Virtual Network",
-      "relatedTerms": [
-        "SDN"
-      ]
-    },
-    {
       "term": "OVS",
       "definition": "The software-defined virtual switch used by XCP-ng to manage VM network traffic.",
       "abbreviation": "Open vSwitch",
@@ -883,11 +734,6 @@
       "term": "OVSDB",
       "definition": "The management protocol/schema for configuring Open vSwitch.",
       "abbreviation": "Open vSwitch Database"
-    },
-    {
-      "term": "P2M",
-      "definition": "Xen memory mapping from guest-physical to machine (host) addresses; implemented in xen/arch/x86/mm/p2m*.c.",
-      "abbreviation": "Physical to Machine"
     },
     {
       "term": "P2V",
@@ -928,16 +774,6 @@
       "abbreviation": "Page Frame Number"
     },
     {
-      "term": "PHYP",
-      "definition": "IBM's proprietary firmware hypervisor (the core of PowerVM) that runs beneath pSeries guests.",
-      "abbreviation": "POWER Hypervisor",
-      "relatedTerms": [
-        "hypervisor",
-        "PowerVM",
-        "pSeries"
-      ]
-    },
-    {
       "term": "PIF",
       "abbreviation": "Physical Interface",
       "definition": "XAPI term for a physical network port on a host. Every real NIC that XCP-ng can see shows up as a PIF object in the XAPI database. Compare with VIF (virtual equivalent).",
@@ -972,31 +808,6 @@
         "VM",
         "SR"
       ]
-    },
-    {
-      "term": "PowerNV",
-      "definition": "The bare-metal OpenPOWER platform type, where the OS runs directly on the hardware via OPAL firmware with no hypervisor beneath. Contrast pSeries.",
-      "abbreviation": "Power Non-Virtualized",
-      "relatedTerms": [
-        "hypervisor",
-        "OpenPOWER",
-        "pSeries",
-        "OPAL"
-      ]
-    },
-    {
-      "term": "PowerVM",
-      "definition": "IBM's proprietary virtualization stack for POWER (the PHYP hypervisor plus tooling); runs pSeries guests.",
-      "relatedTerms": [
-        "hypervisor",
-        "pSeries",
-        "PHYP"
-      ]
-    },
-    {
-      "term": "PQC",
-      "definition": "Cryptographic algorithms designed to resist attacks by quantum computers.",
-      "abbreviation": "Post-Quantum Cryptography"
     },
     {
       "term": "Promiscuous mode",
@@ -1070,7 +881,13 @@
     {
       "term": "RAID",
       "definition": "Combining disks for redundancy and/or performance.",
-      "abbreviation": "Redundant Array of Independent Disks"
+      "abbreviation": "Redundant Array of Independent Disks",
+      "aliases": [
+        "RAID 0",
+        "RAID 1",
+        "RAID 5",
+        "RAID 6"
+      ]
     },
     {
       "term": "RBAC",
@@ -1080,23 +897,14 @@
     {
       "term": "REST",
       "definition": "An architectural style for HTTP APIs using resources and standard verbs.",
-      "abbreviation": "Representational State Transfer"
-    },
-    {
-      "term": "REST API",
-      "definition": "Xen Orchestra's HTTP interface under /rest/v0/… for scripting against XO (list VMs, read stats, import/patch, etc.).",
-      "abbreviation": "Representational State Transfer API",
+      "abbreviation": "Representational State Transfer",
+      "caseSensitive": true,
       "relatedTerms": [
-        "Xen Orchestra",
-        "VM",
+        "API",
+        "JSON-RPC",
+        "XAPI",
+        "XML-RPC",
         "XO"
-      ]
-    },
-    {
-      "term": "reverse proxy",
-      "definition": "A server (nginx, Caddy, HAProxy, etc.) placed in front of an application that terminates TLS and forwards plain traffic to the application behind it.",
-      "relatedTerms": [
-        "TLS"
       ]
     },
     {
@@ -1132,15 +940,6 @@
       "definition": "XCP-ng/XAPI procedure that patches a pool host-by-host, evacuating VMs to avoid downtime.",
       "abbreviation": "Rolling Pool Update",
       "relatedTerms": [
-        "VM"
-      ]
-    },
-    {
-      "term": "RRD",
-      "definition": "A fixed-size time-series store (rrdtool); XAPI records host and VM performance metrics as RRDs.",
-      "abbreviation": "Round-Robin Database",
-      "relatedTerms": [
-        "XAPI",
         "VM"
       ]
     },
@@ -1184,14 +983,6 @@
       ]
     },
     {
-      "term": "SBAT",
-      "definition": "UEFI Secure Boot revocation mechanism using component generation numbers (sbat.csv) instead of revoking individual binaries.",
-      "abbreviation": "Secure Boot Advanced Targeting",
-      "relatedTerms": [
-        "UEFI"
-      ]
-    },
-    {
       "term": "SDN",
       "definition": "Decoupling network control from forwarding so networks are programmable.",
       "abbreviation": "Software-Defined Networking"
@@ -1223,11 +1014,6 @@
       "term": "SHA",
       "definition": "A family of cryptographic hash functions (SHA-1/2/3).",
       "abbreviation": "Secure Hash Algorithm"
-    },
-    {
-      "term": "SKU",
-      "definition": "A distinct sellable product/variant identifier.",
-      "abbreviation": "Stock Keeping Unit"
     },
     {
       "term": "SLA",
@@ -1268,15 +1054,6 @@
       "definition": "Log file for SMAPI activity at /var/log/SMlog; on busy pools this is typically the dominant /var/log consumer.",
       "relatedTerms": [
         "SMAPI"
-      ]
-    },
-    {
-      "term": "SMP",
-      "definition": "Multiple CPUs/cores sharing memory under one OS; vCPU scheduling concerns the hypervisor.",
-      "abbreviation": "Symmetric Multiprocessing",
-      "relatedTerms": [
-        "hypervisor",
-        "vCPU"
       ]
     },
     {
@@ -1334,11 +1111,6 @@
       "term": "SSO",
       "definition": "Authenticating once to gain access to multiple applications.",
       "abbreviation": "Single Sign-On"
-    },
-    {
-      "term": "SSSD",
-      "definition": "Linux service that connects hosts to central identity providers (LDAP/AD/Kerberos).",
-      "abbreviation": "System Security Services Daemon"
     },
     {
       "term": "state.db",
@@ -1447,11 +1219,6 @@
       ]
     },
     {
-      "term": "UEM",
-      "definition": "Centralised management of desktops, mobiles, and other endpoints.",
-      "abbreviation": "Unified Endpoint Management"
-    },
-    {
       "term": "URI",
       "definition": "A string identifying a resource (URLs are a kind of URI).",
       "abbreviation": "Uniform Resource Identifier"
@@ -1495,14 +1262,6 @@
         "VDI",
         "VIF",
         "VM"
-      ]
-    },
-    {
-      "term": "VCF",
-      "definition": "VMware's bundled private-cloud stack; a migration source for XCP-ng.",
-      "abbreviation": "VMware Cloud Foundation",
-      "relatedTerms": [
-        "XCP-ng"
       ]
     },
     {
@@ -1662,17 +1421,15 @@
       "abbreviation": "Wide Area Network"
     },
     {
-      "term": "WHQL",
-      "definition": "Microsoft's driver certification program; relevant to signing paravirtual Windows guest drivers.",
-      "abbreviation": "Windows Hardware Quality Labs"
-    },
-    {
       "term": "XAPI",
       "abbreviation": "Xen API",
-      "definition": "The management toolstack (daemon + REST/XMLRPC API) that controls XCP-ng hosts. Every operation — VM creation, storage, networking — goes through XAPI. `xe` CLI and Xen Orchestra both talk to it.",
+      "definition": "The management toolstack (daemon + REST/XML-RPC API) that controls XCP-ng hosts. Every operation — VM creation, storage, networking — goes through XAPI. `xe` CLI and Xen Orchestra both talk to it.",
       "relatedTerms": [
-        "Xen Orchestra",
+        "REST",
+        "XAPI",
         "XCP-ng",
+        "XML-RPC",
+        "XO",
         "VM"
       ]
     },
@@ -1695,14 +1452,6 @@
       ]
     },
     {
-      "term": "Xen Orchestra",
-      "definition": "The web management interface used to administer XCP-ng pools, hosts, backups, and networking.",
-      "abbreviation": "Xen Orchestra",
-      "relatedTerms": [
-        "XCP-ng"
-      ]
-    },
-    {
       "term": "XenCenter",
       "definition": "The legacy Windows desktop client for XenServer/XCP-ng management, maintained by Citrix/Cloud Software Group."
     },
@@ -1717,13 +1466,24 @@
     },
     {
       "term": "XFS",
-      "definition": "A high-performance journaling filesystem; an option for dom0/host storage.",
+      "definition": "A high-performance journaling file-system; an option for dom0/host storage.",
       "abbreviation": "XFS filesystem"
+    },
+    {
+      "term": "XML-RPC",
+      "definition": "a remote procedure call (RPC) protocol which uses XML to encode its calls and HTTP as a transport mechanism.",
+      "abbreviation": "Extensible Markup Language Remote Procedure Call",
+      "relatedTerms": [
+        "API",
+        "JSON-RPC",
+        "REST"
+      ]
     },
     {
       "term": "XO",
       "definition": "The open-source web management interface for XCP-ng (and XenServer). Replaces XenCenter. Provides the Console tab (noVNC), backup jobs, resource scheduling, and the XAPI REST proxy.",
       "abbreviation": "Xen Orchestra",
+      "aliases": "Xen Orchestra",
       "relatedTerms": [
         "XenServer",
         "XenCenter",
@@ -1747,8 +1507,8 @@
       "abbreviation": "Xen Orchestra Appliance",
       "definition": "The pre-packaged virtual appliance version of Xen Orchestra distributed by Vates. Deploys as a ready-to-run VM rather than requiring a manual source build. Includes paid features (advanced backup, DR) not in the open-source edition.",
       "relatedTerms": [
-        "Xen Orchestra",
         "DR",
+        "XO",
         "VM"
       ]
     },
@@ -1758,15 +1518,8 @@
       "abbreviation": "Xen Orchestra STORage",
       "relatedTerms": [
         "LINSTOR",
-        "DRBD"
-      ]
-    },
-    {
-      "term": "XS9",
-      "definition": "Citrix/Cloud Software Group's XenServer 9 release line.",
-      "abbreviation": "XenServer 9",
-      "relatedTerms": [
-        "XenServer"
+        "DRBD",
+        "XO"
       ]
     },
     {
