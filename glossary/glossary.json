@@ -38,6 +38,7 @@
     },
     {
       "term": "bond",
+      "autoLink": false,
       "definition": "Several NICs combined into one logical network link for redundancy or higher throughput.",
       "abbreviation": "(network bond)",
       "relatedTerms": [
@@ -49,7 +50,6 @@
       "definition": "The standard EFF command-line client that requests and renews free Let's Encrypt (ACME) TLS certificates.",
       "abbreviation": "certbot",
       "relatedTerms": [
-        "ACME",
         "TLS"
       ]
     },
@@ -81,6 +81,7 @@
     },
     {
       "term": "weight",
+      "autoLink": false,
       "definition": "Relative share of CPU time a VM gets when hosts are contended; XO exposes it as Default/Quarter/Half/etc.",
       "aliases": "CPU weight",
       "caseSensitive": true,
@@ -121,7 +122,6 @@
       "definition": "The Linux distribution commonly used as the base OS when installing Xen Orchestra from sources (rather than using the XOA appliance).",
       "abbreviation": "Debian GNU/Linux",
       "relatedTerms": [
-        "Xen Orchestra",
         "XOA"
       ]
     },
@@ -138,10 +138,7 @@
     {
       "term": "DMA",
       "definition": "Hardware feature letting devices read/write memory without the CPU; the reason an IOMMU is needed for safe passthrough.",
-      "abbreviation": "Direct Memory Access",
-      "relatedTerms": [
-        "IOMMU"
-      ]
+      "abbreviation": "Direct Memory Access"
     },
     {
       "term": "DNS",
@@ -324,6 +321,7 @@
     },
     {
       "term": "heap",
+      "autoLink": false,
       "definition": "The memory the Node.js xo-server process will allocate; independent of the VM's total RAM until configured.",
       "abbreviation": "Node.js heap",
       "relatedTerms": [
@@ -408,7 +406,6 @@
       "definition": "A JSON-based wire protocol for remote procedure calls (RPC), defining only a few data types and commands.",
       "abbreviation": "JavaScript Object Notation-Remote Procedure Call",
       "relatedTerms": [
-        "API",
         "REST",
         "XML-RPC"
       ]
@@ -718,8 +715,7 @@
         "HVM",
         "VM",
         "hypervisor",
-        "XCP-ng",
-        "PVH"
+        "XCP-ng"
       ]
     },
     {
@@ -784,7 +780,6 @@
       "abbreviation": "Representational State Transfer",
       "caseSensitive": true,
       "relatedTerms": [
-        "API",
         "JSON-RPC",
         "XAPI",
         "XML-RPC",
@@ -1242,7 +1237,6 @@
       "definition": "The management toolstack (daemon + REST/XML-RPC API) that controls XCP-ng hosts. Every operation — VM creation, storage, networking — goes through XAPI. `xe` CLI and Xen Orchestra both talk to it.",
       "relatedTerms": [
         "REST",
-        "XAPI",
         "XCP-ng",
         "XML-RPC",
         "XO",
@@ -1290,7 +1284,6 @@
       "definition": "a remote procedure call (RPC) protocol which uses XML to encode its calls and HTTP as a transport mechanism.",
       "abbreviation": "Extensible Markup Language Remote Procedure Call",
       "relatedTerms": [
-        "API",
         "JSON-RPC",
         "REST"
       ]
@@ -1313,7 +1306,6 @@
       "definition": "The Node.js backend process inside XOA; its memory heap limit must be raised to actually use extra RAM given to the VM.",
       "abbreviation": "xo-server",
       "relatedTerms": [
-        "heap limit",
         "XOA",
         "VM"
       ]

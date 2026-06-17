@@ -1,0 +1,26 @@
+---
+name: Validate glossary
+
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    paths:
+      - glossary/glossary.json
+      - scripts/validate-glossary.js
+      - .github/workflows/validate-glossary.yml
+  push:
+    paths:
+      - glossary/glossary.json
+      - scripts/validate-glossary.js
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/validate-glossary.js
