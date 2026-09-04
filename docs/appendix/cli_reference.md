@@ -2849,32 +2849,38 @@ VDIs have the following parameters:
 |`uuid`|The unique identifier/object reference for the VDI|Read only|
 |`name-label`|The name of the VDI|Read/write|
 |`name-description`|The description string of the VDI|Read/write|
+|`is-a-snapshot`|True if this VDI is a VM storage snapshot|Read only|
+|`snapshot-of`|The UUID of the storage this VDI is a snapshot of|Read only|
+|`snapshots`|The UUIDs of all snapshots of this VDI|Read only|
+|`snapshot-time`|The timestamp of the snapshot operation that created this VDI|Read only|
 |`allowed-operations`|A list of the operations allowed in this state|Read only set parameter|
 |`current-operations`|A list of the operations that are currently in progress on this VDI|Read only set parameter|
 |`sr-uuid`|SR in which the VDI resides|Read only|
+|`sr-name-label`|Name of the containing storage repository|Read only|
 |`vbd-uuids`|A list of VBDs that refer to this VDI|Read only set parameter|
 |`crashdump-uuids`|List of crash dumps that refer to this VDI|Read only set parameter|
 |`virtual-size`|Size of disk as presented to the VM, in bytes. Depending on the storage back-end type, the size may not be respected exactly|Read only|
 |`physical-utilisation`|Amount of physical space that the VDI is taking up on the SR, in bytes|Read only|
+|`location`|Location information|Read only|
 |`type`|Type of VDI, for example, System or User|Read only|
 |`sharable`|True if this VDI may be shared|Read only|
 |`read-only`|True if this VDI can only be mounted read-only|Read only|
 |`storage-lock`|True if this VDI is locked at the storage level|Read only|
-|`parent`|References the parent VDI when this VDI is part of a chain|Read only|
-|`missing`|True if SR scan operation reported this VDI as not present|Read only|
-|`other-config`|Extra configuration information for this VDI|Read/write map parameter|
-|`sr-name-label`|Name of the containing storage repository|Read only|
-|`location`|Location information|Read only|
 |`managed`|True if the VDI is managed|Read only|
+|`parent`|References the parent VDI when this VDI is part of a chain (DEPRECATED)|Read only|
+|`missing`|True if SR scan operation reported this VDI as not present|Read only|
+|`is-tools-iso`|<TODO> (`True` or `False`)|Read/write|
+|`other-config`|Extra configuration information for this VDI|Read/write map parameter|
 |`xenstore-data`|Data to be inserted into the xenstore tree (/local/domain/0/backend/ vbd/*domid*/*device-id*/smdata) after the VDI is attached. The SM back-ends usually set this field on `vdi_attach`.|Read only map parameter|
 |`sm-config`|SM dependent data|Read only map parameter|
-|`is-a-snapshot`|True if this VDI is a VM storage snapshot|Read only|
-|`snapshot_of`|The UUID of the storage this VDI is a snapshot of|Read only|
-|`snapshots`|The UUIDs of all snapshots of this VDI|Read only|
-|`snapshot_time`|The timestamp of the snapshot operation that created this VDI|Read only|
-|`metadata-of-pool`|The uuid of the pool which created this metadata VDI|Read only|
+|`on-boot`|Behavior of a VM’s VDI when booted: `persist` (default) or `reset`|Read/write|
+|`allow-caching`|Define the caching behavior (`True` or `False`)|Read/write|
 |`metadata-latest`|Flag indicating whether the VDI contains the latest known metadata for this pool|Read only|
+|`metadata-of-pool`|The uuid of the pool which created this metadata VDI|Read only|
+|`tags`|User-specified tags for categorization purposes|Read/write|
 |`cbt-enabled`|Flag indicating whether changed block tracking is enabled for the VDI|Read/write|
+
+
 
 ### `vdi-clone`
 
