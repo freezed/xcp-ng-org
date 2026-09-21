@@ -770,7 +770,7 @@
       "term": "XO",
       "definition": "The open-source web management interface for XCP-ng (and XenServer). Replaces XenCenter. Provides the Console tab (noVNC), backup jobs, resource scheduling, and the XAPI REST proxy.",
       "abbreviation": "Xen Orchestra",
-      "aliases": "Xen Orchestra"
+      "aliases": ["Xen Orchestra"]
     },
     {
       "term": "XOA",

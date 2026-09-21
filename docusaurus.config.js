@@ -77,25 +77,14 @@ const config = {
           remarkPlugins: [
             glossaryPlugin.getRemarkPlugin(
               {
-                glossaryPath: 'glossary/glossary.json',
+                glossaryPath: 'docs/glossary/glossary.json',
                 routePath: '/glossary',
               },
               { siteDir: __dirname }
             ),
           ],
         },
-        pages: {
-          // Add the remark plugin to enable auto-linking in pages
-          remarkPlugins: [
-            glossaryPlugin.getRemarkPlugin(
-              {
-                glossaryPath: 'glossary/glossary.json',
-                routePath: '/glossary',
-              },
-              { siteDir: __dirname }
-            ),
-          ],
-        },
+        pages: false,
         blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -246,7 +235,7 @@ const config = {
     [
       'docusaurus-plugin-glossary',
       {
-        glossaryPath: 'glossary/glossary.json',
+        glossaryPath: 'docs/glossary/glossary.json',
         routePath: '/glossary',
       },
     ],
